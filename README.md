@@ -3,8 +3,8 @@
 ## Fonctionnalités principales
 
 ### Authentification
-- Inscription d'un nouvel utilisateur
-- Connexion/déconnexion d'un utilisateur
+- ~~Inscription d'un nouvel utilisateur~~ ✅
+- ~~Connexion/déconnexion d'un utilisateur~~ ✅
 
 _Optionnel_ :
 - Récupération de mot de passe
