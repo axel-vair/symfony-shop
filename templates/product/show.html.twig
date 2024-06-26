@@ -2,7 +2,10 @@
 
 {% block title %}{{ product.name }}!{% endblock %}
 
+
 {% block body %}
-    {{ product.description }}
-    {{ product.price }}
+    <div class="container py-3">
+        {{ product.description }}
+        {{ product.price }}
+    </div>
 {% endblock %}

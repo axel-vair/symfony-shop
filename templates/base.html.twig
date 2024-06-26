@@ -1,26 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block meta %}{% endblock %}
     <title>{% block title %}Welcome!{% endblock %}</title>
-    <link rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-
     {% endblock %}
-
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
 <body>
-<div class="container py-3">
-    {% block header %}{% endblock %}
-</div>
-{% block body %} {% endblock %}
-{% block full_width_content %}{% endblock %}
-
-{% include 'partials/_footer.html.twig' %}
+{% block body_content %}
+    <div class="container py-3">
+        {% include 'partials/_header.html.twig' %}
+    </div>
+    {% block body %}{% endblock %}
+    {% block full_width_content %}{% endblock %}
+    {% include 'partials/_footer.html.twig' %}
+{% endblock %}
+{% block javascripts_bottom %}{% endblock %}
 </body>
 </html>
