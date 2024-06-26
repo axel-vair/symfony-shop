@@ -22,7 +22,7 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
