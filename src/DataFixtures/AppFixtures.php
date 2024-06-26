@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
             $product->setCreatedDate($faker->dateTime);
             // Associate random Category to Product
             $randomCategory = $categories[array_rand($categories)];
-            $product->addCategory($randomCategory);
+            $product->setCategory($randomCategory);
 
             $products[] = $product;
             $manager->persist($product);
@@ -60,15 +60,15 @@ class AppFixtures extends Fixture
         // Create and persist Comments
         for ($i = 0; $i < 10; $i++) {
             $comment = new Comment();
-            $comment->setDescription($faker->sentence);
+            $comment->setComment($faker->sentence);
             $comment->setRating($faker->randomFloat(1, 0, 5));
 
             // Associate random User and Product to Comment
             $randomUser = $users[array_rand($users)];
             $randomProduct = $products[array_rand($products)];
 
-            $comment->addUserId($randomUser);
-            $comment->addProductId($randomProduct);
+            $comment->setUserComment($randomUser);
+            $comment->setProduct($randomProduct);
 
             $manager->persist($comment);
         }

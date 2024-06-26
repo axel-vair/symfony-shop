@@ -23,11 +23,7 @@
                             </svg>
                             <div class="card-body">
                                 <h3>{{ product.name }}</h3>
-                                <p>Catégorie{% if product.categories|length > 1 %}s{% endif %} :
-                                    {% for category in product.categories %}
-                                        {{ category }}{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </p>
+                                <p>Catégorie: {{ product.category }}</p>
                                 <p class="card-text">{{ product.description|length > 80 ? product.description|slice(0, 80) ~ "..." : product.description }}</p>
                                 <div>
                                     <p>Prix: {{ product.price }}</p>
