@@ -8,37 +8,53 @@
         <p class="fs-5 text-body-secondary">Retrouvez tous nos produits et services bien-être sur notre boutique
             en ligne. </p>
     </div>
-    <div class="album py-5 bg-body-tertiary">
-        <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <turbo-frame id="products">
+        <div class="album py-5 bg-body-tertiary">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-                {% for product in products %}
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"></rect>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div class="card-body">
-                                <h3>{{ product.name }}</h3>
-                                <p>Catégorie: {{ product.category }}</p>
-                                <p class="card-text">{{ product.description|length > 80 ? product.description|slice(0, 80) ~ "..." : product.description }}</p>
-                                <div>
-                                    <p>Prix: {{ product.price }}</p>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ path('app_product_id', {id: product.id}) }}">Voir</a></button>
+                    {% for product in products %}
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                    <rect width="100%" height="100%" fill="#55595c"></rect>
+                                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                                </svg>
+                                <div class="card-body">
+                                    <h3>{{ product.name }}</h3>
+                                    <p>Catégorie: {{ product.category }}</p>
+                                    <p class="card-text">{{ product.description|length > 80 ? product.description|slice(0, 80) ~ "..." : product.description }}</p>
+                                    <div>
+                                        <p>Prix: {{ product.price }}</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary"><a
+                                                        href="{{ path('app_product_id', {id: product.id}) }}">Voir</a>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
 
+            <div class="container mt-5">
+                <div class="w-100 d-flex justify-content-end">
+                    <div class="d-flex align-items-center" id="products">
+                        {{ pagerfanta(products, 'twitter_bootstrap4', {
+                            prev_message: 'Précédent',
+                            next_message: 'Suivant'
+                        }) }}
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+    </turbo-frame>
+
 {% endblock %}
