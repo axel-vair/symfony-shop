@@ -22,8 +22,6 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\Column]
-    private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -50,6 +48,9 @@ class Product
      */
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'product_id')]
     private Collection $categories;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -82,18 +83,6 @@ class Product
     public function setPrice(float $price): static
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -203,6 +192,18 @@ class Product
                 $category->setProductId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
