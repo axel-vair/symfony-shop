@@ -18,6 +18,9 @@
 <div class="container py-3">
     {% block header %}{% endblock %}
 </div>
+{% block body %} {% endblock %}
 {% block full_width_content %}{% endblock %}
+
+{% include 'partials/_footer.html.twig' %}
 </body>
 </html>
