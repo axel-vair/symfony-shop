@@ -17,7 +17,7 @@ class Category
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
-    private ?Product $product_id = null;
+    private ?Product $product = null;
 
     public function getId(): ?int
     {
@@ -36,15 +36,19 @@ class Category
         return $this;
     }
 
-    public function getProductId(): ?Product
+    public function getProduct(): ?Product
     {
-        return $this->product_id;
+        return $this->product;
     }
 
-    public function setProductId(?Product $product_id): static
+    public function setProduct(?Product $product): static
     {
-        $this->product_id = $product_id;
+        $this->product = $product;
 
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }
