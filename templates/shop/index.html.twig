@@ -46,8 +46,8 @@
                                 </svg>
                                 <div class="card-body">
                                     <h3>{{ product.name }}</h3>
-                                    <p>Catégorie{% if product.categories|length > 1 %}s{% endif %} :
-                                        {% for category in product.categories %}
+                                    <p>Catégorie{% if product.category|length > 1 %}s{% endif %} :
+                                        {% for category in product.category %}
                                             {{ category }}{% if not loop.last %}, {% endif %}
                                         {% endfor %}
                                     </p>
