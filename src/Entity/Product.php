@@ -22,39 +22,39 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
+<<<<<<< HEAD
     #[ORM\Column]
     private ?string $description = null;
 
+=======
+>>>>>>> b488fc18474c4cf2fc2ee584c03bbc626403e0fc
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
-
-    /**
-     * @var Collection<int, Category>
-     */
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'product')]
-    private Collection $id_category;
-
-   
 
     #[ORM\Column(nullable: true)]
     private ?int $stock = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $created_date = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $createdDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'product_id')]
-    private ?Comment $comment = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $comment = null;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Category $category = null;
 
     /**
-     * @var Collection<int, Category>
+     * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'product_id')]
-    private Collection $categories;
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'product')]
+    private Collection $comments;
 
     public function __construct()
     {
-        $this->id_category = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,18 +86,6 @@ class Product
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getImage(): ?string
     {
         return $this->image;
@@ -109,37 +97,6 @@ class Product
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getIdCategory(): Collection
-    {
-        return $this->id_category;
-    }
-
-    public function addIdCategory(Category $idCategory): static
-    {
-        if (!$this->id_category->contains($idCategory)) {
-            $this->id_category->add($idCategory);
-            $idCategory->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdCategory(Category $idCategory): static
-    {
-        if ($this->id_category->removeElement($idCategory)) {
-            // set the owning side to null (unless already changed)
-            if ($idCategory->getProduct() === $this) {
-                $idCategory->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
 
     public function getStock(): ?int
     {
@@ -155,52 +112,76 @@ class Product
 
     public function getCreatedDate(): ?\DateTimeInterface
     {
-        return $this->created_date;
+        return $this->createdDate;
     }
 
-    public function setCreatedDate(\DateTimeInterface $created_date): static
+    public function setCreatedDate(?\DateTimeInterface $createdDate): static
     {
-        $this->created_date = $created_date;
+        $this->createdDate = $createdDate;
 
         return $this;
     }
 
-    public function getComment(): ?Comment
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    public function setComment(?Comment $comment): static
+    public function setComment(?string $comment): static
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getCategories(): Collection
+    public function getCategory(): ?Category
     {
-        return $this->categories;
+        return $this->category;
     }
 
-    public function addCategory(Category $category): static
+    public function setCategory(?Category $category): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-            $category->setProductId($this);
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeCategory(Category $category): static
+    public function removeComment(Comment $comment): static
     {
-        if ($this->categories->removeElement($category)) {
+        if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($category->getProductId() === $this) {
-                $category->setProductId(null);
+            if ($comment->getProduct() === $this) {
+                $comment->setProduct(null);
             }
         }
 

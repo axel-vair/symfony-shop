@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,103 +14,31 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $comment = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'comment')]
-    private Collection $user_id;
-
-    /**
-     * @var Collection<int, Product>
-     */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'comment')]
-    private Collection $product_id;
-
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?float $rating = null;
 
-    public function __construct()
-    {
-        $this->user_id = new ArrayCollection();
-        $this->product_id = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?User $userComment = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Product $product = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDescription(): ?string
+    public function getComment(): ?string
     {
-        return $this->description;
+        return $this->comment;
     }
 
-    public function setDescription(?string $description): static
+    public function setComment(string $comment): static
     {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUserId(): Collection
-    {
-        return $this->user_id;
-    }
-
-    public function addUserId(User $userId): static
-    {
-        if (!$this->user_id->contains($userId)) {
-            $this->user_id->add($userId);
-            $userId->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserId(User $userId): static
-    {
-        if ($this->user_id->removeElement($userId)) {
-            // set the owning side to null (unless already changed)
-            if ($userId->getComment() === $this) {
-                $userId->setComment(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProductId(): Collection
-    {
-        return $this->product_id;
-    }
-
-    public function addProductId(Product $productId): static
-    {
-        if (!$this->product_id->contains($productId)) {
-            $this->product_id->add($productId);
-            $productId->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProductId(Product $productId): static
-    {
-        if ($this->product_id->removeElement($productId)) {
-            // set the owning side to null (unless already changed)
-            if ($productId->getComment() === $this) {
-                $productId->setComment(null);
-            }
-        }
+        $this->comment = $comment;
 
         return $this;
     }
@@ -122,9 +48,33 @@ class Comment
         return $this->rating;
     }
 
-    public function setRating(?float $rating): static
+    public function setRating(float $rating): static
     {
         $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getUserComment(): ?User
+    {
+        return $this->userComment;
+    }
+
+    public function setUserComment(?User $userComment): static
+    {
+        $this->userComment = $userComment;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }
