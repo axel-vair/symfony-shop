@@ -16,7 +16,7 @@ _Optionnel_ :
 ### Catalogue de produits
 
 - Affichage de la liste des produits avec filtres et pagination
-- Page de détails d'un produit
+- ~~Page de détails d'un produit~~
 - Gestion des catégories de produits
 
 ### Panier d'achat
