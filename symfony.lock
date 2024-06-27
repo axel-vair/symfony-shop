@@ -1,4 +1,7 @@
 {
+    "babdev/pagerfanta-bundle": {
+        "version": "v4.4.0"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.12",
         "recipe": {
@@ -287,9 +290,6 @@
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
         ]
-    },
-    "symfonycasts/tailwind-bundle": {
-        "version": "v0.5.3"
     },
     "twig/extra-bundle": {
         "version": "v3.10.0"
