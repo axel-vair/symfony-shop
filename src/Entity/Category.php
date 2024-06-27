@@ -18,10 +18,6 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-<<<<<<< HEAD
-    #[ORM\ManyToOne(inversedBy: 'categories')]
-    private ?Product $product = null;
-=======
     /**
      * @var Collection<int, Product>
      */
@@ -32,7 +28,6 @@ class Category
     {
         $this->products = new ArrayCollection();
     }
->>>>>>> b488fc18474c4cf2fc2ee584c03bbc626403e0fc
 
     public function getId(): ?int
     {
@@ -51,21 +46,6 @@ class Category
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(?Product $product): static
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-    public function __toString(): string
-    {
-=======
     /**
      * @return Collection<int, Product>
      */
@@ -96,7 +76,6 @@ class Category
         return $this;
     }
     public function __toString(){
->>>>>>> b488fc18474c4cf2fc2ee584c03bbc626403e0fc
         return $this->name;
     }
 }

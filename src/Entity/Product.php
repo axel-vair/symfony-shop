@@ -22,12 +22,6 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
-<<<<<<< HEAD
-    #[ORM\Column]
-    private ?string $description = null;
-
-=======
->>>>>>> b488fc18474c4cf2fc2ee584c03bbc626403e0fc
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
