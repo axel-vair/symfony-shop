@@ -13,6 +13,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ShopController extends AbstractController
 {
+    /**
+     * @param ProductRepository $productRepository
+     * @param CategoryRepository $categoryRepository
+     * @param int $page
+     * @param int|null $category_id
+     * @return Response
+     */
     #[Route('/shop', name: 'app_shop')]
     public function index(
         ProductRepository $productRepository,
@@ -20,6 +27,8 @@ class ShopController extends AbstractController
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] ?int $category_id = null
     ): Response {
+
+        // query pour créer dynamiquement une requête DQL pour récupérer les produits "p"
         $queryBuilder = $productRepository->createQueryBuilder('p');
 
         if ($category_id) {
