@@ -18,7 +18,7 @@
                                 <ul class="list-group list-group-flush">
                                     {% for category in categories %}
                                         <li class="list-group-item bg-transparent px-0">
-                                            <a href="{{ path('app_category', {id: category.id}) }}" class="text-decoration-none text-body-secondary">{{ category.name }}</a>
+                                            <a href="{{ path('app_category', {id: category.id}) }}" class="text-decoration-none text-body-secondary" data-turbo="false">{{ category.name }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
