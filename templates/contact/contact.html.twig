@@ -7,26 +7,30 @@
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
     </style>
 
-    <div class="example-wrapper">
 
+<div class="container-m">
 
-        Nos coordonnées
-        <ul>
-            <li>Addresse : 06 rue Jeanne Duprès 13001 Marseille</li>
-            <li>Téléphone : 06 26 23 67 90</li>
-        </ul>
+    <h1 class="">Laissez-nous vos coordonnées !</h1>
+    <div class="container-m text-bg-success">
+        {{ form(contactForm) }}
     </div>
 
+    <div class="text-bg-success">
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
-    <h1 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-pink-900">Laissez-nous vos coordonnées !</h1>
+    <div class="container-m text-bg-info p-3 my-3">
+        Nous joindre :
 
-{{ form(contactForm) }}
+            <div>Addresse : 06 rue Jeanne Duprès 13001 Marseille</div>
+            <div>Téléphone : 06 26 23 67 90</div>
 
-    {% for message in app.flashes('notice') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
+    </div>
 
 
 {% endblock %}
