@@ -19,10 +19,10 @@ class CartService
      * @param int $id
      * @return void
      */
-    public function addToCard(int $id): void
+    public function addToCart(int $id): void
     {
-        $cart = $this->requestStack->getCurrentRequest()->get('cart', []);
-        if (!empty($card[$id])) {
+        $cart = $this->getSession()->get('cart', []);
+        if (!empty($cart[$id])) {
             $cart[$id]++;
         }else{
             $cart[$id] = 1;
@@ -30,7 +30,11 @@ class CartService
         $this->getSession()->set('cart', $cart);
     }
 
-    public function getTotal(): array
+    public function removeFromCart()
+    {
+        return $this->getSession()->remove('cart');
+    }
+    public function getCartContents(): array
     {
         $cart = $this->getSession()->get('cart', []);
         $cartData = [];
@@ -45,6 +49,16 @@ class CartService
             ];
         }
         return $cartData;
+    }
+
+    public function calculateTotal(): float
+    {
+        $total = 0;
+        $cartContents = $this->getCartContents();
+        foreach ($cartContents as $item) {
+            $total += $item['product']->getPrice() * $item['quantity'];
+        }
+        return $total;
     }
     private function getSession(): SessionInterface
     {
