@@ -27,10 +27,18 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
 
-    #[Route('/panier/delete', name: 'app_cart_delete')]
+    #[Route('/panier/delete/product/{id}', name: 'app_cart_one_product_delete')]
+    public function deleteOneProductCart(CartService $cartService, Product $product): Response
+    {
+        $cartService->removeOneProductToCart($product->getId());
+        return $this->redirectToRoute('app_cart');
+    }
+    #[Route('/panier/vider', name: 'app_cart_delete')]
     public function deleteCart(CartService $cartService): Response
     {
         $cartService->removeFromCart();
-        return $this->redirectToRoute('app_shop');
+        $this->addFlash('success', 'Votre panier a été vidé.');
+        return $this->redirectToRoute('app_cart');
     }
+
 }

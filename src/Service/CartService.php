@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -30,6 +31,12 @@ class CartService
         $this->getSession()->set('cart', $cart);
     }
 
+    public function removeOneProductToCart(int $productId)
+    {
+        $cart = $this->getSession()->get('cart', []);
+        unset($cart[$productId]);
+        $this->getSession()->set('cart', $cart);
+    }
     public function removeFromCart()
     {
         return $this->getSession()->remove('cart');
