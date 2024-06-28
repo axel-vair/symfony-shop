@@ -33,7 +33,7 @@ class AppFixtures extends Fixture
                 'category_id' => 1,
                 'name' => 'Le massage Thaï',
                 'price' => 60,
-                'image' => null,
+                'image' => "/yoga.jpg",
                 'stock' => 5,
                 'created_date' => new \DateTime('2024-02-09'),
                 'description' => 'Le massage thaïlandais recouvre le corps entier. La théorie du massage thaïlandais se fonde sur le concept de lignes d’énergie liées au corps qui sont appelées sen. Si les écrits traditionnels de la médecine thaïe mentionnent 72 000 lignes d\'énergie, il existe 10 lignes principales (sen sip). Le massage thaï est une thérapie manuelle qui vise à rééquilibrer les flux énergétiques le long des sen en vue de renforcer ou de rétablir la bonne santé.
@@ -45,7 +45,7 @@ class AppFixtures extends Fixture
                 'category_id' => 1,
                 'name' => 'Le massage Balinais',
                 'price' => 60,
-                'image' => null,
+                'image' => "/hathra.jpg",
                 'stock' => 5,
                 'created_date' => new \DateTime('2024-02-09'),
                 'description' => 'Le massage balinais, trouvant son origine en Indonésie, s’adresse en particulier aux personnes ayant des douleurs musculaires ou qui sont soumises quotidiennement au stress. Ce massage permet de revitaliser le corps autant que l’esprit et de retrouver une énergie positive qui ne pourra qu’être bénéfique sur l’ensemble de l’organisme.
@@ -57,7 +57,7 @@ class AppFixtures extends Fixture
                 'category_id' => 1,
                 'name' => 'Le massage Californien',
                 'price' => 60,
-                'image' => null,
+                'image' => "/yoga.jpg",
                 'stock' => 5,
                 'created_date' => new \DateTime('2024-02-09'),
                 'description' => 'Plus communément appelé le « toucher du cœur », le massage californien est une pratique psycho-corporelle datant des années 70. Le massage californien est une approche globale qui vise autant la détente que l\'éveil d\'une conscience psychocorporelle. Ce massage utilise de longs mouvements lents et fluides qui permettent une profonde relaxation physique et psychique. Partant d\'effleurages doux, enveloppants et relaxants, les manoeuvres s’enchaînent et s’intensifient pour soulager des tensions plus profondes. Cela peut faire surgir et libérer des émotions cachées, inscrites dans la mémoire corporelle. Plus la personne massée s’abandonne à l\'expérience, plus elle s\'ouvre à ce que le massage californien qualifie de toucher du coeur. Profondément sensible, le bon déroulement du massage californien dépend totalement de la connexion entre le donneur et le receveur. En effet, il est primordial que le thérapeute soit à l\'écoute et que le massé soit en totale confiance.',
@@ -68,7 +68,7 @@ class AppFixtures extends Fixture
                 'category_id' => 1,
                 'name' => 'Le massage aux pierre chaudes',
                 'price' => 60,
-                'image' => null,
+                'image' => "/yoga.jpg",
                 'stock' => 5,
                 'created_date' => new \DateTime('2024-02-09'),
                 'description' => 'Le massage aux pierres chaudes est un type de massage au cours duquel des pierres, généralement issues de la pierre de basalte, sont utilisées. Afin de faire chauffer les pierres volcaniques, ces dernières sont placées dans de l’eau chaude pour qu’elles obtiennent une température suffisamment élevée.
@@ -82,7 +82,7 @@ class AppFixtures extends Fixture
                 'category_id' => 2,
                 'name' => 'Hatha Yoga',
                 'price' => 30,
-                'image' => null,
+                'image' => "/yoga.jpg",
                 'stock' => 15,
                 'created_date' => new \DateTime('2023-02-09'),
                 'description' => 'Le Yoga Hatha est certainement la variante la plus connue chez nous. C’est un terme générique qui englobe toutes les formes physiques de yoga. Une introduction aux fondamentaux de cette discipline, avec une approche classique des postures et des techniques de respiration. Dans de nombreux cas, il est également pratiqué sous forme d’étirements avant ou après un autre type d’entraînement.
@@ -96,7 +96,7 @@ class AppFixtures extends Fixture
                 'category_id' => 2,
                 'name' => 'Vinyasa Yoga',
                 'price' => 30,
-                'image' => null,
+                'image' => "/yoga.jpg",
                 'stock' => 15,
                 'created_date' => new \DateTime('2024-02-09'),
                 'description' => 'Le Vinyasa est un des cours de yoga les plus populaires en France, avec le Hatha et l’Ashtanga. Dynamique et fluide, il permet aux élèves de s’offrir un temps de lâcher-prise tout en se tonifiant et s’étirant en profondeur.
@@ -108,7 +108,7 @@ class AppFixtures extends Fixture
                 'category_id' => 2,
                 'name' => 'Fly Yoga',
                 'price' => 40,
-                'image' => null,
+                'image' => "/yoga.jpg",
                 'stock' => 15,
                 'created_date' => new \DateTime('2023-02-09'),
                 'description' => 'Le yoga aérien (ou Fly Yoga et Flying Yoga) a été créé dans les années 2000 aux États-Unis. C’est un type de yoga doux qui se pratique dans un hamac suspendu et qui fait travailler l’ensemble des muscles du corps. Ce type de yoga intègre de la relaxation, de la méditation, des étirements et des mouvements de danse, de pilates, et de gymnastique acrobatique. Le yoga aérien donne l’impression de « flotter » et permet de faire l’expérience de différentes sensations qui favorisent la sérénité et la confiance en soi. On pratique des postures dans un hamac situé à 1 mètre du sol en alternant plusieurs mouvements avec appui au sol et postures aériennes. Le hamac est suffisamment haut pour que la tête ne touche pas le sol dans les inversions, mais les bras peuvent facilement se mettre au sol depuis le hamac pour avoir un appui supplémentaire dans certaines postures. Ce type de yoga suspendu permet à la fois d’étirer le corps et la colonne et de renforcer les muscles en profondeur.',
@@ -119,7 +119,7 @@ class AppFixtures extends Fixture
                 'category_id' => 3,
                 'name' => 'Vipassana',
                 'price' => 150,
-                'image' => null,
+                'image' => "/yoga.jpg",
                 'stock' => 10,
                 'created_date' => new \DateTime('2023-02-09'),
                 'description' => 'Vipassanā (pāli) ou vipaśyanā (विपश्यना, sanskrit ; chinois 觀 guān; tibétain ལྷག་མཐོང་, lhaktong) désigne dans la tradition bouddhique la « vue profonde » ou « inspection », ainsi que les pratiques de méditation qui y sont associées. C\'est la deuxième étape des pratiques de méditation dans le bouddhisme, qui est utilisée après samatha, « la pacification mentale ».
