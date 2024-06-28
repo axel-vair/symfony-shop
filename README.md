@@ -15,18 +15,18 @@ _Optionnel_ :
 
 ### Catalogue de produits
 
-- Affichage de la liste des produits avec filtres et pagination
-- ~~Page de détails d'un produit~~
-- Gestion des catégories de produits
+- ~~Affichage de la liste des produits avec filtres et pagination~~ ✅
+- ~~Page de détails d'un produit~~ ✅
+- ~~Gestion des catégories de produits~~ ✅
 
 ### Panier d'achat
-- Ajout/suppression de produits dans le panier
-- Mise à jour des quantités
-- Calcul du total du panier
+- ~~Ajout/suppression de produits dans le panier~~ ✅
+- ~~Mise à jour des quantités~~ ✅
+- ~~Calcul du total du panier~~ ✅
 
 ### Processus de commande
 - Formulaire de commande (adresse de livraison, etc.)
-- Récapitulatif de la commande
+- ~~Récapitulatif de la commande~~ ✅
 - Enregistrement de la commande en base de données
 
 _Optionnel_ :
@@ -36,6 +36,11 @@ _Optionnel_ :
 - Liste des commandes avec filtres et pagination
 - Détails d'une commande
 - Changement de statut d'une commande
+
+### Gestion des routes et sécurité 
+- Créer une route 404
+- Autoriser l'accès au panier pour les utilisateurs connectés uniquement
+- Gérer l'accès au dashboard
 
 ### Communication
 - Chat en direct à l'aide de Mercure
