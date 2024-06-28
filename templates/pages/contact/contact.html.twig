@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contactez-nous !{% endblock %}
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+
+<div class="container-m">
+
+    <h1 class="">Laissez-nous vos coordonnées !</h1>
+    <div class="container-m text-bg-success">
+        {{ form(contactForm) }}
+    </div>
+
+    <div class="text-bg-success">
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+    <div class="container-m text-bg-info p-3 my-3">
+        Nous joindre :
+
+            <div>Addresse : 06 rue Jeanne Duprès 13001 Marseille</div>
+            <div>Téléphone : 06 26 23 67 90</div>
+
+    </div>
+
+
+{% endblock %}
