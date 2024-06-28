@@ -3,73 +3,89 @@
 {% block title %}Boutique!{% endblock %}
 
 {% block full_width_content %}
-    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-        <h1 class="display-4 fw-normal text-body-emphasis">Butterfly</h1>
-        <p class="fs-5 text-body-secondary">Retrouvez tous nos produits et services bien-être sur notre boutique en ligne.</p>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="text-center mb-5">
+                    <h1 class="display-4 fw-bold text-body-emphasis">Butterfly</h1>
+                    <p class="fs-5 text-body-secondary">Retrouvez tous nos produits et services bien-être sur notre boutique en ligne.</p>
+                </div>
+            </div>
+        </div>
     </div>
+
     <turbo-frame id="products">
-        <div class="album py-5 bg-body-tertiary">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 order-lg-2 order-1 mb-4 mb-lg-0">
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-body">
-                                <h4 class="card-title h5 mb-3">Catégories</h4>
-                                <ul class="list-group list-group-flush">
-                                    {% for category in categories %}
-                                        <li class="list-group-item bg-transparent px-0">
-                                            <a href="{{ path('app_category', {id: category.id}) }}" class="text-decoration-none text-body-secondary" data-turbo="false">{{ category.name }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card shadow-sm" style="height: 795px;"> <!-- Hauteur fixe définie ici -->
-                            <div class="card-body d-flex flex-column p-0 h-100">
-                                <svg class="bd-placeholder-img h-100" width="100%" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                    <rect width="100%" height="100%" fill="#868e96"/>
-                                    <text x="50%" y="50%" fill="#dee2e6" dy=".3em" text-anchor="middle">Espace Publicitaire</text>
-                                </svg>
-                            </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 order-lg-2 order-1 mb-4 mb-lg-0">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title h5 mb-3">Catégories</h4>
+                            <ul class="list-group list-group-flush">
+                                {% for category in categories %}
+                                    <li class="list-group-item bg-transparent px-0">
+                                        <a href="{{ path('app_category', {id: category.id}) }}" class="text-decoration-none text-body-secondary" data-turbo="false">{{ category.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
-                    <div class="col-lg-9 order-lg-1 order-2">
-                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                            {% for product in products %}
-                                <div class="col">
-                                    <div class="card shadow-sm h-100">
-                                        <img src="{{ asset('/images') ~ product.image }}" class="card-img-top" alt="product image">
+                    <div class="card shadow-sm" style="height: 725px;">
+                        <div class="card-body d-flex flex-column p-0 h-100">
+                            <svg class="bd-placeholder-img h-100" width="100%" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <rect width="100%" height="100%" fill="#868e96"/>
+                                <text x="50%" y="50%" fill="#dee2e6" dy=".3em" text-anchor="middle">Espace Publicitaire</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 order-lg-1 order-2">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                        {% for product in products %}
+                            <div class="col">
+                                <a href="{{ path('app_product_id', {id: product.id}) }}" class="text-decoration-none text-body-emphasis" data-turbo="false">
+                                    <div class="card shadow-sm h-100 rounded product-card">
+                                        <img src="{{ asset('/images') ~ product.image }}" class="card-img-top rounded-top" alt="product image">
                                         <div class="card-body d-flex flex-column">
-                                            <h3 class="h5">{{ product.name }}</h3>
-                                            <p class="text-muted small">Catégorie: {{ product.category.name }}</p>
+                                            <h3 class="h5 mb-2">{{ product.name }}</h3>
+                                            <p class="text-muted small mb-3">Catégorie: {{ product.category.name }}</p>
                                             <p class="card-text flex-grow-1">{{ product.description|length > 80 ? product.description|slice(0, 80) ~ "..." : product.description }}</p>
                                             <div class="mt-auto">
-                                                <p class="fw-bold">Prix: {{ product.price }}</p>
+                                                <p class="fw-bold mb-3">Prix : {{ product.price }} €</p>
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="btn-group">
-                                                        <a href="{{ path('app_product_id', {id: product.id}) }}" class="btn btn-sm btn-outline-secondary" data-turbo="false">Voir</a>
-                                                    </div>
+                                                    <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-sm btn-outline-dark" data-turbo="false">Acheter</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container mt-5">
-                <div class="w-100 d-flex justify-content-center">
-                    <div class="d-flex align-items-center" id="products">
-                        {{ pagerfanta(products, 'twitter_bootstrap4', {
-                            prev_message: 'Précédent',
-                            next_message: 'Suivant'
-                        }) }}
+                                </a>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="container mt-5">
+            <div class="w-100 d-flex justify-content-center">
+                <div class="d-flex align-items-center" id="products">
+                    {{ pagerfanta(products, 'twitter_bootstrap5', {
+                        prev_message: 'Précédent',
+                        next_message: 'Suivant'
+                    }) }}
+                </div>
+            </div>
+        </div>
     </turbo-frame>
+
+    <style>
+        .product-card {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 {% endblock %}
