@@ -87,5 +87,29 @@
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+        .product-card {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pagination .page-link {
+            color: #343a40; /* Couleur noire */
+        }
+
+        .pagination .page-link:hover,
+        .pagination .page-link:focus {
+            color: #212529; /* Couleur noire plus foncée */
+            background-color: #f8f9fa; /* Couleur de fond grise */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #343a40; /* Couleur de fond noire pour la page active */
+            border-color: #343a40; /* Couleur de bordure noire pour la page active */
+            color: #fff; /* Couleur de texte blanche pour la page active */
+        }
     </style>
 {% endblock %}
