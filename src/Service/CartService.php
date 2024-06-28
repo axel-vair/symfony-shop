@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -47,9 +46,6 @@ class CartService
         $cartData = [];
         foreach ($cart as $id => $quantity) {
             $product = $this->productRepository->findOneBy(['id' => $id]);
-            if(!$product){
-
-            }
             $cartData[] = [
                 'product' => $product,
                 'quantity' => $quantity,
@@ -66,6 +62,26 @@ class CartService
             $total += $item['product']->getPrice() * $item['quantity'];
         }
         return $total;
+    }
+
+    public function increaseQuantity(int $id): void
+    {
+        $cart = $this->getSession()->get('cart', []);
+        if (!empty($cart[$id])) {
+            $cart[$id]++;
+        }
+        $this->getSession()->set('cart', $cart);
+    }
+
+    public function decreaseQuantity(int $id): void
+    {
+        $cart = $this->getSession()->get('cart', []);
+        if (!empty($cart[$id]) && $cart[$id] > 1) {
+            $cart[$id]--;
+        } else {
+            unset($cart[$id]);
+        }
+        $this->getSession()->set('cart', $cart);
     }
     private function getSession(): SessionInterface
     {

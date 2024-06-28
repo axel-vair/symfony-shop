@@ -4,14 +4,15 @@
 
 {% block body %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
     <div class="container my-5">
         {% if cart is not empty %}
             <div class="card">
                 <div class="row">
                     <div class="col-md-8 bg-white p-5 rounded-start">
                         <h4 class="mb-4"><b>Mon panier</b></h4>
+                        {% set totalItems = 0 %}
                         {% for item in cart %}
+                            {% set totalItems = totalItems + item.quantity %}
                             <div class="border-top border-bottom py-3 mb-3">
                                 <div class="row align-items-center">
                                     <div class="col-2">
@@ -23,14 +24,18 @@
                                         <div>{{ item.product.name }}</div>
                                     </div>
                                     <div class="col">
-                                        <a href="#" class="text-dark">-</a>
-                                        <a href="#" class="border px-2 text-dark">{{ item.quantity }}</a>
-                                        <a href="#" class="text-dark">+</a>
+                                        <a href="{{ path('app_cart_quantity_decrease', {'id': item.product.id}) }}"
+                                           class="text-dark" data-turbo-frame="cart_content cart_summary cart_total">-</a>
+
+
+                                        <span class="border px-2 text-dark">{{ item.quantity }}</span>
+                                        <a href="{{ path('app_cart_quantity_increase', {'id': item.product.id}) }}"
+                                           class="text-dark" data-turbo-frame="cart_content cart_summary cart_total">+</a>
                                     </div>
                                     <div class="col">
                                         &euro; {{ item.product.price }}
                                         <a href="{{ path('app_cart_one_product_delete', {'id': item.product.id}) }}"
-                                           class="text-danger ms-3">
+                                           class="text-danger ms-3" data-turbo-frame="cart_content cart_summary cart_total" target="_self">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </div>
@@ -41,16 +46,24 @@
                             <a href="{{ path('app_cart_delete') }}" class="btn btn-danger"
                                onclick="return confirm('Êtes-vous sûr de vouloir vider votre panier ?')">Vider le
                                 panier</a>
-                            <a href="{{ path('app_shop') }}" class="text-muted"><i class="fas fa-arrow-left"></i> Retour
+                            <a href="{{ path('app_shop') }}" class="text-muted"><i class="fas fa-arrow-left"></i>
+                                Retour
                                 sur la boutique</a>
                         </div>
                     </div>
                     <div class="col-md-4 bg-light p-5 rounded-end">
                         <h5 class="mb-4"><b>Résumé</b></h5>
                         <div class="row mb-3">
-                            <div class="col">Produits ({{ cart|length }})</div>
+                            <div class="col">
+                                {% if totalItems == 1 %}
+                                    Produit ({{ totalItems }})
+                                {% else %}
+                                    Produits ({{ totalItems }})
+                                {% endif %}
+                            </div>
                             <div class="col text-end">&euro; {{ total }}</div>
                         </div>
+
                         <form>
                             <div class="mb-3">
                                 <label for="shipping" class="form-label">Livraison</label>

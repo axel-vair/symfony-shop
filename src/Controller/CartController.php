@@ -27,17 +27,34 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
 
-    #[Route('/panier/delete/product/{id}', name: 'app_cart_one_product_delete')]
-    public function deleteOneProductCart(CartService $cartService, Product $product): Response
-    {
-        $cartService->removeOneProductToCart($product->getId());
-        return $this->redirectToRoute('app_cart');
-    }
     #[Route('/panier/vider', name: 'app_cart_delete')]
     public function deleteCart(CartService $cartService): Response
     {
         $cartService->removeFromCart();
         $this->addFlash('success', 'Votre panier a été vidé.');
+        return $this->redirectToRoute('app_cart');
+    }
+
+    #[Route('/panier/quantity/increase/{id}', name: 'app_cart_quantity_increase')]
+    public function increaseQuantity(CartService $cartService, Product $product)
+    {
+        $cartService->increaseQuantity($product->getId());
+        return $this->redirectToRoute('app_cart');
+
+    }
+
+    #[Route('/panier/quantity/decrease/{id}', name: 'app_cart_quantity_decrease')]
+    public function decreaseQuantity(CartService $cartService, Product $product)
+    {
+        $cartService->decreaseQuantity($product->getId());
+        return $this->redirectToRoute('app_cart');
+
+    }
+
+    #[Route('/panier/delete/product/{id}', name: 'app_cart_one_product_delete')]
+    public function deleteOneProductFromCart(CartService $cartService, Product $product)
+    {
+        $cartService->removeOneProductToCart($product->getId());
         return $this->redirectToRoute('app_cart');
     }
 
