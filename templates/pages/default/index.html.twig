@@ -3,6 +3,13 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
+    <div class="container w-75">
+    {% for connect in app.flashes('connect') %}
+        <div class="alert alert-success" role="alert">
+            {{ connect }}
+        </div>
+    {% endfor %}
+    </div>
     <div class="container-fluid hero-section">
         <div class="row align-items-center">
             <div class=" order-md-1 text-center text-md-left">
@@ -12,7 +19,6 @@
             </div>
         </div>
     </div>
-
     <div class="container my-5">
         <div class="row">
             {% for category in categories %}
@@ -20,7 +26,8 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title">{{ category.name }}</h5>
-                            <a href="{{ path('app_category_index', {name: category.name}) }}" class="btn btn-outline-dark">Voir la catégorie</a>
+                            <a href="{{ path('app_category_index', {name: category.name}) }}"
+                               class="btn btn-outline-dark">Voir la catégorie</a>
                         </div>
                     </div>
                 </div>
@@ -36,13 +43,15 @@
                     {% for product in products %}
                         <div class="col">
                             <div class="card h-100 shadow-sm">
-                                <img src="{{ asset('/images') ~ product.image }}" class="card-img-top" alt="{{ product.name }}">
+                                <img src="{{ asset('/images') ~ product.image }}" class="card-img-top"
+                                     alt="{{ product.name }}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ product.name }}</h5>
                                     <p class="card-text">{{ product.description|length > 80 ? product.description|slice(0, 80) ~ "..." : product.description }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="font-weight-bold">{{ product.price }} €</span>
-                                        <a href="{{ path('app_product_id', {id: product.id}) }}" class="btn btn-outline-dark">Voir le produit</a>
+                                        <a href="{{ path('app_product_id', {id: product.id}) }}"
+                                           class="btn btn-outline-dark">Voir le produit</a>
                                     </div>
                                 </div>
                             </div>
