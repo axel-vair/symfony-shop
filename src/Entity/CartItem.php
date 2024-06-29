@@ -62,4 +62,8 @@ class CartItem
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return sprintf('CartItem(id=%d, product=%s, quantity=%d)', $this->getId(), $this->getProduct()->getName(), $this->getQuantity());
+    }
 }

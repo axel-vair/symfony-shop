@@ -5,36 +5,34 @@
 {% block body %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <div class="container my-5">
-        {% if cart is not empty %}
+        {% if cart|length > 0 %}
             <div class="card">
                 <div class="row">
                     <div class="col-md-8 bg-white p-5 rounded-start">
                         <h4 class="mb-4"><b>Mon panier</b></h4>
                         {% set totalItems = 0 %}
-                        {% for item in cart %}
-                            {% set totalItems = totalItems + item.quantity %}
+                        {% for cartItem in cart %}
+                            {% set totalItems = totalItems + cartItem.quantity %}
                             <div class="border-top border-bottom py-3 mb-3">
                                 <div class="row align-items-center">
                                     <div class="col-2">
-                                        <img class="img-fluid" src="{{ asset('images/' ~ item.product.image) }}"
-                                             alt="{{ item.product.name }}">
+                                        <img class="img-fluid" src="{{ asset('images/' ~ cartItem.product.image) }}"
+                                             alt="{{ cartItem.product.name }}">
                                     </div>
                                     <div class="col">
-                                        <div class="text-muted">{{ item.product.category ?? 'Catégorie' }}</div>
-                                        <div>{{ item.product.name }}</div>
+                                        <div class="text-muted">{{ cartItem.product.category ?? 'Catégorie' }}</div>
+                                        <div>{{ cartItem.product.name }}</div>
                                     </div>
                                     <div class="col">
-                                        <a href="{{ path('app_cart_quantity_decrease', {'id': item.product.id}) }}"
+                                        <a href="{{ path('app_cart_quantity_decrease', {'id': cartItem.product.id}) }}"
                                            class="text-dark" data-turbo-frame="cart_content cart_summary cart_total">-</a>
-
-
-                                        <span class="border px-2 text-dark">{{ item.quantity }}</span>
-                                        <a href="{{ path('app_cart_quantity_increase', {'id': item.product.id}) }}"
+                                        <span class="border px-2 text-dark">{{ cartItem.quantity }}</span>
+                                        <a href="{{ path('app_cart_quantity_increase', {'id': cartItem.product.id}) }}"
                                            class="text-dark" data-turbo-frame="cart_content cart_summary cart_total">+</a>
                                     </div>
                                     <div class="col">
-                                        &euro; {{ item.product.price }}
-                                        <a href="{{ path('app_cart_one_product_delete', {'id': item.product.id}) }}"
+                                        &euro; {{ cartItem.product.price }}
+                                        <a href="{{ path('app_cart_one_product_delete', {'id': cartItem.product.id}) }}"
                                            class="text-danger ms-3" data-turbo-frame="cart_content cart_summary cart_total" target="_self">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
