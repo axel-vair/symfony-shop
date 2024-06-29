@@ -1,0 +1,52 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <style>
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+        }
+
+        .error-template {
+            padding: 40px 15px;
+            text-align: center;
+        }
+
+        .error-actions {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .error-actions .btn {
+            margin-right: 10px;
+        }
+
+        .fa-exclamation-triangle {
+            font-size: 8rem;
+            color: #ffc107;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row h-100 align-items-center">
+            <div class="col-md-12">
+                <div class="error-template">
+                    <i class="fas fa-exclamation-triangle mb-4"></i>
+                    <h1 class="display-1">Non autorisé !</h1>
+                    <h2 class="display-4">403 Accès interdit</h2>
+                    <div class="error-details mb-4">
+                        Vous n'avez pas les droits pour accéder à cette page.
+                    </div>
+                    <div class="error-actions">
+                        <a href="{{ path('app_shop') }}" class="btn btn-dark btn-lg">
+                            Retour à l'accueil
+                        </a>
+                        <a href="{{ path('app_contact') }}" class="btn btn-outline-secondary btn-lg">
+                            Contactez-nous
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
