@@ -12,7 +12,8 @@
 
         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
             <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ path('app_shop') }}">Boutique</a>
-            <a class="me-3 py-2 link-body-emphasis text-decoration-none dropdown-toggle" href="#" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="me-3 py-2 link-body-emphasis text-decoration-none dropdown-toggle" href="#"
+               id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 Catégories
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -21,8 +22,16 @@
                 <li><a class="dropdown-item" href="/categorie/massage">Massage</a></li>
             </ul>
             <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Services</a>
-            <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ path('app_cart') }}">Panier</a>
-            <a class="py-2 link-body-emphasis text-decoration-none" href="{{ path('app_contact') }}">Contact</a>
+            <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ path('app_contact') }}">Contact</a>
+            {% if app.user %}
+                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ path('app_cart') }}">Panier</a>
+                <a class="btn btn-dark" href="{{ path('app_logout') }}">Déconnexion</a>
+
+            {% else %}
+                <a class="btn btn-outline-dark me-3" href="{{ path('app_login') }}">Connexion</a>
+                <a class="btn btn-dark" href="{{ path('app_register') }}">Inscription</a>
+            {% endif %}
+
 
         </nav>
     </div>

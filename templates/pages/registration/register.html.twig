@@ -1,20 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-pink-900">Register</h1>
-
-    {{ form_errors(registrationForm) }}
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-    
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-
+    <h1 class="mt-10 text-center text-2xl font-bold leading-9">Inscription</h1>
+    <div class="container w-25 mt-5">
+        {{ form(registrationForm) }}
+    </div>
 
 
 
