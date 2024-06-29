@@ -7,9 +7,11 @@ use App\Service\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CartController extends AbstractController
 {
+    #[IsGranted("ROLE_USER")]
     #[Route('/panier', name: 'app_cart')]
     public function index(CartService $cartService): Response
     {
