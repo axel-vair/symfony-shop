@@ -10,8 +10,8 @@ _Optionnel_ :
 - Récupération de mot de passe
 
 ### Gestion du compte utilisateur
-- Affichage et modification des informations du compte
-- Affichage de l'historique des commandes
+- ~~_Affichage et modification des informations du compte_~~ ✅
+- ~~Affichage de l'historique des commandes~~ ✅
 
 ### Catalogue de produits
 
@@ -27,19 +27,19 @@ _Optionnel_ :
 ### Processus de commande
 - Formulaire de commande (adresse de livraison, etc.)
 - ~~Récapitulatif de la commande~~ ✅
-- Enregistrement de la commande en base de données
+- ~~Enregistrement de la commande en base de données~~ ✅
 
 _Optionnel_ :
 - Paiement en ligne (avec un module tiers comme Stripe)
 
 ### Gestion des commandes (partie administration)
-- Liste des commandes avec filtres et pagination
-- Détails d'une commande
+- ~~Liste des commandes avec pagination~~ ✅
+- ~~Détails d'une commande~~ ✅
 - Changement de statut d'une commande
 
 ### Gestion des routes et sécurité 
-- Créer une route 404
-- Autoriser l'accès au panier pour les utilisateurs connectés uniquement
+- ~~Créer une route 404~~ (but dont work in dev) ✅
+- ~~Autoriser l'accès au panier pour les utilisateurs connectés uniquement~~ ✅
 - Gérer l'accès au dashboard
 
 ### Communication
