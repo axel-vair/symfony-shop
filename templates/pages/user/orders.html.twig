@@ -7,26 +7,27 @@
         <h1 class="mb-4">Mes commandes</h1>
 
         {% if orders|length > 0 %}
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Numéro de commande</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Statut</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for order in orders %}
-                    <tr>
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
-                        <td>{{ order.total|number_format(2, ',', ' ') }} €</td>
-                        <td>{{ order.status }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% for order in orders %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Commande #{{ order.id }} - {{ order.createdAt|date('d/m/Y H:i') }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Total : {{ order.total|number_format(2, ',', ' ') }} €</h5>
+                        <p class="card-text">Statut : {{ order.status }}</p>
+
+                        <h6>Produits :</h6>
+                        <ul class="list-group">
+                            {% for item in order.orderItems %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ item.product.name }}
+                                    <span class="badge bg-primary rounded-pill">{{ item.quantity }} x {{ item.price|number_format(2, ',', ' ') }} €</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
         {% else %}
             <p>Vous n'avez pas encore passé de commande.</p>
         {% endif %}
