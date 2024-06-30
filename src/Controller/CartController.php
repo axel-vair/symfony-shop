@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Service\CartService;
+use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -122,6 +123,21 @@ class CartController extends AbstractController
     {
         $cartService->removeOneProductToCart($product->getId()); // Supprime le produit du panier
         return $this->redirectToRoute('app_cart'); // Redirige vers la page du panier
+    }
+
+    #[Route('/panier/valider', name: 'app_cart_validate')]
+    public function validateCart(OrderService $orderService): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        try {
+            $order = $orderService->createOrderFromCart($this->getUser());
+            $this->addFlash('success', 'Votre commande a été créée avec succès.');
+            return $this->redirectToRoute('app_user_orders');
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('app_cart');
+        }
     }
 
 }
