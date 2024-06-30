@@ -49,7 +49,7 @@ class CartService
     }
 
     /**
-     * Supprime un produit du panier.
+     * Supprime un produit spécifique du panier.
      *
      * @param int $productId L'ID du produit à supprimer
      * @return void
@@ -67,10 +67,11 @@ class CartService
             $this->entityManager->flush();
         }
     }
+
     /**
      * Supprime le contenu du panier.
      *
-     * @return mixed
+     * @return void
      */
     public function removeFromCart()
     {
@@ -82,26 +83,6 @@ class CartService
         $this->entityManager->persist($cart);
         $this->entityManager->flush();
     }
-    /**
-     * Récupère le contenu du panier.
-     * Retourne un tableau associatif avec les produits et leurs quantités.
-     *
-     * @return array
-     */
-    public function getCartContents(): array
-    {
-        $cart = $this->getSession()->get('cart', []);
-        $cartData = [];
-        foreach ($cart as $id => $quantity) {
-            $product = $this->productRepository->findOneBy(['id' => $id]);
-            $cartData[] = [
-                'product' => $product,
-                'quantity' => $quantity,
-            ];
-        }
-        return $cartData;
-    }
-
 
     /**
      * Calcule le montant total du panier.
@@ -117,6 +98,7 @@ class CartService
         }
         return $total;
     }
+
     /**
      * Augmente la quantité d'un produit dans le panier.
      *
@@ -135,7 +117,6 @@ class CartService
             $this->entityManager->flush();
         }
     }
-
 
     /**
      * Diminue la quantité d'un produit dans le panier.
@@ -162,16 +143,6 @@ class CartService
         }
     }
 
-    /**
-     * Récupère l'objet Session.
-     *
-     * @return SessionInterface
-     */
-    private function getSession(): SessionInterface
-    {
-        return $this->requestStack->getSession();
-    }
-
     public function getCart(): Cart
     {
         $user = $this->security->getUser();
@@ -191,4 +162,9 @@ class CartService
         return $cart;
     }
 
+    public function getCartItemCount(): int
+    {
+        $cart = $this->getCart();
+        return $cart->getCartItems()->count();
+    }
 }

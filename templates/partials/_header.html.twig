@@ -23,7 +23,15 @@
             </ul>
             {% if app.user %}
                 <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ path('app_profil', {id: app.user.id}) }}">Profil</a>
-                <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ path('app_cart') }}">Panier</a>
+                <a class="me-3 py-2 link-body-emphasis text-decoration-none position-relative" href="{{ path('app_cart') }}">
+                    Panier
+                    {% set cartCount = cart_count() %}
+                    {% if cartCount > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ cartCount }}
+        </span>
+                    {% endif %}
+                </a>
                 <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{{ path('app_contact') }}">Contact</a>
                 <a class="btn btn-dark" href="{{ path('app_logout') }}">Déconnexion</a>
             {% else %}
