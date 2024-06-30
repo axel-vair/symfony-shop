@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Édition du profil{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4">Édition du profil</h1>
+
+                        {{ form(form) }}
+
+                        <hr class="my-4">
+
+                        <h2 class="text-center mb-3">Mes dernières commandes</h2>
+
+                        {% if app.user.orders|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Numéro</th>
+                                        <th>Date</th>
+                                        <th>Total</th>
+                                        <th>Statut</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for order in app.user.orders|slice(0, 3) %}
+                                        <tr>
+                                            <td><a href="{{ path('app_order_details', {id: order.id}) }}">#{{ order.id }}</a></td>
+                                            <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                                            <td>{{ order.total|number_format(2, ',', ' ') }} €</td>
+                                            <td>{{ order.status }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="{{ path('app_user_orders') }}" class="btn btn-dark">Voir toutes mes commandes</a>
+                            </div>
+                        {% else %}
+                            <p class="text-center">Vous n'avez pas encore passé de commande.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
