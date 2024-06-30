@@ -15,7 +15,7 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'app_product_id', methods: ['GET'])]
     public function index(Product $product): Response
     {
-        return $this->render('pages/product/order_details.html.twig', [
+        return $this->render('pages/product/show.html.twig', [
             "product" => $product,
         ]);
     }
