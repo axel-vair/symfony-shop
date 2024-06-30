@@ -6,11 +6,12 @@
     <div class="container mt-5">
         <h1 class="mb-4">Mes commandes</h1>
 
-        {% if orders|length > 0 %}
+        {% if orders.count > 0 %}
             {% for order in orders %}
                 <div class="card mb-4">
                     <div class="card-header">
-                        Commande #{{ order.id }} - {{ order.createdAt|date('d/m/Y H:i') }}
+                        Commande <a href="{{ path('app_order_details', {id: order.id}) }}"> #{{ order.id }}</a>
+                        - {{ order.createdAt|date('d/m/Y H:i') }}
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Total : {{ order.total|number_format(2, ',', ' ') }} €</h5>
@@ -21,17 +22,48 @@
                             {% for item in order.orderItems %}
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     {{ item.product.name }}
-                                    <span class="badge bg-primary rounded-pill">{{ item.quantity }} x {{ item.price|number_format(2, ',', ' ') }} €</span>
+                                    <span class="badge bg-dark rounded-pill">{{ item.quantity }} x {{ item.price|number_format(2, ',', ' ') }} €</span>
                                 </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
             {% endfor %}
+
+            {% if orders.haveToPaginate %}
+                <div class="container mt-5">
+                    <div class="w-100 d-flex justify-content-center">
+                        <div class="d-flex align-items-center">
+                            {{ pagerfanta(orders, 'twitter_bootstrap5', {
+                                prev_message: 'Précédent',
+                                next_message: 'Suivant'
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         {% else %}
             <p>Vous n'avez pas encore passé de commande.</p>
         {% endif %}
 
         <a href="{{ path('app_profil', {'id': app.user.id}) }}" class="btn btn-secondary">Retour au profil</a>
     </div>
+
+    <style>
+        .pagination .page-link {
+            color: #343a40; /* Couleur noire */
+        }
+
+        .pagination .page-link:hover,
+        .pagination .page-link:focus {
+            color: #212529; /* Couleur noire plus foncée */
+            background-color: #f8f9fa; /* Couleur de fond grise */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #343a40; /* Couleur de fond noire pour la page active */
+            border-color: #343a40; /* Couleur de bordure noire pour la page active */
+            color: #fff; /* Couleur de texte blanche pour la page active */
+        }
+    </style>
 {% endblock %}
