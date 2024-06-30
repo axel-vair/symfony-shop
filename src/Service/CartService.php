@@ -60,9 +60,9 @@ class CartService
         $cartItem = $cart->getCartItems()->filter(function ($item) use ($productId) {
             return $item->getProduct()->getId() === $productId;
         })->first();
-
         if ($cartItem) {
             $cart->removeCartItem($cartItem);
+            $this->entityManager->remove($cartItem);
             $this->entityManager->persist($cart);
             $this->entityManager->flush();
         }
@@ -74,9 +74,14 @@ class CartService
      */
     public function removeFromCart()
     {
-        return $this->getSession()->remove('cart');
+        $cart = $this->getCart();
+        foreach ($cart->getCartItems() as $cartItem) {
+            $this->entityManager->remove($cartItem);
+        }
+        $cart->getCartItems()->clear();
+        $this->entityManager->persist($cart);
+        $this->entityManager->flush();
     }
-
     /**
      * Récupère le contenu du panier.
      * Retourne un tableau associatif avec les produits et leurs quantités.
@@ -120,12 +125,17 @@ class CartService
      */
     public function increaseQuantity(int $id): void
     {
-        $cart = $this->getSession()->get('cart', []);
-        if (!empty($cart[$id])) {
-            $cart[$id]++;
+        $cart = $this->getCart();
+        $cartItem = $cart->getCartItems()->filter(function ($item) use ($id) {
+            return $item->getProduct()->getId() === $id;
+        })->first();
+        if ($cartItem) {
+            $cartItem->setQuantity($cartItem->getQuantity() + 1);
+            $this->entityManager->persist($cartItem);
+            $this->entityManager->flush();
         }
-        $this->getSession()->set('cart', $cart);
     }
+
 
     /**
      * Diminue la quantité d'un produit dans le panier.
@@ -136,13 +146,20 @@ class CartService
      */
     public function decreaseQuantity(int $id): void
     {
-        $cart = $this->getSession()->get('cart', []);
-        if (!empty($cart[$id]) && $cart[$id] > 1) {
-            $cart[$id]--;
-        } else {
-            unset($cart[$id]);
+        $cart = $this->getCart();
+        $cartItem = $cart->getCartItems()->filter(function ($item) use ($id) {
+            return $item->getProduct()->getId() === $id;
+        })->first();
+        if ($cartItem) {
+            if ($cartItem->getQuantity() > 1) {
+                $cartItem->setQuantity($cartItem->getQuantity() - 1);
+                $this->entityManager->persist($cartItem);
+            } else {
+                $cart->removeCartItem($cartItem);
+                $this->entityManager->remove($cartItem);
+            }
+            $this->entityManager->flush();
         }
-        $this->getSession()->set('cart', $cart);
     }
 
     /**
