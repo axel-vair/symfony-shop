@@ -125,6 +125,10 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart'); // Redirige vers la page du panier
     }
 
+    /**
+     * @param OrderService $orderService
+     * @return Response
+     */
     #[Route('/panier/valider', name: 'app_cart_validate')]
     public function validateCart(OrderService $orderService): Response
     {
