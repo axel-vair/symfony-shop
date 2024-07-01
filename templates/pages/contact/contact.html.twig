@@ -1,38 +1,41 @@
-{% extends 'base.html.twig' %}
+    {% extends 'base.html.twig' %}
 
-{% block title %}Contactez-nous !{% endblock %}
-{% block body %}
-    <style>
-        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
+    {% block title %}Contactez-nous !{% endblock %}
 
+    {% block body %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="container">
+        <div class="container-fluid py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                        <div class="card-body p-5">
+                            <div class="row">
+                                <div class="col-lg-7 pe-lg-5">
+                                    <h2 class="mb-4">Laissez-nous vos coordonnées</h2>
+                                    {{ form(contactForm) }}
 
-    <h1 class="">Laissez-nous vos coordonnées !</h1>
-    <div class="">
-        {{ form(contactForm) }}
-    </div>
-
-    <div class="text-bg-success">
-        {% for message in app.flashes('notice') %}
-            <div class="alert alert-success">
-                {{ message }}
+                                    {% for message in app.flashes('notice') %}
+                                        <div class="alert alert-success mt-3">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-lg-5 mt-4 mt-lg-0">
+                                    <div class="bg-body-secondary text-dark p-4 h-100 d-flex flex-column justify-content-center rounded">
+                                        <h3 class="mb-4">Nous joindre</h3>
+                                        <div class="d-flex align-items-center justify-center mb-3">
+                                            <i class="fas fa-map-marker-alt fa-2x me-3"></i>
+                                            <p class="mb-0">06 rue Jeanne Duprès<br>13001 Marseille</p>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-phone fa-2x me-3"></i>
+                                            <p class="mb-0">06 26 23 67 90</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
             </div>
-        {% endfor %}
-    </div>
-
-    <div class=" p-3 my-3">
-        Nous joindre :
-
-        <div>Addresse : 06 rue Jeanne Duprès 13001 Marseille</div>
-        <div>Téléphone : 06 26 23 67 90</div>
-
-    </div>
-</div>
-
-
-
-
-{% endblock %}
+        </div>
+    {% endblock %}
