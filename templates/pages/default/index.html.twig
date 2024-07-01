@@ -3,59 +3,103 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <div class="container px-5">
-        <div class="row row-cols-1 row-cols-md-3 g-4 mb-3 text-center">
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Free</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled mt-3 mb-4">
-                            <li>10 users included</li>
-                            <li>2 GB of storage</li>
-                            <li>Email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
-                    </div>
+    <div class="container w-75">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <div class="container-fluid hero-section">
+        <div class="row align-items-center">
+            <div class="order-md-1 text-center text-md-left">
+                <h1 class="display-4 font-weight-bold">Bienvenue chez Butterfly</h1>
+                <p class="lead">Découvrez notre sélection de produits bien-être pour prendre soin de vous.</p>
+                <a href="{{ path('app_shop') }}" class="btn btn-dark btn-lg">Découvrir la boutique</a>
             </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Pro</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled mt-3 mb-4">
-                            <li>20 users included</li>
-                            <li>10 GB of storage</li>
-                            <li>Priority email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
-                    </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-md-4 mb-4">
+                    <a href="{{ path('app_category_index', {name: category.name}) }}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm category-card position-relative">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h5 class="card-title">{{ category.name }}</h5>
+                            </div>
+                            <i class="bi bi-arrow-up-right-square category-icon position-absolute"></i>
+                        </div>
+                    </a>
                 </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Enterprise</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled mt-3 mb-4">
-                            <li>30 users included</li>
-                            <li>15 GB of storage</li>
-                            <li>Phone and email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
-                    </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="mb-4">Nos meilleures ventes</h2>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for product in products %}
+                        <div class="col">
+                            <a href="{{ path('app_product_id', {id: product.id}) }}" class="text-decoration-none">
+                                <div class="card h-100 shadow-sm">
+                                    <img src="{{ asset('/images') ~ product.image }}" class="card-img-top"
+                                         alt="{{ product.name }}">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text flex-grow-1">{{ product.description|length > 80 ? product.description|slice(0, 80) ~ "..." : product.description }}</p>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-top-0">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="px-3 py-2 rounded" style="background-color: #f8f9fa;">
+                                                <p class="card-text h6 fw-bold mb-1 text-muted">Prix</p>
+                                                <p class="card-text h4 fw-bold mb-0">{{ product.price }} €</p>
+                                            </div>
+                                            <p class="btn btn-sm btn-dark">Voir le produit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .hero-section {
+            background-color: #f8f9fa;
+            padding: 80px 0;
+        }
+
+        .card {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: #000;
+            transition: color 0.3s ease;
+        }
+
+        .category-icon:hover {
+            color: #797979;
+        }
+    </style>
+
 {% endblock %}

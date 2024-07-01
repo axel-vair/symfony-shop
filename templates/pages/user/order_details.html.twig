@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande #{{ order.id }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Détails de la commande #{{ order.id }}</h1>
+
+        <div class="card">
+            <div class="card-header">
+                Commande passée le {{ order.createdAt|date('d/m/Y à H:i') }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Statut : {{ order.status }}</h5>
+                <p class="card-text">Total : {{ order.total|number_format(2, ',', ' ') }} €</p>
+
+                <h6 class="mt-4">Produits commandés :</h6>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in order.orderItems %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.price|number_format(2, ',', ' ') }} €</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ (item.price * item.quantity)|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <a href="{{ path('app_user_orders') }}" class="btn btn-secondary mt-3">Retour à la liste des commandes</a>
+    </div>
+{% endblock %}
