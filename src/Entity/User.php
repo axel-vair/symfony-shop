@@ -52,6 +52,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'utilisateur')]
     private Collection $orders;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $google_id = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $authMethod = 'local';
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -201,6 +207,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $order->setUtilisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->google_id;
+    }
+
+    public function setGoogleId(?string $google_id): static
+    {
+        $this->google_id = $google_id;
+
+        return $this;
+    }
+
+    public function getAuthMethod(): ?string
+    {
+        return $this->authMethod;
+    }
+
+    public function setAuthMethod(string $authMethod): static
+    {
+        $this->authMethod = $authMethod;
 
         return $this;
     }
