@@ -2,13 +2,18 @@
 
 namespace App\Controller;
 
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    public const SCOPE = [
+        'google' => []
+    ];
     /**
      * Gère le processus de connexion des utilisateurs.
      *
@@ -39,6 +44,22 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/oauth/connect/{service}', name: 'auth_oauth_connect', methods: ['GET'])]
+    public function connect(string $service, ClientRegistry $clientRegistry): RedirectResponse
+    {
+        if(! in_array($service, array_keys(self::SCOPE), true)) {
+            throw $this->createAccessDeniedException();
+        }
+        return $clientRegistry
+            ->getClient($service)
+            ->redirect(self::SCOPE[$service]);
+    }
+
+    #[Route(path: '/oauth/check/{service}', name: 'auth_oauth_check', methods: ['GET', 'POST'])]
+    public function check(): Response
+    {
+        return new Response(status:200);
+    }
     /**
      * Gère le processus de déconnexion des utilisateurs.
      *

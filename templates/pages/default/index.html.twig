@@ -4,14 +4,14 @@
 
 {% block body %}
     <div class="container w-75">
-        {% for label, messages in app.flashes %}
+       {# {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
-        {% endfor %}
+        {% endfor %}#}
     </div>
     <div class="container-fluid hero-section">
         <div class="row align-items-center">
@@ -42,7 +42,7 @@
 
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
+            <div class="col-md-12 text-center">
                 <h2 class="mb-4">Nos meilleures ventes</h2>
                 <div class="row row-cols-1 row-cols-md-3 g-4">
                     {% for product in products %}
@@ -57,11 +57,11 @@
                                     </div>
                                     <div class="card-footer bg-transparent border-top-0">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div class="px-3 py-2 rounded" style="background-color: #f8f9fa;">
+                                            <div class="px-3 py-2 mb-2 rounded" style="background-color: #f8f9fa;">
                                                 <p class="card-text h6 fw-bold mb-1 text-muted">Prix</p>
                                                 <p class="card-text h4 fw-bold mb-0">{{ product.price }} €</p>
                                             </div>
-                                            <p class="btn btn-sm btn-dark">Voir le produit</p>
+                                            <p class="btn btn-md btn-dark">Voir le produit</p>
                                         </div>
                                     </div>
                                 </div>
