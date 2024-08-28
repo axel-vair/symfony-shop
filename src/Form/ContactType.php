@@ -13,29 +13,29 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Email;
 
 class ContactType extends AbstractType
 {
-  /*  public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('email', EmailType::class, [])
-            ->add('name')
-            ->add('message', TextareaType::class,[])
-            ->add('envoyer',SubmitType::class,)
-        ;
-    }*/
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class, [
-                'attr' => [
-                    'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
-                    'placeholder' => 'Adresse email'
-                ],
-                'label' => 'Email',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+        ->add('email', EmailType::class, [
+            'attr' => [
+                'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                'placeholder' => 'Adresse email'
+            ],
+            'label' => 'Email',
+            'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+            'constraints' => [
+                new NotBlank([
+                    'message' => 'L\'adresse email ne peut pas être vide.',
+                ]),
+                new Email([
+                    'message' => 'Veuillez saisir une adresse email valide.',
+                ]),
+            ],
             ])
 
             ->add('name', TextareaType::class, [
@@ -45,6 +45,11 @@ class ContactType extends AbstractType
                 ],
                 'label' => 'Nom',
                 'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le nom ne peut pas être vide.',
+                    ]),
+                ],
             ])
 
             ->add('message', TextareaType::class, [
@@ -54,6 +59,11 @@ class ContactType extends AbstractType
                 ],
                 'label' => 'Message',
                 'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le message ne peut pas être vide.',
+                    ]),
+                ],
             ])
 
             ->add('envoyer', SubmitType::class, [
