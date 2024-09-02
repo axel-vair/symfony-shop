@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240705082740 extends AbstractMigration
+final class Version20240902094711 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -40,7 +40,7 @@ final class Version20240705082740 extends AbstractMigration
         $this->addSql('CREATE TABLE comment (id INT NOT NULL, user_comment_id INT DEFAULT NULL, product_id INT DEFAULT NULL, comment TEXT NOT NULL, rating DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_9474526C5F0EBBFF ON comment (user_comment_id)');
         $this->addSql('CREATE INDEX IDX_9474526C4584665A ON comment (product_id)');
-        $this->addSql('CREATE TABLE contact (id INT NOT NULL, email VARCHAR(255) NOT NULL, name VARCHAR(255) DEFAULT NULL, message TEXT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE contact (id INT NOT NULL, name VARCHAR(255) DEFAULT NULL, message TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "order" (id INT NOT NULL, utilisateur_id INT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, total DOUBLE PRECISION NOT NULL, status VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_F5299398FB88E14F ON "order" (utilisateur_id)');
         $this->addSql('COMMENT ON COLUMN "order".created_at IS \'(DC2Type:datetime_immutable)\'');

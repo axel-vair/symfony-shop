@@ -14,7 +14,7 @@
         "doctrine/doctrine-bundle": "^2.12",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.2",
-        "easycorp/easyadmin-bundle": "^4.10",
+        "easycorp/easyadmin-bundle": "^4.11",
         "fakerphp/faker": "^1.23",
         "knpuniversity/oauth2-client-bundle": "^2.18",
         "league/oauth2-github": "^3.1",

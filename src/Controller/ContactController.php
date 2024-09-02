@@ -28,10 +28,7 @@ class ContactController extends AbstractController
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Crée une nouvelle instance de l'entité Contact
         $contact = new Contact();
-
-        // Crée le formulaire de contact en utilisant ContactType
         $form = $this->createForm(ContactType::class, $contact);
 
         // Traite la requête et remplit l'objet $contact avec les données soumises
@@ -39,13 +36,12 @@ class ContactController extends AbstractController
 
         // Vérifie si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
+            // dd('Formulaire validé et entité persistée.');
             // Persiste l'entité Contact dans la base de données
             $entityManager->persist($contact);
             $entityManager->flush();
-
             // Ajoute un message flash pour informer l'utilisateur que son message a été envoyé
             $this->addFlash('notice', "Votre message a été envoyé !");
-
             // Redirige l'utilisateur vers la page de contact
             return $this->redirectToRoute('app_contact');
         }
