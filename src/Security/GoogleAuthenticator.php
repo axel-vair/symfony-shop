@@ -25,27 +25,6 @@ class GoogleAuthenticator extends AbstractOAuthAuthenticator
     protected string $serviceName = 'google';
 
     /**
-     * Constructeur de la classe GoogleAuthenticator.
-     *
-     * Initialise l'authentificateur avec les dépendances nécessaires.
-     * Appelle le constructeur parent avec les mêmes paramètres.
-     *
-     * @param ClientRegistry $clientRegistry Registre des clients OAuth
-     * @param RouterInterface $router Interface de routage Symfony
-     * @param UserRepository $userRepository Repository pour les opérations liées aux utilisateurs
-     * @param OAuthRegistrationService $registrationService Service pour l'enregistrement des utilisateurs OAuth
-     */
-    public function __construct(
-        ClientRegistry           $clientRegistry,
-        RouterInterface          $router,
-        UserRepository           $userRepository,
-        OAuthRegistrationService $registrationService,
-    )
-    {
-        parent::__construct($clientRegistry, $router, $userRepository, $registrationService);
-    }
-
-    /**
      * Récupère l'utilisateur à partir des informations fournies par Google.
      *
      * Cette méthode implémente la méthode abstraite de la classe parente.

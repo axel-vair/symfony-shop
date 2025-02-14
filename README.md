@@ -7,6 +7,7 @@
 - ~~Connexion/déconnexion d'un utilisateur~~ ✅
 -  ~~Connexion OAuth2~~ ✅
 
+
 _Optionnel_ :
 - Récupération de mot de passe
 
