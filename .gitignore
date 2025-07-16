@@ -27,3 +27,6 @@
 
 compose.yaml
 .env
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
