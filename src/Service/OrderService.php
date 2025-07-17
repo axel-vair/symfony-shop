@@ -12,14 +12,12 @@ class OrderService
 {
     private EntityManagerInterface $entityManager;
     private CartService $cartService;
-    private Security $security;
 
 
-    public function __construct(EntityManagerInterface $entityManager, CartService $cartService, Security $security)
+    public function __construct(EntityManagerInterface $entityManager, CartService $cartService)
     {
         $this->entityManager = $entityManager;
         $this->cartService = $cartService;
-        $this->security = $security;
 
     }
 
