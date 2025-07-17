@@ -6,16 +6,21 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class OrderService
 {
     private EntityManagerInterface $entityManager;
     private CartService $cartService;
+    private Security $security;
 
-    public function __construct(EntityManagerInterface $entityManager, CartService $cartService)
+
+    public function __construct(EntityManagerInterface $entityManager, CartService $cartService, Security $security)
     {
         $this->entityManager = $entityManager;
         $this->cartService = $cartService;
+        $this->security = $security;
+
     }
 
     /**
@@ -36,14 +41,12 @@ class OrderService
             throw new \Exception('Le panier est vide');
         }
 
-        // Crée une nouvelle commande
         $order = new Order();
         $order->setUtilisateur($user);
         $order->setTotal($this->cartService->calculateTotal($cart));
         $order->setStatus('En attente');
         $order->setCreatedAt(new \DateTimeImmutable());
 
-        // Crée les éléments de commande à partir des éléments du panier
         foreach ($cart->getCartItems() as $cartItem) {
             $orderItem = new OrderItem();
             $orderItem->setOrder($order);
@@ -53,18 +56,17 @@ class OrderService
                 throw new \Exception('Produit non disponible');
             }
             $orderItem->setProduct($product);
-            $orderItem->setQuantity((int) $cartItem->getQuantity());
-            $orderItem->setPrice((float) $product->getPrice());
+            $orderItem->setQuantity((int)$cartItem->getQuantity());
+            $orderItem->setPrice((float)$product->getPrice());
             $order->addOrderItem($orderItem);
         }
 
-        // Enregistre la commande
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
-        // Vide le panier après la création de la commande
         $this->cartService->removeFromCart($user);
 
         return $order;
     }
+
 }
