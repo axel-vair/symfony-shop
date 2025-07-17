@@ -41,8 +41,10 @@ class UserController extends AbstractController
         // Vérifie que l'utilisateur est complètement authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Vérifie que l'utilisateur actuel modifie son propre profil
-        if ($this->getUser()->getId() !== $user->getId()) {
+        $currentUser = $this->getUser();
+
+        // Vérifie que l'utilisateur actuel est bien authentifié et que l'utilisateur modifie son propre profil
+        if ($currentUser === null || $currentUser->getId() !== $user->getId()) {
             throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier ce profil.');
         }
 
@@ -51,7 +53,14 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $plainPassword = $form->get('password')->getData();
+
+            // Vérifie que le mot de passe actuel est une chaîne de caractères et non vide
+            if (!is_string($plainPassword) || empty($plainPassword)) {
+                $this->addFlash('error', 'Mot de passe incorrect. Votre profil n\'a pas été modifié.');
+                return $this->redirectToRoute('app_profil', ['id' => $user->getId()]);
+            }
 
             // Vérifie que le mot de passe actuel est correct
             if (!$hasher->isPasswordValid($user, $plainPassword)) {

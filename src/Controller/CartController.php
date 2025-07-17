@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\User;
 use App\Service\CartService;
 use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,8 +55,14 @@ class CartController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         // Ajoute le produit au panier
-        $cartService->addToCart($product->getId());
-
+        $id = $product->getId();
+        if (is_int($id)) {
+            $cartService->addToCart($id);
+        } else {
+            // Gérer l'erreur ou rediriger l'utilisateur
+            $this->addFlash('error', 'Produit invalide.');
+            return $this->redirectToRoute('app_cart');
+        }
         // Redirige vers la page du panier
         return $this->redirectToRoute('app_cart');
     }
@@ -94,8 +101,15 @@ class CartController extends AbstractController
     #[Route('/panier/quantity/increase/{id}', name: 'app_cart_quantity_increase')]
     public function increaseQuantity(CartService $cartService, Product $product)
     {
-        // Augmente la quantité du produit dans le panier
-        $cartService->increaseQuantity($product->getId());
+        $id = $product->getId();
+
+        if (is_int($id)) {
+            // Augmente la quantité du produit dans le panier
+            $cartService->increaseQuantity($id);
+        } else {
+            $this->addFlash('error', 'Produit invalide.');
+            return $this->redirectToRoute('app_cart');
+        }
 
         // Redirige vers la page du panier
         return $this->redirectToRoute('app_cart');
@@ -113,8 +127,15 @@ class CartController extends AbstractController
     #[Route('/panier/quantity/decrease/{id}', name: 'app_cart_quantity_decrease')]
     public function decreaseQuantity(CartService $cartService, Product $product)
     {
-        // Diminue la quantité du produit dans le panier
-        $cartService->decreaseQuantity($product->getId());
+        $id = $product->getId();
+
+        if (is_int($id)) {
+            // Diminue la quantité du produit dans le panier
+            $cartService->decreaseQuantity($id);
+        } else {
+            $this->addFlash('error', 'Produit invalide.');
+            return $this->redirectToRoute('app_cart');
+        }
 
         // Redirige vers la page du panier
         return $this->redirectToRoute('app_cart');
@@ -132,8 +153,15 @@ class CartController extends AbstractController
     #[Route('/panier/delete/product/{id}', name: 'app_cart_one_product_delete')]
     public function deleteOneProductFromCart(CartService $cartService, Product $product)
     {
-        // Supprime le produit spécifique du panier
-        $cartService->removeOneProductToCart($product->getId());
+        $id = $product->getId();
+
+        if (is_int($id)) {
+            // Supprime le produit spécifique du panier
+            $cartService->removeOneProductToCart($id);
+        } else {
+            $this->addFlash('error', 'Produit invalide.');
+            return $this->redirectToRoute('app_cart');
+        }
 
         // Redirige vers la page du panier
         return $this->redirectToRoute('app_cart');
@@ -155,20 +183,26 @@ class CartController extends AbstractController
         // Vérifie si l'utilisateur a le rôle 'ROLE_USER', sinon refuse l'accès
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        try {
-            // Tente de créer une commande à partir du panier
-            $order = $orderService->createOrderFromCart($this->getUser());
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            try {
+                // Tente de créer une commande à partir du panier
+                $order = $orderService->createOrderFromCart($this->getUser());
 
-            // Ajoute un message flash de succès
-            $this->addFlash('success', 'Votre commande a été créée avec succès.');
+                // Ajoute un message flash de succès
+                $this->addFlash('success', 'Votre commande a été créée avec succès.');
 
-            // Redirige vers la page des commandes de l'utilisateur
-            return $this->redirectToRoute('app_user_orders');
-        } catch (\Exception $e) {
-            // En cas d'erreur, ajoute un message flash d'erreur
-            $this->addFlash('error', $e->getMessage());
+                // Redirige vers la page des commandes de l'utilisateur
+                return $this->redirectToRoute('app_user_orders');
+            } catch (\Exception $e) {
+                // En cas d'erreur, ajoute un message flash d'erreur
+                $this->addFlash('error', $e->getMessage());
 
-            // Redirige vers la page du panier
+                // Redirige vers la page du panier
+                return $this->redirectToRoute('app_cart');
+            }
+        } else {
+            $this->addFlash('error', 'Utilisateur non authentifié.');
             return $this->redirectToRoute('app_cart');
         }
     }
