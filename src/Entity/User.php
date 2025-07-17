@@ -20,7 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $google_id = null;
 
     #[ORM\Column(length: 20)]
-    private ?string $authMethod = 'local';
+    private string $authMethod = 'local';
 
     public function __construct()
     {
@@ -92,9 +92,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see UserInterface
-     *
-     * @return list<string>
+     * @return array|string[]
      */
     public function getRoles(): array
     {

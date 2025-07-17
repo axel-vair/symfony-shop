@@ -13,7 +13,7 @@ class CartItem
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'cartItems')]
     private ?Cart $cart = null;
@@ -66,6 +66,12 @@ class CartItem
     }
     public function __toString(): string
     {
-        return sprintf('CartItem(id=%d, product=%s, quantity=%d)', $this->getId(), $this->getProduct()->getName(), $this->getQuantity());
+        // Vérifie que le produit existe avant d'appeler getName
+        if ($this->getProduct()) {
+            return sprintf('CartItem(id=%d, product=%s, quantity=%d)', $this->getId(), $this->getProduct()->getName(), $this->getQuantity());
+        }
+
+        // Si pas de produit, retourne une chaîne par défaut
+        return sprintf('CartItem(id=%d, product=undefined, quantity=%d)', $this->getId(), $this->getQuantity());
     }
 }

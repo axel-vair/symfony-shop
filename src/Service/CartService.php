@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CartService
 {
+    private RequestStack $requestStack;
+    private ProductRepository $productRepository;
+    private Security $security;
+    private EntityManagerInterface $entityManager;
+
     public function __construct(RequestStack $requestStack, ProductRepository $productRepository, Security $security, EntityManagerInterface $entityManager)
     {
         $this->requestStack = $requestStack;
@@ -73,7 +78,7 @@ class CartService
      *
      * @return void
      */
-    public function removeFromCart()
+    public function removeFromCart(): void
     {
         $cart = $this->getCart();
         foreach ($cart->getCartItems() as $cartItem) {
@@ -146,15 +151,18 @@ class CartService
     public function getCart(): Cart
     {
         $user = $this->security->getUser();
+
         if (!$user) {
             throw new \LogicException('User must be logged in to access cart.');
         }
 
         $cart = $user->getCart();
+
         if (!$cart) {
             $cart = new Cart();
             $cart->setUtilisateur($user);
             $user->setCart($cart);
+
             $this->entityManager->persist($cart);
             $this->entityManager->flush();
         }
