@@ -60,8 +60,13 @@ abstract class AbstractOAuthAuthenticator extends OAuth2Authenticator
      */
     protected function getUserIdentifier(ResourceOwnerInterface $resourceOwner): string
     {
-        return $resourceOwner->getEmail();
+        $data = $resourceOwner->toArray();
+        if (empty($data['email'])) {
+            throw new \RuntimeException("L'email OAuth est absent.");
+        }
+        return $data['email'];
     }
+
 
     /**
      * Vérifie si l'authentificateur supporte la requête actuelle.

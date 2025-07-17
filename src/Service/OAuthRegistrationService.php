@@ -40,20 +40,23 @@ class OAuthRegistrationService
      */
     public function persist(ResourceOwnerInterface $resourceOwner): User
     {
-        // Création d'un nouvel utilisateur
+        $data = $resourceOwner->toArray();
+        $email = $data['email'] ?? null;
+
+        if (!$email) {
+            throw new \RuntimeException("L'email OAuth est absent.");
+        }
+
         $user = (new User())
-            ->setEmail($resourceOwner->getEmail())
+            ->setEmail($email)
             ->setGoogleId($resourceOwner->getId());
 
-        // Définition de la méthode d'authentification
         $user->setAuthMethod('google');
-
-        // Définition d'un mot de passe par défaut
         $user->setPassword(self::OAUTH_PASSWORD);
 
-        // Ajout de l'utilisateur à la base de données
         $this->userRepository->add($user, true);
 
         return $user;
     }
+
 }

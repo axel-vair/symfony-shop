@@ -44,9 +44,12 @@ class UserController extends AbstractController
         $currentUser = $this->getUser();
 
         // Vérifie que l'utilisateur actuel est bien authentifié et que l'utilisateur modifie son propre profil
-        if ($currentUser === null || $currentUser->getId() !== $user->getId()) {
+        if (!$currentUser instanceof User || $currentUser->getId() !== $user->getId()) {
             throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier ce profil.');
         }
+       /* if ($currentUser === null || $currentUser->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier ce profil.');
+        }*/
 
         // Crée et traite le formulaire d'édition
         $form = $this->createForm(UserType::class, $user);

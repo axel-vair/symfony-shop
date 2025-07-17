@@ -79,8 +79,14 @@ class CartController extends AbstractController
     #[Route('/panier/vider', name: 'app_cart_delete')]
     public function deleteCart(CartService $cartService): Response
     {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw new \Exception('Vous devez être connecté');
+        }
+
         // Vide le contenu du panier
-        $cartService->removeFromCart();
+        $cartService->removeFromCart($user);
 
         // Ajoute un message flash de succès
         $this->addFlash('success', 'Votre panier a été vidé.');
@@ -182,27 +188,20 @@ class CartController extends AbstractController
     {
         // Vérifie si l'utilisateur a le rôle 'ROLE_USER', sinon refuse l'accès
         $this->denyAccessUnlessGranted('ROLE_USER');
-
         $user = $this->getUser();
-        if ($user instanceof User) {
-            try {
-                // Tente de créer une commande à partir du panier
-                $order = $orderService->createOrderFromCart($this->getUser());
 
-                // Ajoute un message flash de succès
-                $this->addFlash('success', 'Votre commande a été créée avec succès.');
-
-                // Redirige vers la page des commandes de l'utilisateur
-                return $this->redirectToRoute('app_user_orders');
-            } catch (\Exception $e) {
-                // En cas d'erreur, ajoute un message flash d'erreur
-                $this->addFlash('error', $e->getMessage());
-
-                // Redirige vers la page du panier
-                return $this->redirectToRoute('app_cart');
-            }
-        } else {
+        if (!$user instanceof User) {
+            // Si l'utilisateur n'est pas authentifié
             $this->addFlash('error', 'Utilisateur non authentifié.');
+            return $this->redirectToRoute('app_cart');
+        }
+        try {
+            $order = $orderService->createOrderFromCart($user);
+
+            $this->addFlash('success', 'Votre commande a été créée avec succès.');
+            return $this->redirectToRoute('app_user_orders');
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_cart');
         }
     }

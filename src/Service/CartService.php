@@ -4,22 +4,22 @@ namespace App\Service;
 
 use App\Entity\Cart;
 use App\Entity\CartItem;
+use App\Entity\User;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CartService
 {
-    private RequestStack $requestStack;
     private ProductRepository $productRepository;
     private Security $security;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(RequestStack $requestStack, ProductRepository $productRepository, Security $security, EntityManagerInterface $entityManager)
-    {
-        $this->requestStack = $requestStack;
+    public function __construct(
+        ProductRepository $productRepository,
+        Security $security,
+        EntityManagerInterface $entityManager
+    ) {
         $this->productRepository = $productRepository;
         $this->security = $security;
         $this->entityManager = $entityManager;
@@ -31,20 +31,24 @@ class CartService
      * Sinon, on ajoute le produit avec une quantité de 1.
      *
      * @param int $id L'ID du produit à ajouter
-     * @return void
      */
     public function addToCart(int $id): void
     {
         $cart = $this->getCart();
         $cartItem = $cart->getCartItems()->filter(function ($item) use ($id) {
-            return $item->getProduct()->getId() === $id;
+            $product = $item->getProduct();
+            return $product && $product->getId() === $id;
         })->first();
 
         if ($cartItem) {
             $cartItem->setQuantity($cartItem->getQuantity() + 1);
         } else {
+            $product = $this->productRepository->find($id);
+            if (!$product) {
+                throw new \Exception('Produit introuvable.');
+            }
             $cartItem = new CartItem();
-            $cartItem->setProduct($this->productRepository->find($id));
+            $cartItem->setProduct($product);
             $cartItem->setQuantity(1);
             $cart->addCartItem($cartItem);
         }
@@ -57,14 +61,15 @@ class CartService
      * Supprime un produit spécifique du panier.
      *
      * @param int $productId L'ID du produit à supprimer
-     * @return void
      */
-    public function removeOneProductToCart(int $productId)
+    public function removeOneProductToCart(int $productId): void
     {
         $cart = $this->getCart();
         $cartItem = $cart->getCartItems()->filter(function ($item) use ($productId) {
-            return $item->getProduct()->getId() === $productId;
+            $product = $item->getProduct();
+            return $product && $product->getId() === $productId;
         })->first();
+
         if ($cartItem) {
             $cart->removeCartItem($cartItem);
             $this->entityManager->remove($cartItem);
@@ -76,15 +81,18 @@ class CartService
     /**
      * Supprime le contenu du panier.
      *
-     * @return void
+     * @param User $user L'utilisateur dont on vide le panier
      */
-    public function removeFromCart(): void
+    public function removeFromCart(User $user): void
     {
         $cart = $this->getCart();
+
         foreach ($cart->getCartItems() as $cartItem) {
             $this->entityManager->remove($cartItem);
         }
+
         $cart->getCartItems()->clear();
+
         $this->entityManager->persist($cart);
         $this->entityManager->flush();
     }
@@ -97,9 +105,12 @@ class CartService
      */
     public function calculateTotal(Cart $cart): float
     {
-        $total = 0;
+        $total = 0.0;
         foreach ($cart->getCartItems() as $cartItem) {
-            $total += $cartItem->getProduct()->getPrice() * $cartItem->getQuantity();
+            $product = $cartItem->getProduct();
+            if ($product) {
+                $total += $product->getPrice() * $cartItem->getQuantity();
+            }
         }
         return $total;
     }
@@ -108,14 +119,15 @@ class CartService
      * Augmente la quantité d'un produit dans le panier.
      *
      * @param int $id L'ID du produit à augmenter
-     * @return void
      */
     public function increaseQuantity(int $id): void
     {
         $cart = $this->getCart();
         $cartItem = $cart->getCartItems()->filter(function ($item) use ($id) {
-            return $item->getProduct()->getId() === $id;
+            $product = $item->getProduct();
+            return $product && $product->getId() === $id;
         })->first();
+
         if ($cartItem) {
             $cartItem->setQuantity($cartItem->getQuantity() + 1);
             $this->entityManager->persist($cartItem);
@@ -128,14 +140,15 @@ class CartService
      * Si la quantité est de 1, le produit est supprimé du panier.
      *
      * @param int $id L'ID du produit à diminuer
-     * @return void
      */
     public function decreaseQuantity(int $id): void
     {
         $cart = $this->getCart();
         $cartItem = $cart->getCartItems()->filter(function ($item) use ($id) {
-            return $item->getProduct()->getId() === $id;
+            $product = $item->getProduct();
+            return $product && $product->getId() === $id;
         })->first();
+
         if ($cartItem) {
             if ($cartItem->getQuantity() > 1) {
                 $cartItem->setQuantity($cartItem->getQuantity() - 1);
@@ -148,11 +161,16 @@ class CartService
         }
     }
 
+    /**
+     * Retourne le panier de l'utilisateur connecté.
+     *
+     * @return Cart
+     */
     public function getCart(): Cart
     {
         $user = $this->security->getUser();
 
-        if (!$user) {
+        if (!$user instanceof User) {
             throw new \LogicException('User must be logged in to access cart.');
         }
 
@@ -170,6 +188,11 @@ class CartService
         return $cart;
     }
 
+    /**
+     * Retourne le nombre total d'items dans le panier.
+     *
+     * @return int
+     */
     public function getCartItemCount(): int
     {
         $cart = $this->getCart();
