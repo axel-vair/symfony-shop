@@ -8,7 +8,7 @@ use Twig\TwigFunction;
 
 class CartExtension extends AbstractExtension
 {
-    private $cartService;
+    private CartService $cartService;
 
     public function __construct(CartService $cartService)
     {
@@ -21,7 +21,7 @@ class CartExtension extends AbstractExtension
      * Cette méthode retourne un tableau de fonctions Twig, chaque fonction étant une instance de TwigFunction.
      * Dans ce cas, nous définissons une fonction nommée 'cart_count' qui appelle la méthode getCartCount.
      *
-     * @return array Un tableau de fonctions Twig
+     * @return array<\Twig\TwigFunction> Un tableau de fonctions Twig
      */
     public function getFunctions(): array
     {

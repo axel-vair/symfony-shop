@@ -15,7 +15,7 @@ class Cart
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $utilisateur = null;

@@ -9,8 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class OrderService
 {
-    private $entityManager;
-    private $cartService;
+    private EntityManagerInterface $entityManager;
+    private CartService $cartService;
 
     public function __construct(EntityManagerInterface $entityManager, CartService $cartService)
     {
@@ -29,7 +29,7 @@ class OrderService
      * @return Order La commande créée
      * @throws \Exception Si le panier est vide
      */
-    public function createOrderFromCart(User $user)
+    public function createOrderFromCart(User $user): Order
     {
         $cart = $user->getCart();
         if (!$cart || $cart->getCartItems()->isEmpty()) {
@@ -47,9 +47,14 @@ class OrderService
         foreach ($cart->getCartItems() as $cartItem) {
             $orderItem = new OrderItem();
             $orderItem->setOrder($order);
-            $orderItem->setProduct($cartItem->getProduct());
-            $orderItem->setQuantity($cartItem->getQuantity());
-            $orderItem->setPrice($cartItem->getProduct()->getPrice());
+
+            $product = $cartItem->getProduct();
+            if(!$product){
+                throw new \Exception('Produit non disponible');
+            }
+            $orderItem->setProduct($product);
+            $orderItem->setQuantity((int) $cartItem->getQuantity());
+            $orderItem->setPrice((float) $product->getPrice());
             $order->addOrderItem($orderItem);
         }
 
