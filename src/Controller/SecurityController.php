@@ -52,7 +52,7 @@ class SecurityController extends AbstractController
         }
         return $clientRegistry
             ->getClient($service)
-            ->redirect(self::SCOPE[$service], []);
+            ->redirect(self::SCOPE[$service]);
     }
 
 

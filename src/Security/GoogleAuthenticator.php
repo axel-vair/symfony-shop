@@ -4,12 +4,9 @@ namespace App\Security;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Service\OAuthRegistrationService;
 use http\Exception\RuntimeException;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GoogleUser;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Classe GoogleAuthenticator
