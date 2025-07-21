@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
+    <!-- container -->
     <div class="container mt-5" style="max-width: 400px;">
         <h1 class="mt-10 text-center text-2xl font-bold leading-9 mb-4">Connexion</h1>
 
+        <!-- alerts div -->
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -18,18 +18,21 @@
                 <a href="{{ path('app_logout') }}">Se déconnecter</a>
             </div>
         {% endif %}
+        <!-- end alerts div -->
 
+        <!-- button oauth service -->
         <div class="d-grid mb-4">
             <a href="{{ path('auth_oauth_connect', {service: 'google'}) }}" class="btn btn-outline-dark btn-lg">
                 <i class="fab fa-google me-2"></i> Se connecter avec Google
             </a>
         </div>
-
+        <!-- end button oauth service -->
         <div class="d-flex align-items-center my-4">
             <hr class="flex-grow-1">
             <span class="px-3">ou se connecter avec un email</span>
             <hr class="flex-grow-1">
         </div>
+        <!-- start form -->
         <form method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Email</label>
@@ -46,19 +49,12 @@
             </div>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-            {# Uncomment this section to add a remember me option
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="_remember_me" name="_remember_me">
-            <label class="form-check-label" for="_remember_me">Se souvenir de moi</label>
-        </div>
-            #}
-
             <div class="d-grid">
                 <button class="btn btn-dark mt-4" type="submit">
                     Se connecter
                 </button>
             </div>
         </form>
+        <!-- end form -->
     </div>
 {% endblock %}

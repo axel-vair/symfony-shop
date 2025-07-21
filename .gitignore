@@ -30,3 +30,5 @@ compose.yaml
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+.github/.DS_Store
