@@ -46,3 +46,17 @@ _Optionnel_ :
 
 ### Communication
 - Chat en direct à l'aide de Mercure
+
+
+### Launch sonarqube scanner 
+
+```
+docker run --rm --platform linux/amd64 \
+--network symfony-shop_default \
+-v "$(pwd):/usr/src" \
+-e SONAR_HOST_URL="http://sonarqube:9000" \
+-e SONAR_LOGIN="sqa_49a6c5a5b0e4c23f079ddc64357cf6d1d0306405" \
+sonarsource/sonar-scanner-cli
+
+
+```
