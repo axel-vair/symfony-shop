@@ -50,13 +50,25 @@ _Optionnel_ :
 
 ### Launch sonarqube scanner 
 
-```
-docker run --rm --platform linux/amd64 \
---network symfony-shop_default \
--v "$(pwd):/usr/src" \
--e SONAR_HOST_URL="http://sonarqube:9000" \
--e SONAR_LOGIN="sqa_49a6c5a5b0e4c23f079ddc64357cf6d1d0306405" \
-sonarsource/sonar-scanner-cli
-
+- Ajout de la configuration SonarQube dans le compose.yaml 
+- Lancement des containers
+- Allez sur le port 9001 pour configurer le projet
+- Créer un sonar-project.properties et renseigner les informations (et token généré)
+- Installation de sonar-scanner via homebrew
+- Lancer la commande : 
 
 ```
+sonar-scanner \
+  -Dsonar.projectKey=butterfly \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://localhost:9001 \
+  -Dsonar.token=sqp_2d1b1c5bb608031e1dd6d84e87f8c29096ed2fcb
+
+```
+
+
+Code coverage avec XDEBUG:
+
+``
+ XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text
+``

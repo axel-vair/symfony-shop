@@ -1,5 +1,5 @@
 <?php
-// tests/Controller/CategoryControllerTest.php
+
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -21,6 +21,21 @@ class CategoryControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', $name);
     }
 
+    public function testCategoryPageWithCaseInsensitiveSearch()
+    {
+        $client = static::createClient();
+        $category = $client->getContainer()->get('doctrine')->getRepository(Category::class)->findOneBy([]);
+        if (!$category) {
+            $this->markTestSkipped('Pas de catégorie en base pour tester.');
+        }
+
+        // Tester la recherche insensible à la casse
+        $name = strtoupper($category->getName());
+        $client->request('GET', '/categorie/'.$name);
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', $category->getName());
+    }
+
     public function testCategoryPageNotFound()
     {
         $client = static::createClient();
@@ -38,5 +53,14 @@ class CategoryControllerTest extends WebTestCase
 
         $client->request('GET', '/category/'.$category->getId());
         $this->assertResponseRedirects('/shop?category_id='.$category->getId(), 302);
+    }
+
+    public function testCategoryFilterInvalidCategory()
+    {
+        $client = static::createClient();
+
+        // ID invalide (en dehors de la portée des IDs valides en base)
+        $client->request('GET', '/category/9999999');
+        $this->assertResponseStatusCodeSame(404);
     }
 }
