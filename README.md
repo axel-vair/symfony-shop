@@ -8,9 +8,6 @@
 -  ~~Connexion OAuth2~~ ✅
 
 
-_Optionnel_ :
-- Récupération de mot de passe
-
 ### Gestion du compte utilisateur
 - ~~_Affichage et modification des informations du compte_~~ ✅
 - ~~Affichage de l'historique des commandes~~ ✅
@@ -44,30 +41,28 @@ _Optionnel_ :
 - ~~Autoriser l'accès au panier pour les utilisateurs connectés uniquement~~ ✅
 - ~~Gérer l'accès au dashboard~~ ✅
 
-### Communication
-- Chat en direct à l'aide de Mercure
 
 
-### Launch sonarqube scanner 
+## ✳️ SonarQube configuration  
 
 - Ajout de la configuration SonarQube dans le compose.yaml 
 - Lancement des containers
 - Allez sur le port 9001 pour configurer le projet
 - Créer un sonar-project.properties et renseigner les informations (et token généré)
 - Installation de sonar-scanner via homebrew
-- Lancer la commande : 
+
+###  Launch Sonar-Scanner
 
 ```
 sonar-scanner \
   -Dsonar.projectKey=butterfly \
   -Dsonar.sources=. \
   -Dsonar.host.url=http://localhost:9001 \
-  -Dsonar.token=sqp_2d1b1c5bb608031e1dd6d84e87f8c29096ed2fcb
+  -Dsonar.token={SONAR_LOGIN}
 
 ```
 
-
-Code coverage avec XDEBUG:
+### Launch XDEBUG code coverage that will be get by sonar
 
 ``
  XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text
@@ -118,6 +113,11 @@ In case of failure, the error logs are read and the problem is debugged locally.
 - Exécution des tests avec PHPUnit
 - Analyse statique avec PHPStan
 
+### 📈 Indicateurs suivis
+
+- **Taux de couverture de tests** : X% (via PHPUnit/XDEBUG)
+- **Nombre d'erreurs PHPStan** : 0 (niveau 8)
+- **Bugs/vulnérabilités SonarQube** : 0 critiques
 
 ### 🧪 Interprétation des rapports
 - PHPUnit : en cas d’échec, le job CI affiche les tests KO dans la console GitHub Actions.
