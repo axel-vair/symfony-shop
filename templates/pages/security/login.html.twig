@@ -7,6 +7,12 @@
     <div class="container mt-5" style="max-width: 400px;">
         <h1 class="mt-10 text-center text-2xl font-bold leading-9 mb-4">Connexion</h1>
 
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         <!-- alerts div -->
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

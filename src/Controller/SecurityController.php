@@ -15,8 +15,7 @@ class SecurityController extends AbstractController
         'google' => []
     ];
     /**
-     * Gère le processus de connexion des utilisateurs.
-     *
+     * Gère le processus de connexion des utilisateurs
      * Cette méthode affiche le formulaire de connexion et gère les erreurs de connexion.
      * Elle récupère la dernière erreur d'authentification (s'il y en a une) et le dernier
      * nom d'utilisateur entré, puis les passe à la vue pour affichage.
@@ -27,17 +26,14 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // Récupère l'erreur de connexion s'il y en a une
         $error = $authenticationUtils->getLastAuthenticationError();
-
-        // Récupère le dernier nom d'utilisateur entré
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        // Ajoute un message flash pour informer l'utilisateur qu'il est connecté
-        // Note : Ce message flash sera affiché après une connexion réussie
-        $this->addFlash('success', 'Vous êtes connecté.e !');
+        if($lastUsername){
+            $this->addFlash('success', 'You are logged in.');
+            return $this->redirectToRoute('app_default');
 
-        // Rend la vue du formulaire de connexion en passant les informations nécessaires
+        }
         return $this->render('pages/security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,

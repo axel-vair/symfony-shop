@@ -72,3 +72,69 @@ Code coverage avec XDEBUG:
 ``
  XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text
 ``
+
+
+## 📄 Dossier technique CI/CD
+
+### CI/CD Summary (EN)
+
+CI is handled by GitHub Actions triggered on push and pull_request on the `main` branch.  
+Tests are automated using PHPUnit, and static analysis is done with PHPStan (level 8).  
+Reports are interpreted through GitHub Actions logs.  
+Docker is used for containerization.  
+In case of failure, the error logs are read and the problem is debugged locally.
+
+
+### 🔧 Environnement technique
+| Élément                 | Détail                          |
+| ----------------------- | ------------------------------- |
+| Langage principal       | PHP 8.3                         |
+| Framework               | Symfony                         |
+| Outil de tests          | PHPUnit                         |
+| Analyse de code         | PHPStan (niveau 8)              |
+| Système CI              | GitHub Actions                  |
+| OS du runner CI         | Ubuntu (latest)                 |
+| Base de données de test | SQLite                          |
+| Gestionnaire de paquets | Composer                        |
+| Conteneurisation        | Docker (cf. fichier ci-dessous) |
+
+
+### ⚙️ Infrastructure utilisée
+
+**CI/CD via GitHub Actions** : déclencheur sur push et pull_request vers main.
+
+
+**Outils intégrés dans le pipeline** :
+- composer install
+- phpunit pour l'exécution des tests
+- phpstan pour l’analyse de code statique
+- Serveur d’automatisation : GitHub Actions configuré par fichier YAML.
+- Conteneurisation : environnement exécutable via Docker (voir fichier ci-dessous).
+
+### 🔁 Déroulement du pipeline
+- Checkout du code
+- Installation de PHP et des dépendances Composer
+- Création de la base SQLite 
+- Exécution des tests avec PHPUnit
+- Analyse statique avec PHPStan
+
+
+### 🧪 Interprétation des rapports
+- PHPUnit : en cas d’échec, le job CI affiche les tests KO dans la console GitHub Actions.
+- PHPStan : le niveau 8 indique une exigence élevée. Chaque erreur est listée avec ligne et explication.
+
+### 🧯 Démarche de résolution de problème
+- Identifier le job qui échoue sur GitHub Actions.
+- Lire le journal du job pour repérer l’erreur (ex : test cassé, dépendance manquante).
+- Reproduire localement si besoin.
+- Appliquer une correction ou ouvrir une issue GitHub.
+- Ajouter un test de non-régression si nécessaire.
+
+### 🕵️ Veille technologique DevOps
+Je consulte régulièrement les sources suivantes :
+
+- Site de Symfony
+- Site php.net
+- Blog GitHub Actions
+- OWASP pour les vulnérabilités
+- PHPStan changelog (ex : nouvelles règles disponibles)
