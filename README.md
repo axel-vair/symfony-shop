@@ -1,45 +1,79 @@
-# Boutique en ligne Symfony
+## 🧭 Expression des besoins du projet
 
-## Fonctionnalités principales
+Ce projet a été réalisé dans un cadre scolaire, selon un **cahier des charges imposé**. L'objectif principal était de développer une **boutique en ligne complète avec Symfony**, en respectant les bonnes pratiques de développement, d’architecture logicielle et de DevOps.
 
-### Authentification
-- ~~Inscription d'un nouvel utilisateur~~ ✅
-- ~~Connexion/déconnexion d'un utilisateur~~ ✅
--  ~~Connexion OAuth2~~ ✅
+### 🎯 Objectifs fonctionnels
+
+L’application devait inclure les modules suivants :
+
+- Authentification (inscription, connexion)
+- Page de profil utilisateur
+- Catalogue d’articles avec :
+    - Filtres par **catégorie**
+    - Tri par **date de publication**
+    - **Pagination** (5 articles par page minimum)
+- Panier d’achat
+- Paiement (réel ou simulé)
+- Historique des commandes
+
+### 🛠️ Objectifs techniques
+
+L’application devait impérativement utiliser :
+
+- **Symfony CLI** pour la gestion du projet
+- **Doctrine ORM** pour la gestion des entités et requêtes (DQL)
+- Composants techniques :
+    - `Entities`, `Repositories`, `DTO`, `Migrations`
+    - `Controllers`, `Services`, `Interfaces`, `Routes`, `BuildForm`, `Middlewares`
+- Documentation de l'API via **API Platform**
+- Base de données nommée `symfony-shop` avec les tables :
+    - `User`, `Article`, `Category`, `Comment`, `Role`
+- Tous les formulaires générés via `BuildForm`
+- Utilisation de middlewares pour restreindre l’accès aux routes
+
+### 🔒 Sécurité
+
+- Gestion des droits d’accès par rôles (`user`, `admin`)
+- Vérification de l’authentification avant l’accès à certaines routes
+- Définition des routes via contrôleurs ou fichier YAML
+
+### 🚀 Fonctionnalités avancées optionnelles
+
+- Implémenter un **scheduler** (cron) pour effectuer des sauvegardes régulières de la base de données
+- Utilisation de **PHP Mailer** pour l’envoi de mails :
+    - Lors de l’inscription
+    - Lors d’un achat
+- Intégration de **Faker.js** pour la génération de données fictives
+- Utilisation de **DTOs** pour encapsuler et valider les données d’entrée dans les contrôleurs
+
+---
+
+## 🚫 Limites du projet
+
+Certaines fonctionnalités ont été exclues ou partiellement développées dans le cadre du projet, notamment :
+
+- 🔒 Paiement réel en ligne : non implémenté (simulation seulement)
+- 📅 Scheduler : non intégré (proposé comme amélioration future)
+- 📤 Envoi de mail : partiellement implémenté (proposé comme amélioration future)
 
 
-### Gestion du compte utilisateur
-- ~~_Affichage et modification des informations du compte_~~ ✅
-- ~~Affichage de l'historique des commandes~~ ✅
+---
 
-### Catalogue de produits
+## ✅ Traduction du cahier des charges en livrables
 
-- ~~Affichage de la liste des produits avec filtres et pagination~~ ✅
-- ~~Page de détails d'un produit~~ ✅
-- ~~Gestion des catégories de produits~~ ✅
+| Besoin exprimé                             | Réalisation                               | Statut     |
+|-------------------------------------------|-------------------------------------------|------------|
+| Symfony CLI, Doctrine, BuildForm          | Intégrés et utilisés dans tout le projet  | ✅ Fait     |
+| Authentification + page profil            | Fonctionnels                              | ✅ Fait     |
+| Catalogue avec filtres et pagination      | Filtres par catégorie et date, pagination | ✅ Fait     |
+| Panier d’achat                            | Fonctionnel, stockage en session          | ✅ Fait     |
+| Historique des commandes                  | Accessible depuis le profil utilisateur   | ✅ Fait     |
+| Paiement                                   | Simulation via formulaire                 | 🔶 Partiel  |
+| API Platform + DTO                        | DTO en place, API Platform utilisé        | 🔶 Partiel  |
+| Scheduler (backup auto BDD)               | Non réalisé, décrit dans la doc           | ❌ Non fait |
+| Envoi d’e-mails (PHP Mailer)              | Non réalisé, décrit dans la doc                   |  ❌ Non fait  |
+| Faker.js (génération de données fictives) | Utilisé pour pré-remplir la base          | ✅ Fait     |
 
-### Panier d'achat
-- ~~Ajout/suppression de produits dans le panier~~ ✅
-- ~~Mise à jour des quantités~~ ✅
-- ~~Calcul du total du panier~~ ✅
-
-### Processus de commande
-- Formulaire de commande (adresse de livraison, etc.)
-- ~~Récapitulatif de la commande~~ ✅
-- ~~Enregistrement de la commande en base de données~~ ✅
-
-_Optionnel_ :
-- Paiement en ligne (avec un module tiers comme Stripe)
-
-### Gestion des commandes (partie administration)
-- ~~Liste des commandes avec pagination~~ ✅
-- ~~Détails d'une commande~~ ✅
-- Changement de statut d'une commande
-
-### Gestion des routes et sécurité 
-- ~~Créer une route 404~~ (but dont work in dev) ✅
-- ~~Autoriser l'accès au panier pour les utilisateurs connectés uniquement~~ ✅
-- ~~Gérer l'accès au dashboard~~ ✅
 
 
 
