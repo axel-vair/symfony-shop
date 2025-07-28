@@ -30,8 +30,7 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         if($lastUsername){
-            $this->addFlash('success', 'You are logged in.');
-            return $this->redirectToRoute('app_default');
+           $this->onLoginSuccess();
 
         }
         return $this->render('pages/security/login.html.twig', [
