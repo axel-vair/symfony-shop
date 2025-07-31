@@ -20,14 +20,6 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $admin = new Admin();
-        $admin->setEmail('admin@admin.com');
-        $plaintextPassword = 'admin';
-        $hashedPassword = $this->passwordHasher->hashPassword($admin, $plaintextPassword);
-        $admin->setPassword($hashedPassword);
-        $admin->setRoles(['ROLE_ADMIN']);
-        $manager->persist($admin);
-        $manager->flush();
         // Categories
         $categories = [
             1 => 'Massage',
