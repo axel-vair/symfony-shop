@@ -50,7 +50,7 @@ jobs:
         run: echo "DATABASE_URL=postgresql://shop:pass@127.0.0.1:5432/shop_test" >> .env.test.local
 
       - name: Generate Doctrine Migration
-        run: php bin/console make:migration --no-interaction
+        run: php bin/console make:migration
 
       - name: Run Doctrine Migrations
         run: php bin/console doctrine:migrations:migrate --no-interaction
