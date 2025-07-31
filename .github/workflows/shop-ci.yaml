@@ -46,6 +46,9 @@ jobs:
       - name: Drop database
         run: php bin/console doctrine:database:drop --force
 
+      - name: Create database
+        run: php bin/console doctrine:database:create
+
       - name: Generate Doctrine Migration
         run: php bin/console make:migration
 
