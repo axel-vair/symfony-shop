@@ -22,7 +22,7 @@ jobs:
           POSTGRES_PASSWORD: pass
           POSTGRES_DB: shop_test
         options: >-
-          --health-cmd="pg_isready -U shop_test" --health-timeout=5s --health-interval=10s --health-retries=5
+          --health-cmd="pg_isready -U shop" --health-timeout=5s --health-interval=10s --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
@@ -43,6 +43,9 @@ jobs:
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+      - name: Set DATABASE_URL for migrations and tests
+        run: echo "DATABASE_URL=postgresql://shop:pass@127.0.0.1:5432/shop_test" >> $GITHUB_ENV
+
       - name: Generate Doctrine Migration
         run: php bin/console make:migration
 
@@ -53,8 +56,6 @@ jobs:
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
         run: vendor/bin/phpunit
 
       - name: Install PHPStan
