@@ -22,7 +22,7 @@ jobs:
           POSTGRES_PASSWORD: pass
           POSTGRES_DB: shop
         options: >-
-          --health-cmd="pg_isready -U symfony" --health-timeout=5s --health-interval=10s --health-retries=5
+          --health-cmd="pg_isready -U shop" --health-timeout=5s --health-interval=10s --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
@@ -44,23 +44,39 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Drop database
-        run: php bin/console doctrine:database:drop --force
+        env:
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop
+          PGPASSWORD: pass
+        run: php bin/console doctrine:database:drop --force --if-exists --env=test --no-interaction
 
       - name: Create database
-        run: php bin/console doctrine:database:create
+        env:
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop
+          PGPASSWORD: pass
+        run: php bin/console doctrine:database:create --env=test --no-interaction
 
       - name: Generate Doctrine Migration
-        run: php bin/console make:migration
+        env:
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop
+          PGPASSWORD: pass
+        run: php bin/console make:migration --no-interaction --env=test
 
       - name: Run Doctrine Migrations
-        run: php bin/console doctrine:migrations:migrate --no-interaction
+        env:
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop
+          PGPASSWORD: pass
+        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
 
       - name: Load Doctrine Fixtures (if any)
-        run: php bin/console doctrine:fixtures:load --no-interaction
+        env:
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop
+          PGPASSWORD: pass
+        run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop
+          PGPASSWORD: pass
         run: vendor/bin/phpunit
 
       - name: Install PHPStan
