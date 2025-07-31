@@ -21,15 +21,16 @@ class ProductCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return Product::class;
-    }  public function configureCrud(Crud $crud): Crud
-{
-    // Modifier le titre de la page
-    return $crud
-        ->setPageTitle(Crud::PAGE_INDEX, 'Produits')
-        ->setPageTitle(Crud::PAGE_NEW, 'Ajouter un produit')
-        ->setPageTitle(Crud::PAGE_EDIT, 'Modifier un produit')
-        ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du produit');
-}
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle(Crud::PAGE_INDEX, 'Produits')
+            ->setPageTitle(Crud::PAGE_NEW, 'Ajouter un produit')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Modifier un produit')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du produit');
+    }
 
     public function configureFields(string $pageName): iterable
     {

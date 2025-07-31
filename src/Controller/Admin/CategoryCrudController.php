@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -18,6 +19,14 @@ class CategoryCrudController extends AbstractCrudController
         return Category::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setPageTitle(Crud::PAGE_INDEX, 'Categories')
+            ->set(Crud::PAGE_NEW, 'Ajouter une categorie')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Modifier une categorie')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du categorie');
+    }
     public function configureFields(string $pageName): iterable
     {
         return [
