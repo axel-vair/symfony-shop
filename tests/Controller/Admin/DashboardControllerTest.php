@@ -28,7 +28,7 @@ class DashboardControllerTest extends WebTestCase
         $container = $client->getContainer();
         $em = $container->get('doctrine')->getManager();
 
-        // Création et persistance d'un utilisateur avec le rôle ROLE_ADMIN
+        // Création et persistance d'un utilisateur wavec le rôle ROLE_ADMIN
         $user = new User();
         $user->setEmail('admin@example.com');
         $user->setRoles(['ROLE_ADMIN']);

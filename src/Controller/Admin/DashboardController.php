@@ -44,5 +44,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Produits', 'fa fa-box', Product::class); // Products link
         yield MenuItem::linkToCrud('Catégories', 'fa fa-list', Category::class); // Categories link
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class); // Users link
+        yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out-alt');
     }
 }
