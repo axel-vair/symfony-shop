@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller;
 
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RegistrationControllerTest extends WebTestCase
@@ -16,7 +15,6 @@ class RegistrationControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Inscription');
         $this->assertSelectorExists('form');
     }
-
 
     public function testRegistrationWithValidData(): void
     {
@@ -33,8 +31,7 @@ class RegistrationControllerTest extends WebTestCase
         // On attend une redirection vers login
         $this->assertResponseRedirects('/login');
 
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
     }
-
 
 }

@@ -8,17 +8,22 @@
         <div class="container-fluid py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger mt-3">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success mt-3">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                         <div class="card-body p-5">
                             <div class="row">
                                 <div class="col-lg-7 pe-lg-5">
                                     <h2 class="mb-4">Laissez-nous vos coordonnées</h2>
                                     {{ form(contactForm) }}
-
-                                    {% for message in app.flashes('notice') %}
-                                        <div class="alert alert-success mt-3">
-                                            {{ message }}
-                                        </div>
-                                    {% endfor %}
                                 </div>
                                 <div class="col-lg-5 mt-4 mt-lg-0">
                                     <div class="bg-body-secondary text-dark p-4 h-100 d-flex flex-column justify-content-center rounded">

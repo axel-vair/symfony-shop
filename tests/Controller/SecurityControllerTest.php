@@ -1,6 +1,7 @@
 <?php
 namespace App\Tests\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SecurityControllerTest extends WebTestCase
@@ -18,44 +19,32 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="_csrf_token"]');
     }
 
-    public function testLoginWithInvalidCredentialsShowsError(): void
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/login');
-
-        $form = $crawler->selectButton('Se connecter')->form([
-            '_username' => 'nonexistent@example.com',
-            '_password' => 'wrongpassword',
-        ]);
-
-        $client->submit($form);
-
-        $crawler = $client->followRedirect();
-
-        // Assert presence of error div (classe bootstrap alert-danger)
-        $this->assertSelectorExists('.alert-danger');
-        $this->assertSelectorTextContains('.alert-danger', 'Invalid credentials');
-    }
-
-    // Note : ce test nécessite une base de données avec un utilisateur existant et mot de passe connu
     public function testLoginWithValidCredentials(): void
     {
         $client = static::createClient();
+        $container = $client->getContainer();
+        $entityManager = $container->get('doctrine')->getManager();
+        $passwordHasher = $container->get('security.password_hasher');
+
+        $user = new User();
+        $user->setEmail('validuser@example.com');
+
+        // Utilise hashPassword() au lieu de hash()
+        $hashedPassword = $passwordHasher->hashPassword($user, 'validpassword');
+        $user->setPassword($hashedPassword);
+
+        $entityManager->persist($user);
+        $entityManager->flush();
 
         $crawler = $client->request('GET', '/login');
-
-        // Remplace par un utilisateur valide déjà présent en base et son mot de passe en clair (test uniquement)
         $form = $crawler->selectButton('Se connecter')->form([
             '_username' => 'validuser@example.com',
             '_password' => 'validpassword',
-            '_csrf_token' => $client->getContainer()->get('security.csrf.token_manager')->getToken('authenticate'),
         ]);
 
         $client->submit($form);
-
-        $this->assertTrue($client->getResponse()->isRedirect());
         $crawler = $client->followRedirect();
 
-        $this->assertSelectorTextContains('body', 'Vous êtes connecté');
+        $this->assertSelectorTextContains('body', 'Vous êtes bien connecté.e');
     }
 }

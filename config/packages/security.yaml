@@ -9,21 +9,10 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
-        admin_provider:
-            entity:
-                class: App\Entity\Admin
-                property: email
-        app_user_provider:
-            chain:
-                providers: [ 'admin_provider', 'user_provider' ]
-
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
         main:
             lazy: true
-            provider: app_user_provider
+            provider: user_provider
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -31,8 +20,7 @@ security:
             logout:
                 path: app_logout
             custom_authenticator: App\Security\GoogleAuthenticator
-                # where to redirect after logout
-                # target: app_any_route
+
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

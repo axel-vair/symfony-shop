@@ -11,7 +11,6 @@ class ProductControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        /** @var EntityManagerInterface */
         $em = $client->getContainer()->get('doctrine')->getManager();
 
         $product = $em->getRepository(Product::class)->findOneBy([]);
