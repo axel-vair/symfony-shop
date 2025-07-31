@@ -40,7 +40,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
-      - name: Install Dependencies (avec dev pour maker-bundle)
+      - name: Install Dependencies
         run: composer install --no-ansi --no-interaction --no-progress
 
       - name: Drop database
@@ -52,11 +52,6 @@ jobs:
         env:
           DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
         run: php bin/console doctrine:database:create --env=test --no-interaction
-
-      - name: Generate Doctrine Migration
-        env:
-          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
-        run: php bin/console make:migration --no-interaction --env=test
 
       - name: Run Doctrine Migrations
         env:
