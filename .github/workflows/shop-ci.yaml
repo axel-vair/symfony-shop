@@ -1,8 +1,8 @@
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -22,18 +22,15 @@ jobs:
           POSTGRES_PASSWORD: pass
           POSTGRES_DB: shop_test
         options: >-
-          --health-cmd="pg_isready -U shop" --health-timeout=5s --health-interval=10s --health-retries=5
+          --health-cmd="pg_isready -U symfony" --health-timeout=5s --health-interval=10s --health-retries=5
 
     steps:
-      # Checkout the code
       - uses: actions/checkout@v4
 
-      # Setup PHP environment
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
 
-      # Cache Composer dependencies
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
@@ -43,57 +40,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
-      # Install Composer dependencies
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      # Set the DATABASE_URL for migrations and tests
-      - name: Set DATABASE_URL for migrations and tests
-        run: echo "DATABASE_URL=postgresql://shop:pass@127.0.0.1:5432/shop_test" >> $GITHUB_ENV
+      - name: Drop test database
+        run: php bin/console doctrine:database:drop --env=test --force
 
-      # Drop the database if it exists (reset the DB)
-      - name: Drop database if exists
-        run: php bin/console doctrine:database:drop --force --if-exists --env=test --no-interaction
-
-      # Create a fresh database
       - name: Create database
-        run: php bin/console doctrine:database:create --env=test --no-interaction
+        run: php bin/console doctrine:database:create --no-interaction --env=test
 
-      # Drop any existing sequences or tables that may cause duplication errors
-      - name: Drop conflicting sequences or tables (if any)
-        run: |
-          psql postgresql://shop:pass@127.0.0.1:5432/shop_test -c "DROP SEQUENCE IF EXISTS admin_id_seq CASCADE;"
-          psql postgresql://shop:pass@127.0.0.1:5432/shop_test -c "DROP TABLE IF EXISTS admin CASCADE;"
+      - name: Create schema
+        run: php bin/console doctrine:schema:create --no-interaction --env=test
 
-      # Generate Doctrine Migration (if there are new schema changes)
-      - name: Generate Doctrine Migration
-        run: php bin/console make:migration --no-interaction
-
-      # Check if any migration files were generated
-      - name: Check for migration file
-        run: |
-          if [ ! -f "src/Migrations/*.php" ]; then
-            echo "No migrations found!";
-          else
-            echo "Migrations are ready to be applied.";
-          fi
-
-      # Run Doctrine Migrations
-      - name: Run Doctrine Migrations
-        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
-
-      # Load Doctrine Fixtures (if any)
-      - name: Load Doctrine Fixtures (if any)
+      - name: Run fixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
-      # Run PHPUnit tests
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        run: vendor/bin/phpunit --env=test
+        env:
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
+        run: vendor/bin/phpunit
 
-      # Install PHPStan (Static analysis)
-      - name: Install PHPStan
-        run: composer require --dev phpstan/phpstan
-
-      # Run PHPStan for code analysis
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --level=8 src/
