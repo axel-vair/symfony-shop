@@ -18,9 +18,9 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: symfony
-          POSTGRES_PASSWORD: symfony_password
-          POSTGRES_DB: symfony_test
+          POSTGRES_USER: shop
+          POSTGRES_PASSWORD: pass
+          POSTGRES_DB: shop_test
         options: >-
           --health-cmd="pg_isready -U symfony" --health-timeout=5s --health-interval=10s --health-retries=5
 
@@ -30,9 +30,6 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-
-      - name: Copy .env.test.local
-        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
 
       - name: Cache Composer packages
         id: composer-cache
@@ -50,14 +47,14 @@ jobs:
         run: php bin/console make:migration
 
       - name: Run Doctrine Migrations
-        run: php bin/console doctrine:migrations:migrate --no-interaction
+        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
 
       - name: Load Doctrine Fixtures (if any)
-        run: php bin/console doctrine:fixtures:load --no-interaction
+        run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
-          DATABASE_URL: postgresql://symfony:symfony_password@127.0.0.1:5432/symfony_test
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
         run: vendor/bin/phpunit
 
       - name: Install PHPStan
