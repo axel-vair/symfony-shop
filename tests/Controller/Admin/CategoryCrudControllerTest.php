@@ -41,7 +41,7 @@ class CategoryCrudControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('CategoryCrudController', $client->getRequest()->getUri());
-        $this->assertSelectorExists('h1', 'Category');
+        $this->assertSelectorExists('h1', 'Catégories');
     }
 
     /**
@@ -51,16 +51,5 @@ class CategoryCrudControllerTest extends WebTestCase
     public function testGetEntityFqcnReturnsCategoryClassName()
     {
         $this->assertSame(Category::class, CategoryCrudController::getEntityFqcn());
-    }
-
-    private function createMockUserWithRoleAdmin()
-    {
-        // Instancie ici ton User ou Admin Entity en fonction de ta configuration
-        $user = new User();
-        $user->setEmail('admin@example.com');
-        $user->setRoles(['ROLE_ADMIN']);
-        $user->setPassword('dummy'); // le password n'a pas d'importance ici
-
-        return $user;
     }
 }

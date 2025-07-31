@@ -60,7 +60,7 @@ class DashboardControllerTest extends WebTestCase
         // Suivre la redirection vers la page des produits
         $crawler = $client->followRedirect();
 
-        // Assert que la page contient un h1 avec "Product"
-        $this->assertSelectorTextContains('h1', 'Product');
+        // Assert que la page contient un h1 avec "Produits"
+        $this->assertSelectorTextContains('h1', 'Produits');
     }
 }

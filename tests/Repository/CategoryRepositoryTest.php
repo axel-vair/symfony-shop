@@ -1,5 +1,4 @@
 <?php
-// tests/Repository/CategoryRepositoryTest.php
 namespace App\Tests\Repository;
 
 use App\Entity\Category;
@@ -16,7 +15,6 @@ class CategoryRepositoryTest extends KernelTestCase
     {
         self::bootKernel(); // Démarre le noyau Symfony
 
-        // Remplacer l'accès direct à $container par getContainer()
         $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
         $this->categoryRepository = self::getContainer()->get(CategoryRepository::class);
     }
@@ -36,10 +34,8 @@ class CategoryRepositoryTest extends KernelTestCase
         $this->entityManager->persist($category);
         $this->entityManager->flush();
 
-        // Rechercher la catégorie par son nom
         $foundCategory = $this->categoryRepository->findOneBy(['name' => 'Test Category']);
 
-        // Vérifier que la catégorie existe
         $this->assertNotNull($foundCategory);
         $this->assertSame('Test Category', $foundCategory->getName());
     }

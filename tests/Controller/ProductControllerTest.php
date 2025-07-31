@@ -3,7 +3,6 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Entity\Product;
-use Doctrine\ORM\EntityManagerInterface;
 
 class ProductControllerTest extends WebTestCase
 {
@@ -26,7 +25,7 @@ class ProductControllerTest extends WebTestCase
     public function testProductPageNotFound()
     {
         $client = static::createClient();
-        $client->request('GET', '/product/99999999'); // id qui n'existe probablement pas
+        $client->request('GET', '/product/99999999');
         $this->assertResponseStatusCodeSame(404);
     }
 }

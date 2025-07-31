@@ -2,9 +2,7 @@
 
 namespace App\Tests\Controller\Admin;
 
-use App\Controller\Admin\CategoryCrudController;
 use App\Controller\Admin\UserCrudController;
-use App\Entity\Category;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -46,15 +44,5 @@ class UserCrudControllerTest extends WebTestCase
     public function testGetEntityFqcnReturnsUserClassName()
     {
         $this->assertSame(User::class, UserCrudController::getEntityFqcn());
-    }
-    private function createMockUserWithRoleAdmin()
-    {
-        // Instancie ici ton User ou Admin Entity en fonction de ta configuration
-        $user = new User();
-        $user->setEmail('admin@example.com');
-        $user->setRoles(['ROLE_ADMIN']);
-        $user->setPassword('dummy'); // le password n'a pas d'importance ici
-
-        return $user;
     }
 }

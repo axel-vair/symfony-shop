@@ -14,7 +14,7 @@ class ContactControllerTest extends WebTestCase
         // Vérifier que la page se charge correctement
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h2', 'Laissez-nous vos coordonnées');
-        $this->assertSelectorExists('form'); // Vérifie la présence du formulaire
+        $this->assertSelectorExists('form');
     }
 
     public function testSubmitFormSuccessfully(): void
@@ -45,9 +45,9 @@ class ContactControllerTest extends WebTestCase
 
         // Soumettre un formulaire invalide
         $form = $crawler->selectButton('Envoyer')->form();
-        $form['contact[email]'] = ''; // Email vide
-        $form['contact[name]'] = ''; // Nom vide
-        $form['contact[message]'] = ''; // Message vide
+        $form['contact[email]'] = '';
+        $form['contact[name]'] = '';
+        $form['contact[message]'] = '';
 
         $client->submit($form);
 

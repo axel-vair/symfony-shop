@@ -2,9 +2,7 @@
 
 namespace App\Tests\Controller\Admin;
 
-use App\Controller\Admin\CategoryCrudController;
 use App\Controller\Admin\ProductCrudController;
-use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -42,7 +40,7 @@ class ProductCrudControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('ProductCrudController', $client->getRequest()->getUri());
-        $this->assertSelectorExists('h1', 'Product');
+        $this->assertSelectorExists('h1', 'Produits');
     }
 
     /**
@@ -52,15 +50,5 @@ class ProductCrudControllerTest extends WebTestCase
     public function testGetEntityFqcnReturnsProductClassName()
     {
         $this->assertSame(Product::class, ProductCrudController::getEntityFqcn());
-    }
-    private function createMockUserWithRoleAdmin()
-    {
-        // Instancie ici ton User ou Admin Entity en fonction de ta configuration
-        $user = new User();
-        $user->setEmail('admin@example.com');
-        $user->setRoles(['ROLE_ADMIN']);
-        $user->setPassword('dummy'); // le password n'a pas d'importance ici
-
-        return $user;
     }
 }

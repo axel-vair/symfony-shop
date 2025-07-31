@@ -32,7 +32,7 @@ class CartControllerTest extends WebTestCase
         $user = new User();
         $user->setEmail($email);
         $user->setRoles(['ROLE_USER']);
-        $user->setPassword('dummy_password'); // Mot de passe factice suffisant pour tests
+        $user->setPassword('dummy_password');
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -156,4 +156,3 @@ class CartControllerTest extends WebTestCase
         );
     }
 }
-
