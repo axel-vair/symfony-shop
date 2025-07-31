@@ -47,7 +47,7 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Set DATABASE_URL for PostgreSQL
-        run: echo "DATABASE_URL=postgresql://shop:pass@127.0.0.1:5432/shop_test" >> .env.test.local
+        run: echo "DATABASE_URL=postgresql://symfony:symfony_password@127.0.0.1:5432/symfony_test" > .env.test.local
 
       - name: Generate Doctrine Migration
         run: php bin/console make:migration
