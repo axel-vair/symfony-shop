@@ -11,21 +11,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ContactType extends AbstractType
 {
-  /*  public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('email', EmailType::class, [])
-            ->add('name')
-            ->add('message', TextareaType::class,[])
-            ->add('envoyer',SubmitType::class,)
-        ;
-    }*/
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -36,6 +27,11 @@ class ContactType extends AbstractType
                 ],
                 'label' => 'Email',
                 'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'constraints' => [
+                    new NotBlank(['message' => "L'email est requis."]),
+                    new Email(['message' => 'Veuillez saisir une adresse email valide.'])
+                ],
+                'required' => false,
             ])
 
             ->add('name', TextareaType::class, [
@@ -45,6 +41,10 @@ class ContactType extends AbstractType
                 ],
                 'label' => 'Nom',
                 'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Le nom est requis.']),
+                ],
+                'required' => false,
             ])
 
             ->add('message', TextareaType::class, [
@@ -54,6 +54,10 @@ class ContactType extends AbstractType
                 ],
                 'label' => 'Message',
                 'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Le message est requis.']),
+                ],
+                'required' => false,
             ])
 
             ->add('envoyer', SubmitType::class, [

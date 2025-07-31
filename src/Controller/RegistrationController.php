@@ -54,7 +54,7 @@ class RegistrationController extends AbstractController
                 return $this->redirectToRoute('app_login');
             } else {
                 // Gestion de l'erreur si le mot de passe est invalide
-                $this->addFlash('error', 'Le mot de passe doit être une chaîne non vide.');
+                $this->addFlash('alert', 'Le mot de passe doit être une chaîne non vide.');
             }
         }
 

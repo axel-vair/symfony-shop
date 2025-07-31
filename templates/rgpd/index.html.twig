@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Confidentialité | RGPD{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Politique de Confidentialité</h1>
+
+        <p>
+            Cette politique de confidentialité décrit comment nous collectons, utilisons et protégeons vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD).
+        </p>
+
+        <h2>1. Données collectées</h2>
+        <p>
+            Nous pouvons collecter les types de données suivants :
+        <ul>
+            <li>Adresse email</li>
+        </ul>
+        </p>
+
+        <h2>2. Finalité de la collecte</h2>
+        <p>Vos données sont collectées pour les finalités suivantes :</p>
+        <ul>
+            <li>Sécurité</li>
+            <li>Fonctionnement de la boutique</li>
+        </ul>
+
+        <h2>3. Conservation des données</h2>
+        <p>Vos données sont conservées pendant une durée n'excédant pas celle nécessaire aux finalités pour lesquelles elles ont été collectées, et dans le respect des obligations légales.</p>
+
+        <h2>4. Vos droits</h2>
+        <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+        <ul>
+            <li>Droit d'accès</li>
+            <li>Droit de rectification</li>
+            <li>Droit à l’effacement</li>
+            <li>Droit à la portabilité des données</li>
+            <li>Droit d’opposition</li>
+        </ul>
+        <p>Vous pouvez exercer vos droits en nous contactant à l’adresse suivante : <a href="mailto:dpo@butterfly.fr">dpo@butterfly.frr</a></p>
+
+        <h2>5. Cookies</h2>
+        <p>Notre site utilise des cookies pour améliorer votre expérience. Vous pouvez les gérer via les paramètres de votre navigateur.</p>
+
+        <h2>6. Contact</h2>
+        <p>Pour toute question relative à cette politique, veuillez nous contacter à : <a href="mailto:dpo@butterfly.fr">dpo@butterfly.fr</a></p>
+
+        <p class="mt-4 text-muted"><small>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</small></p>
+    </div>
+{% endblock %}

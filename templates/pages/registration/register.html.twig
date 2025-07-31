@@ -3,9 +3,13 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1 class="mt-10 text-center text-2xl font-bold leading-9">Inscription</h1>
-    <div class="container w-25 mt-5">
+    <div class="container mt-5" style="max-width: 400px;">
+        {% for message in app.flashes('alert') %}
+            <div class="alert alert-alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <h1 class="text-center text-2xl font-bold mb-4">Inscription</h1>
         {{ form(registrationForm) }}
     </div>
-
 {% endblock %}

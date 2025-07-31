@@ -44,10 +44,13 @@ class ContactController extends AbstractController
             $entityManager->flush();
 
             // Ajoute un message flash pour informer l'utilisateur que son message a été envoyé
-            $this->addFlash('notice', "Votre message a été envoyé !");
+            $this->addFlash('success', "Votre message a été envoyé !");
 
             // Redirige l'utilisateur vers la page de contact
             return $this->redirectToRoute('app_contact');
+        }else{
+            $this->addFlash('error', "Une erreur est survenue !");
+
         }
 
         // Si le formulaire n'a pas été soumis ou n'est pas valide, affiche la page de contact avec le formulaire
