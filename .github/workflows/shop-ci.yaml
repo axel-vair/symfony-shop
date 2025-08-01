@@ -72,7 +72,7 @@ jobs:
       - name: Run Panther E2E tests
         env:
           DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
-        run: ./vendor/bin/phpunit --testsuite=panther
+        run: PANTHER_NO_HEADLESS=1 ./vendor/bin/phpunit --testsuite=panther
 
       # --- Exécution des autres tests PHPUnit ---
       - name: Run classic PHPUnit tests
