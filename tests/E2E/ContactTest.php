@@ -22,7 +22,7 @@ class ContactTest extends PantherTestCase
         $crawler = $client->request('GET', '/contact');
 
         // Remplir et soumettre le formulaire
-        $form = $crawler->selectButton('Envoyer')->form();
+        $form = $crawler->selectButton('Envoyer le message')->form();
         $form['contact[email]'] = 'john@example.com';
         $form['contact[name]'] = 'John Doe';
         $form['contact[message]'] = 'Ceci est un message de test.';
