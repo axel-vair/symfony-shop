@@ -60,7 +60,7 @@ class ContactType extends AbstractType
                 'required' => false,
             ])
 
-            ->add('envoyer', SubmitType::class, [
+            ->add('submit', SubmitType::class, [
                 'label' => 'Envoyer le message',
                 'attr' => ['class' => 'd-grid btn btn-dark mt-4 w-100'],
             ])

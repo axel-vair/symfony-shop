@@ -23,7 +23,7 @@ class ContactControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/contact');
 
         // Soumettre un formulaire valide
-        $form = $crawler->selectButton('Envoyer')->form();
+        $form = $crawler->selectButton('Envoyer le message')->form();
         $form['contact[email]'] = 'test@example.com';
         $form['contact[name]'] = 'John Doe';
         $form['contact[message]'] = 'Test message';
@@ -44,7 +44,7 @@ class ContactControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/contact');
 
         // Soumettre un formulaire invalide
-        $form = $crawler->selectButton('Envoyer')->form();
+        $form = $crawler->selectButton('Envoyer le message')->form();
         $form['contact[email]'] = '';
         $form['contact[name]'] = '';
         $form['contact[message]'] = '';

@@ -48,7 +48,7 @@ class ContactController extends AbstractController
 
             // Redirige l'utilisateur vers la page de contact
             return $this->redirectToRoute('app_contact');
-        }else{
+        }elseif ($form->isSubmitted() && !$form->isValid()) {
             $this->addFlash('error', "Une erreur est survenue !");
 
         }
