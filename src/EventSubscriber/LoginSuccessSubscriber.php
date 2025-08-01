@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class LoginSuccessSubscriber implements EventSubscriberInterface
@@ -18,6 +19,13 @@ class LoginSuccessSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $request->getSession()->getFlashBag()->add('success', 'Vous êtes bien connecté.e');
+        /** @var Session $session */
+        $session = $request->getSession();
+
+        if (!$session instanceof Session) {
+            return;
+        }
+
+        $session->getFlashBag()->add('success', 'Vous êtes bien connecté.e');
     }
 }
