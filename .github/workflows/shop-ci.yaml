@@ -55,7 +55,7 @@ jobs:
 
       - name: Load fixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
-        
+
       # --- Exécution des autres tests PHPUnit ---
       - name: Run classic PHPUnit tests
         env:
