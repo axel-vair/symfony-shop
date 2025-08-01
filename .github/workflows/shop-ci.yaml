@@ -43,22 +43,43 @@ jobs:
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Drop test database
-        run: php bin/console doctrine:database:drop --env=test --force
+      # --- Préparation de la BDD ---
+      - name: Drop test database (if exists)
+        run: php bin/console doctrine:database:drop --if-exists --env=test --force
 
-      - name: Create database
+      - name: Create test database
         run: php bin/console doctrine:database:create --no-interaction --env=test
 
       - name: Create schema
         run: php bin/console doctrine:schema:create --no-interaction --env=test
 
-      - name: Run fixtures
+      - name: Load fixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
+      # --- Dépendances pour Panther (Firefox & geckodriver) ---
+      - name: Install Firefox
+        run: sudo apt-get update && sudo apt-get install -y firefox
+
+      - name: Install geckodriver
+        run: |
+          GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          wget -O geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz"
+          tar -xzf geckodriver.tar.gz
+          chmod +x geckodriver
+          sudo mv geckodriver /usr/local/bin/
+
+      # --- Exécution des tests E2E Panther ---
+      - name: Run Panther E2E tests
         env:
           DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
-        run: vendor/bin/phpunit
+        run: ./vendor/bin/phpunit --testsuite=panther
 
+      # --- Exécution des autres tests PHPUnit ---
+      - name: Run classic PHPUnit tests
+        env:
+          DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
+        run: ./vendor/bin/phpunit
+
+      # --- Analyse statique (PHPStan) ---
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --level=8 src/
