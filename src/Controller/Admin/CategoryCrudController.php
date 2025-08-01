@@ -23,7 +23,7 @@ class CategoryCrudController extends AbstractCrudController
     {
         return $crud
             ->setPageTitle(Crud::PAGE_INDEX, 'Categories')
-            ->set(Crud::PAGE_NEW, 'Ajouter une categorie')
+            ->setPageTitle(Crud::PAGE_NEW, 'Ajouter une categorie')
             ->setPageTitle(Crud::PAGE_EDIT, 'Modifier une categorie')
             ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du categorie');
     }
