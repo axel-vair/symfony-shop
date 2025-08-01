@@ -22,10 +22,6 @@ class LoginSuccessSubscriber implements EventSubscriberInterface
         /** @var Session $session */
         $session = $request->getSession();
 
-        if (!$session instanceof Session) {
-            return;
-        }
-
         $session->getFlashBag()->add('success', 'Vous êtes bien connecté.e');
     }
 }
