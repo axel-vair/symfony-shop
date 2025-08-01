@@ -56,6 +56,14 @@ jobs:
       - name: Load fixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
+      # --- Composer assets - importmap install (pour @hotwired/stimulus) ---
+      - name: Install Importmap assets
+        run: php bin/console importmap:install
+
+      # --- Nettoyage cache symfony test ---
+      - name: Clear Symfony cache (test env)
+        run: php bin/console cache:clear --env=test
+
       # --- Exécution des autres tests PHPUnit ---
       - name: Run classic PHPUnit tests
         env:
