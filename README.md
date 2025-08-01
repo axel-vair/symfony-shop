@@ -61,18 +61,18 @@ Certaines fonctionnalités ont été exclues ou partiellement développées dans
 
 ## ✅ Traduction du cahier des charges en livrables
 
-| Besoin exprimé                             | Réalisation                               | Statut     |
-|-------------------------------------------|-------------------------------------------|------------|
-| Symfony CLI, Doctrine, BuildForm          | Intégrés et utilisés dans tout le projet  | ✅ Fait     |
-| Authentification + page profil            | Fonctionnels                              | ✅ Fait     |
+| Besoin exprimé                             | Réalisation                            | Statut     |
+|-------------------------------------------|----------------------------------------|------------|
+| Symfony CLI, Doctrine, BuildForm          | Intégrés et utilisés dans tout le projet | ✅ Fait     |
+| Authentification + page profil            | Fonctionnels                           | ✅ Fait     |
 | Catalogue avec filtres et pagination      | Filtres par catégorie et date, pagination | ✅ Fait     |
-| Panier d’achat                            | Fonctionnel, stockage en session          | ✅ Fait     |
-| Historique des commandes                  | Accessible depuis le profil utilisateur   | ✅ Fait     |
-| Paiement                                   | Simulation via formulaire                 | 🔶 Partiel  |
-| API Platform + DTO                        | DTO en place, API Platform utilisé        | 🔶 Partiel  |
-| Scheduler (backup auto BDD)               | Non réalisé, décrit dans la doc           | ❌ Non fait |
-| Envoi d’e-mails (PHP Mailer)              | Non réalisé, décrit dans la doc                   |  ❌ Non fait  |
-| Faker.js (génération de données fictives) | Utilisé pour pré-remplir la base          | ✅ Fait     |
+| Panier d’achat                            | Fonctionnel, stockage en session       | ✅ Fait     |
+| Historique des commandes                  | Accessible depuis le profil utilisateur | ✅ Fait     |
+| Paiement                                   | Simulation via formulaire              | 🔶 Partiel  |
+| API Platform + DTO                        | API Platform utilisé      | 🔶 Partiel  |
+| Scheduler (backup auto BDD)               | Non réalisé           | ❌ Non fait |
+| Envoi d’e-mails (PHP Mailer)              | Non réalisé              |  ❌ Non fait  |
+| Faker.js (génération de données fictives) | Utilisé pour pré-remplir la base       | ✅ Fait     |
 
 
 
@@ -116,16 +116,17 @@ In case of failure, the error logs are read and the problem is debugged locally.
 
 ### 🔧 Environnement technique
 | Élément                 | Détail                          |
-| ----------------------- | ------------------------------- |
+|-------------------------|---------------------------------|
 | Langage principal       | PHP 8.3                         |
 | Framework               | Symfony                         |
 | Outil de tests          | PHPUnit                         |
 | Analyse de code         | PHPStan (niveau 8)              |
 | Système CI              | GitHub Actions                  |
 | OS du runner CI         | Ubuntu (latest)                 |
-| Base de données de test | SQLite                          |
+| Base de données de test | Postgresql                      |
 | Gestionnaire de paquets | Composer                        |
 | Conteneurisation        | Docker (cf. fichier ci-dessous) |
+| E2E test                | Geckodriver & firefox           |
 
 
 ### ⚙️ Infrastructure utilisée
@@ -135,21 +136,31 @@ In case of failure, the error logs are read and the problem is debugged locally.
 
 **Outils intégrés dans le pipeline** :
 - composer install
-- phpunit pour l'exécution des tests
+- installation de firefox & geckodriver
+- drop de la database de test
+- création de la database de test
+- création du shéma de la database
+- exécution des fixtures
+- install importmap
+- clear du cache
+- phpunit pour l'exécution des tests (y compris tests endtoend)
 - phpstan pour l’analyse de code statique
-- Serveur d’automatisation : GitHub Actions configuré par fichier YAML.
-- Conteneurisation : environnement exécutable via Docker (voir fichier ci-dessous).
+
 
 ### 🔁 Déroulement du pipeline
 - Checkout du code
 - Installation de PHP et des dépendances Composer
-- Création de la base SQLite 
+- Installation de Firefox et de Gecko Driver
+- Création de la base Postgresql 
 - Exécution des tests avec PHPUnit
 - Analyse statique avec PHPStan
 
 ### 📈 Indicateurs suivis
 
-- **Taux de couverture de tests** : X% (via PHPUnit/XDEBUG)
+- **Taux de couverture de tests (via PHPUnit/XDEBUG)** : 
+  - classes 38,64% 
+  - Méthods: 44,21%
+  - Lines: 42,74%
 - **Nombre d'erreurs PHPStan** : 0 (niveau 8)
 - **Bugs/vulnérabilités SonarQube** : 0 critiques
 
