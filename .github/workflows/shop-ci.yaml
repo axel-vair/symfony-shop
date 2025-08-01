@@ -68,7 +68,7 @@ jobs:
       - name: Run classic PHPUnit tests
         env:
           DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
-        run: ./vendor/bin/phpunit --exclude-group=panther
+        run: ./vendor/bin/phpunit
 
       # --- Analyse statique (PHPStan) ---
       - name: Run PHPStan
