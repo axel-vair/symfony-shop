@@ -4,6 +4,9 @@ namespace App\Tests\E2E;
 
 use Symfony\Component\Panther\PantherTestCase;
 
+/**
+ * @group panther
+ */
 class ContactTest extends PantherTestCase
 {
     public function testFormDisplay(): void

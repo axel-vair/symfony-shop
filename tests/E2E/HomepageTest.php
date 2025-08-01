@@ -5,6 +5,9 @@ namespace App\Tests\E2E;
 
 use Symfony\Component\Panther\PantherTestCase;
 
+/**
+ * @group panther
+ */
 class HomepageTest extends PantherTestCase
 {
     public function testHomepageIsSuccessful(): void
