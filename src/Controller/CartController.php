@@ -2,16 +2,24 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Service\CartService;
 use App\Service\OrderService;
+use Doctrine\ORM\EntityManagerInterface;
+use Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CartController extends AbstractController
 {
+    const INVALID = 'Product invalide';
+
     /**
      * Affiche la page du panier.
      * Cette fonction vérifie d'abord si l'utilisateur est authentifié avec le rôle 'ROLE_USER'.
@@ -39,6 +47,133 @@ class CartController extends AbstractController
     }
 
     /**
+     * Crée la commande à partir du panier ET lance la session Stripe Checkout.
+     */
+    #[Route('/panier/caisse', name: 'app_cart_caisse', methods: ['POST'])]
+    public function caisse(OrderService $orderService): Response
+    {
+        // Vérifie si l'utilisateur a le rôle 'ROLE_USER', sinon refuse l'accès
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $user = $this->getUser();
+
+
+        if (!$user instanceof User) {
+            // Si l'utilisateur n'est pas authentifié
+            $this->addFlash('error', 'Utilisateur non authentifié.');
+            return $this->redirectToRoute('app_cart');
+        }
+
+        try {
+            //crée la commande et la met en statut "en attente"
+            $order = $orderService->createOrderFromCart($user);
+            $this->addFlash('success', 'Votre commande a été initialisée avec succès.');
+            return $this->redirectToRoute('app_cart_paiement', ['reference' => (string) $order->getReference()]);
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('app_cart');
+        }
+    }
+
+    /**
+     * Récupère le contenu de la commande et instancie un session stripe
+     * @param Order $order
+     * @param UrlGeneratorInterface $urlGenerator
+     * @return RedirectResponse
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    #[Route('/panier/paiement/{reference}', name: 'app_cart_paiement')]
+    public function paiement (Order $order,
+                              UrlGeneratorInterface $urlGenerator,
+    ): RedirectResponse
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $stripe = new StripeClient('sk_test_51RreSK1WDCNlIvu3yhgW3tc9YyELhMj75n44GISM68DspY6Z4t94jhQoq0Koz7otcPgMFLrBJH1RcJSXYmU3vFfq00eFDo48av');
+        $referenceStr = (string) $order->getReference();
+
+        $lineItems = [];
+        foreach ($order->getOrderItems() as $orderItem) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => (int)($orderItem->getPrice() * 100),
+                    'product_data' => [
+                        'name' => $orderItem->getProduct()->getName(),
+                    ],
+                ],
+                'quantity' => $orderItem->getQuantity(),
+            ];
+        }
+
+        $session = $stripe->checkout->sessions->create([
+            'customer_email' => $user->getEmail(),
+            'line_items' => $lineItems,
+            'mode' => 'payment',
+            'payment_method_types' => ['card'],
+            'success_url' => $urlGenerator->generate('app_succes', [
+                'reference' => $referenceStr
+            ], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url' => $urlGenerator->generate('app_cancel', [
+                'reference' => $referenceStr
+            ], UrlGeneratorInterface::ABSOLUTE_URL),
+            'client_reference_id' => $referenceStr,
+        ]);
+
+        return new RedirectResponse($session->url);
+    }
+
+
+    /**
+     * En cas de succès Stripe, on marque la commande "Payée" puis on redirige vers les détails de la commande.
+     */
+    #[Route('/panier/succes/{reference}', name: 'app_succes')]
+    public function succes(Order $order,
+                           EntityManagerInterface $entityManager,
+                           CartService $cartService): Response
+    {
+
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('User not found or not authenticated');
+        }
+
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        if ($order->getUtilisateur() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Accès refusé à cette commande');
+        }
+
+        if ($order->getStatus() !== 'Payée') {
+            $order->setStatus('Payée');
+            $entityManager->flush();
+        }
+
+        // Vider le panier
+        $cartService->removeFromCart($user);
+
+        $this->addFlash('success', 'Paiement réussi, votre commande est finalisée.');
+
+        return $this->redirectToRoute('app_order_details', [
+            'reference' => $order->getReference(),
+        ]);
+    }
+
+    /**
+     * Annulation du paiement
+     */
+    #[Route('/panier/cancel/{reference}', name: 'app_cancel')]
+    public function cancel(Order $order): Response
+    {
+        $this->addFlash('warning', 'La commande est en attente de paiement');
+
+        return $this->redirectToRoute('app_order_details', [
+            'reference' => $order->getReference(),
+        ]);
+    }
+
+    /**
      * Ajoute un produit au panier.
      * Cette fonction vérifie d'abord si l'utilisateur est authentifié.
      * Elle ajoute ensuite le produit au panier via le CartService.
@@ -60,7 +195,7 @@ class CartController extends AbstractController
             $cartService->addToCart($id);
         } else {
             // Gérer l'erreur ou rediriger l'utilisateur
-            $this->addFlash('error', 'Produit invalide.');
+            $this->addFlash('error', self::INVALID);
             return $this->redirectToRoute('app_cart');
         }
         // Redirige vers la page du panier
@@ -82,7 +217,7 @@ class CartController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            throw new \Exception('Vous devez être connecté');
+            throw new AccessDeniedException('Vous devez être connecté');
         }
 
         // Vide le contenu du panier
@@ -113,7 +248,7 @@ class CartController extends AbstractController
             // Augmente la quantité du produit dans le panier
             $cartService->increaseQuantity($id);
         } else {
-            $this->addFlash('error', 'Produit invalide.');
+            $this->addFlash('error', self::INVALID);
             return $this->redirectToRoute('app_cart');
         }
 
@@ -139,7 +274,7 @@ class CartController extends AbstractController
             // Diminue la quantité du produit dans le panier
             $cartService->decreaseQuantity($id);
         } else {
-            $this->addFlash('error', 'Produit invalide.');
+            $this->addFlash('error', self::INVALID);
             return $this->redirectToRoute('app_cart');
         }
 
@@ -165,7 +300,7 @@ class CartController extends AbstractController
             // Supprime le produit spécifique du panier
             $cartService->removeOneProductToCart($id);
         } else {
-            $this->addFlash('error', 'Produit invalide.');
+            $this->addFlash('error', self::INVALID);
             return $this->redirectToRoute('app_cart');
         }
 
@@ -173,36 +308,4 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
 
-    /**
-     * Valide le panier et crée une commande.
-     * Cette fonction vérifie d'abord si l'utilisateur est authentifié.
-     * Elle tente ensuite de créer une commande à partir du panier via le OrderService.
-     * En cas de succès, elle ajoute un message flash et redirige vers la page des commandes de l'utilisateur.
-     * En cas d'échec, elle ajoute un message d'erreur et redirige vers la page du panier.
-     *
-     * @param OrderService $orderService Le service de gestion des commandes
-     * @return Response Une redirection vers la page des commandes ou du panier
-     */
-    #[Route('/panier/valider', name: 'app_cart_validate')]
-    public function validateCart(OrderService $orderService): Response
-    {
-        // Vérifie si l'utilisateur a le rôle 'ROLE_USER', sinon refuse l'accès
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
-
-        if (!$user instanceof User) {
-            // Si l'utilisateur n'est pas authentifié
-            $this->addFlash('error', 'Utilisateur non authentifié.');
-            return $this->redirectToRoute('app_cart');
-        }
-        try {
-            $order = $orderService->createOrderFromCart($user);
-
-            $this->addFlash('success', 'Votre commande a été créée avec succès.');
-            return $this->redirectToRoute('app_user_orders');
-        } catch (\Exception $e) {
-            $this->addFlash('error', $e->getMessage());
-            return $this->redirectToRoute('app_cart');
-        }
-    }
 }

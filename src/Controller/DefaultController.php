@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +23,7 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'app_default')]
     public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
     {
+
         // Récupère toutes les catégories de la base de données
         $categories = $categoryRepository->findAll();
 

@@ -188,11 +188,8 @@ class Product
 
     public function removeComment(Comment $comment): static
     {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getProduct() === $this) {
-                $comment->setProduct(null);
-            }
+        if ($this->comments->removeElement($comment) && $comment->getProduct() === $this) {
+            $comment->setProduct(null);
         }
 
         return $this;

@@ -20,12 +20,21 @@
             {% for order in orders %}
                 <div class="card mb-4">
                     <div class="card-header">
-                        Commande <a href="{{ path('app_order_details', {id: order.id}) }}" target="_top"> #{{ order.id }}</a>
+                        Commande <a href="{{ path('app_order_details', {reference: order.reference}) }}" target="_top">
+                            #{{ order.reference }}</a>
                         - {{ order.createdAt|date('d/m/Y H:i') }}
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Total : {{ order.total|number_format(2, ',', ' ') }} €</h5>
-                        <p class="card-text">Statut : {{ order.status }}</p>
+                        {% if order.status == 'En attente' %}
+                            <div class="d-flex justify-content-between">
+                                <p class="badge bg-warning">{{ order.status }}</p>
+                                <a href="{{ path('app_cart_paiement', { reference: order.reference }) }}"
+                                   class="btn btn-danger"  data-turbo="false">Régler ma commande</a>
+                            </div>
+                        {% else %}
+                            <span class="badge bg-success">Payée</span>
+                        {% endif %}
 
                         <h6>Produits :</h6>
                         <ul class="list-group">
@@ -53,8 +62,8 @@
                 </div>
             {% endif %}
         </turbo-frame>
-        {% else %}
-            <p>Vous n'avez pas encore passé de commande.</p>
+    {% else %}
+        <p>Vous n'avez pas encore passé de commande.</p>
         {% endif %}
 
         <a href="{{ path('app_profil', {'id': app.user.id}) }}" class="btn btn-secondary">Retour au profil</a>

@@ -129,30 +129,4 @@ class CartControllerTest extends WebTestCase
     {
         $this->doTestProductRoute('/panier/delete/product/{id}');
     }
-
-    public function testValidateCartRedirectsIfNotAuthenticated(): void
-    {
-        $this->client->request('GET', '/panier/valider');
-        $response = $this->client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-        $this->assertStringContainsString('/login', $response->headers->get('Location'));
-    }
-
-    public function testValidateCartBehavior(): void
-    {
-        $user = $this->createUser('user_validate@example.com');
-        $this->client->loginUser($user);
-
-        $this->client->request('GET', '/panier/valider');
-        $response = $this->client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-
-        $location = $response->headers->get('Location');
-        $this->assertTrue(
-            $location === '/mon-compte/commandes' || $location === '/panier',
-            sprintf('La redirection doit être vers la page commandes ou le panier, ici : %s', $location)
-        );
-    }
 }

@@ -34,4 +34,17 @@ class RegistrationControllerTest extends WebTestCase
         $client->followRedirect();
     }
 
+    public function testRegistrationWithInvalidData(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/register');
+        $form = $crawler->selectButton("S'inscrire")->form();
+        $form['registration_form[email]'] = '';
+        $form['registration_form[plainPassword]'] = '';
+        $client->submit($form);
+        $this->assertEquals(422, $client->getResponse()->getStatusCode());
+        $this->assertStringContainsString('Veuillez saisir un email', $client->getResponse()->getContent());
+        $this->assertStringContainsString('Veuillez entrer un mot de passe', $client->getResponse()->getContent());
+    }
+
 }
