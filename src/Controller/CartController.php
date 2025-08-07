@@ -90,7 +90,7 @@ class CartController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $stripe = new StripeClient('sk_test_51RreSK1WDCNlIvu3yhgW3tc9YyELhMj75n44GISM68DspY6Z4t94jhQoq0Koz7otcPgMFLrBJH1RcJSXYmU3vFfq00eFDo48av');
+        $stripe = new StripeClient('%env(STRIPE_SECRET)%');
         $referenceStr = (string) $order->getReference();
 
         $lineItems = [];
