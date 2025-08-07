@@ -30,7 +30,7 @@
                                     <tbody>
                                     {% for order in app.user.orders|slice(0, 3) %}
                                         <tr>
-                                            <td><a href="{{ path('app_order_details', {id: order.id}) }}">#{{ order.id }}</a></td>
+                                            <td><a href="{{ path('app_order_details', {reference: order.reference}) }}">#{{ order.reference }}</a></td>
                                             <td>{{ order.createdAt|date('d/m/Y') }}</td>
                                             <td>{{ order.total|number_format(2, ',', ' ') }} €</td>
                                             <td>{{ order.status }}</td>

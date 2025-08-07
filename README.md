@@ -61,18 +61,18 @@ Certaines fonctionnalités ont été exclues ou partiellement développées dans
 
 ## ✅ Traduction du cahier des charges en livrables
 
-| Besoin exprimé                             | Réalisation                            | Statut     |
-|-------------------------------------------|----------------------------------------|------------|
-| Symfony CLI, Doctrine, BuildForm          | Intégrés et utilisés dans tout le projet | ✅ Fait     |
-| Authentification + page profil            | Fonctionnels                           | ✅ Fait     |
-| Catalogue avec filtres et pagination      | Filtres par catégorie et date, pagination | ✅ Fait     |
-| Panier d’achat                            | Fonctionnel, stockage en session       | ✅ Fait     |
-| Historique des commandes                  | Accessible depuis le profil utilisateur | ✅ Fait     |
-| Paiement                                   | Simulation via formulaire              | 🔶 Partiel  |
-| API Platform + DTO                        | API Platform utilisé      | 🔶 Partiel  |
-| Scheduler (backup auto BDD)               | Non réalisé           | ❌ Non fait |
-| Envoi d’e-mails (PHP Mailer)              | Non réalisé              |  ❌ Non fait  |
-| Faker.js (génération de données fictives) | Utilisé pour pré-remplir la base       | ✅ Fait     |
+| Besoin exprimé                             | Réalisation                                 | Statut     |
+|-------------------------------------------|---------------------------------------------|------------|
+| Symfony CLI, Doctrine, BuildForm          | Intégrés et utilisés dans tout le projet    | ✅ Fait     |
+| Authentification + page profil            | Fonctionnels                                | ✅ Fait     |
+| Catalogue avec filtres et pagination      | Filtres par catégorie et date, pagination   | ✅ Fait     |
+| Panier d’achat                            | Fonctionnel, stockage en session            | ✅ Fait     |
+| Historique des commandes                  | Accessible depuis le profil utilisateur     | ✅ Fait     |
+| Paiement                                   | Simulation via formulaire + Stripe en cours | 🔶 Partiel  |
+| API Platform + DTO                        | API Platform utilisé                        | 🔶 Partiel  |
+| Scheduler (backup auto BDD)               | Non réalisé                                 | ❌ Non fait |
+| Envoi d’e-mails (PHP Mailer)              | Non réalisé                                 |  ❌ Non fait  |
+| Faker.js (génération de données fictives) | Utilisé pour pré-remplir la base            | ✅ Fait     |
 
 
 

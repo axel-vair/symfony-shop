@@ -7,6 +7,7 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Ulid;
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
@@ -16,7 +17,7 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private int $id;
+    private ?int  $id;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?User $utilisateur = null;
@@ -35,6 +36,9 @@ class Order
      */
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'order', cascade: ['persist'])]
     private Collection $orderItems;
+
+    #[ORM\Column(type: 'ulid')]
+    private ?Ulid $reference = null;
 
     public function __construct()
     {
@@ -114,11 +118,22 @@ class Order
 
     public function removeOrderItem(OrderItem $orderItem): static
     {
-        if ($this->orderItems->removeElement($orderItem)) {
-            if ($orderItem->getOrder() === $this) {
-                $orderItem->setOrder(null);
-            }
+        if ($this->orderItems->removeElement($orderItem) && $orderItem->getOrder() === $this) {
+            $orderItem->setOrder(null);
         }
+        return $this;
+    }
+
+
+    public function getReference(): ?Ulid
+    {
+        return $this->reference;
+    }
+
+    public function setReference(Ulid $reference): static
+    {
+        $this->reference = $reference;
+
         return $this;
     }
 }

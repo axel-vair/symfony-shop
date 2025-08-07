@@ -25,6 +25,12 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label' => 'Email',
                 'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir un email',
+                    ]),
+                ],
+                'required' => false,
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,

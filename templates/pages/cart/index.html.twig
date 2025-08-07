@@ -9,37 +9,52 @@
             <div class="card">
                 <div class="row">
                     <div class="col-md-8 bg-white p-5 rounded-start">
+                        {% block flash_messages %}
+                            {% for type in ['debug', 'error', 'success', 'warning'] %}
+                                {% for message in app.flashes(type) %}
+                                    <div class="alert alert-{{ type == 'debug' ? 'info' : (type == 'error' ? 'danger' : (type == 'success' ? 'success' : 'warning')) }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endblock %}
                         <h4 class="mb-4"><b>Mon panier</b></h4>
-                        {% set totalItems = 0 %}
-                        {% for cartItem in cart %}
-                            {% set totalItems = totalItems + cartItem.quantity %}
-                            <div class="border-top border-bottom py-3 mb-3">
-                                <div class="row align-items-center">
-                                    <div class="col-2">
-                                        <img class="img-fluid" src="{{ asset('images/' ~ cartItem.product.image) }}"
-                                             alt="{{ cartItem.product.name }}">
-                                    </div>
-                                    <div class="col">
-                                        <div class="text-muted">{{ cartItem.product.category ?? 'Catégorie' }}</div>
-                                        <div>{{ cartItem.product.name }}</div>
-                                    </div>
-                                    <div class="col">
-                                        <a href="{{ path('app_cart_quantity_decrease', {'id': cartItem.product.id}) }}"
-                                           class="text-dark" data-turbo-frame="cart_content cart_summary cart_total">-</a>
-                                        <span class="border px-2 text-dark">{{ cartItem.quantity }}</span>
-                                        <a href="{{ path('app_cart_quantity_increase', {'id': cartItem.product.id}) }}"
-                                           class="text-dark" data-turbo-frame="cart_content cart_summary cart_total">+</a>
-                                    </div>
-                                    <div class="col">
-                                        &euro; {{ cartItem.product.price }}
-                                        <a href="{{ path('app_cart_one_product_delete', {'id': cartItem.product.id}) }}"
-                                           class="text-danger ms-3" data-turbo-frame="cart_content cart_summary cart_total" target="_self">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
+                        <turbo-frame id="card-content">
+                            {% set totalItems = 0 %}
+                            {% for cartItem in cart %}
+                                {% set totalItems = totalItems + cartItem.quantity %}
+                                <div class="border-top border-bottom py-3 mb-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-2">
+                                            <img class="img-fluid" src="{{ asset('images/' ~ cartItem.product.image) }}"
+                                                 alt="{{ cartItem.product.name }}">
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-muted">{{ cartItem.product.category ?? 'Catégorie' }}</div>
+                                            <div>{{ cartItem.product.name }}</div>
+                                        </div>
+                                        <div class="col">
+                                            <a href="{{ path('app_cart_quantity_decrease', {'id': cartItem.product.id}) }}"
+                                               class="text-dark"
+                                               data-turbo-frame="cart_content cart_summary cart_total">-</a>
+                                            <span class="border px-2 text-dark">{{ cartItem.quantity }}</span>
+                                            <a href="{{ path('app_cart_quantity_increase', {'id': cartItem.product.id}) }}"
+                                               class="text-dark"
+                                               data-turbo-frame="cart_content cart_summary cart_total">+</a>
+                                        </div>
+                                        <div class="col">
+                                            &euro; {{ cartItem.product.price }}
+                                            <a href="{{ path('app_cart_one_product_delete', {'id': cartItem.product.id}) }}"
+                                               class="text-danger ms-3"
+                                               data-turbo-frame="cart_content cart_summary cart_total"
+                                               target="_self">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </turbo-frame>
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="{{ path('app_cart_delete') }}" class="btn btn-danger"
                                onclick="return confirm('Êtes-vous sûr de vouloir vider votre panier ?')">Vider le
@@ -62,23 +77,24 @@
                             <div class="col text-end">&euro; {{ total }}</div>
                         </div>
 
-                        <form>
-                            <div class="mb-3">
-                                <label for="shipping" class="form-label">Livraison</label>
-                                <select class="form-select" id="shipping">
-                                    <option selected>Livraison standard - &euro;5.00</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="coupon" class="form-label">Code promo</label>
-                                <input type="text" class="form-control" id="coupon" placeholder="Entrez votre code">
-                            </div>
-                        </form>
+
+                        <div class="mb-3">
+                            <label for="shipping" class="form-label">Livraison</label>
+                            <select class="form-select" id="shipping">
+                                <option selected>Livraison standard - &euro;5.00</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="coupon" class="form-label">Code promo</label>
+                            <input type="text" class="form-control" id="coupon" placeholder="Entrez votre code">
+                        </div>
                         <div class="row border-top pt-3">
                             <div class="col">PRIX TOTAL</div>
                             <div class="col text-end">&euro; {{ total + 5 }}</div>
                         </div>
-                        <a class="btn btn-dark w-100 mt-4" href="{{ path('app_cart_validate') }}">PAYER</a>
+                        <form action="{{ path('app_cart_caisse') }}" method="post" data-turbo="false">
+                            <button class="btn btn-dark w-100 mt-4">PAYER</button>
+                        </form>
                     </div>
                 </div>
             </div>

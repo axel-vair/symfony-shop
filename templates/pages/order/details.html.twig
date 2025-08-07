@@ -1,17 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de la commande #{{ order.id }}{% endblock %}
+{% block title %}Détails de la commande #{{ order.reference }}{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
-        <h1 class="mb-4">Détails de la commande #{{ order.id }}</h1>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <h1 class="mb-4">Détails de la commande #{{ order.reference }}</h1>
 
         <div class="card">
             <div class="card-header">
                 Commande passée le {{ order.createdAt|date('d/m/Y à H:i') }}
             </div>
             <div class="card-body">
-                <h5 class="card-title">Statut : {{ order.status }}</h5>
+                {% if order.status == 'Payée' %}
+                    <h5 class="card-title badge bg-success">{{ order.status }}</h5>
+                {% else %}
+                    <h5 class="card-title badge bg-warning">{{ order.status }}</h5>
+
+                {% endif %}
                 <p class="card-text">Total : {{ order.total|number_format(2, ',', ' ') }} €</p>
 
                 <h6 class="mt-4">Produits commandés :</h6>
@@ -38,6 +51,11 @@
             </div>
         </div>
 
-        <a href="{{ path('app_user_orders') }}" class="btn btn-secondary mt-3">Retour à la liste des commandes</a>
+        <div class="d-flex justify-content-between">
+            <a href="{{ path('app_user_orders') }}" class="btn btn-secondary mt-3">Retour à la liste des commandes</a>
+            {% if order.status == "En attente" %}
+                <a class="btn btn-danger mt-3">Régler ma commande</a>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

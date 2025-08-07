@@ -6,7 +6,7 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Uid\Ulid;
 
 class OrderService
 {
@@ -41,6 +41,8 @@ class OrderService
 
         $order = new Order();
         $order->setUtilisateur($user);
+        $ulid = new Ulid();
+        $order->setReference($ulid);
         $order->setTotal($this->cartService->calculateTotal($cart));
         $order->setStatus('En attente');
         $order->setCreatedAt(new \DateTimeImmutable());
@@ -62,9 +64,6 @@ class OrderService
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
-        $this->cartService->removeFromCart($user);
-
         return $order;
     }
-
 }
