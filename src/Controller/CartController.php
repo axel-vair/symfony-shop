@@ -90,9 +90,7 @@ class CartController extends AbstractController
      * @throws \Exception
      */
     #[Route('/panier/paiement/{reference}', name: 'app_cart_paiement')]
-    public function paiement (Order $order,
-                              UrlGeneratorInterface $urlGenerator,
-    ): RedirectResponse
+    public function paiement(Order $order, UrlGeneratorInterface $urlGenerator): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         /** @var User $user */
@@ -101,10 +99,8 @@ class CartController extends AbstractController
         $stripe = new StripeClient($this->stripeSecretKey);
         $referenceStr = (string) $order->getReference();
 
-
         $lineItems = [];
         foreach ($order->getOrderItems() as $orderItem) {
-
             $product = $orderItem->getProduct();
             if ($product === null) {
                 throw new \LogicException('Le produit lié à la commande est introuvable.');
@@ -115,16 +111,21 @@ class CartController extends AbstractController
                     'currency' => 'eur',
                     'unit_amount' => (int)($orderItem->getPrice() * 100),
                     'product_data' => [
-                        'name' => $orderItem->getProduct()->getName(),
+                        'name' => (string) $product->getName(),
                     ],
                 ],
-                'quantity' => $orderItem->getQuantity(),
+                'quantity' => (int) $orderItem->getQuantity(),
             ];
+        }
+
+        $email = $user->getEmail();
+        if ($email === null) {
+            throw new \LogicException('L\'email utilisateur est requis pour Stripe.');
         }
 
         Stripe::setApiKey($this->stripeSecretKey);
         $session = Session::create([
-            'customer_email' => $user->getEmail(),
+            'customer_email' => $email,
             'line_items' => $lineItems,
             'mode' => 'payment',
             'payment_method_types' => ['card'],
@@ -137,8 +138,13 @@ class CartController extends AbstractController
             'client_reference_id' => $referenceStr,
         ]);
 
+        if ($session->url === null) {
+            throw new \LogicException('La session Stripe ne contient pas d\'URL de redirection.');
+        }
+
         return new RedirectResponse($session->url);
     }
+
 
 
     /**
