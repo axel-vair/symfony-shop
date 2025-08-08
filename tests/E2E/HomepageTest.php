@@ -12,7 +12,7 @@ class HomepageTest extends PantherTestCase
 {
     public function testHomepageIsSuccessful(): void
     {
-        $client = self::createPantherClient();
+        $client = self::createPantherClient(['browser' => PantherTestCase::FIREFOX]);
         $crawler = $client->request('GET', '/');
 
         $this->assertSelectorTextContains('h1', 'Bienvenue chez Butterfly');
