@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Service\CartService;
 use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 use Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,6 +20,12 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CartController extends AbstractController
 {
+    private string $stripeSecretKey;
+
+    public function __construct(string $stripeSecretKey)
+    {
+        $this->stripeSecretKey = $stripeSecretKey;
+    }
     const INVALID = 'Product invalide';
 
     /**
@@ -79,7 +87,7 @@ class CartController extends AbstractController
      * @param Order $order
      * @param UrlGeneratorInterface $urlGenerator
      * @return RedirectResponse
-     * @throws \Stripe\Exception\ApiErrorException
+     * @throws \Exception
      */
     #[Route('/panier/paiement/{reference}', name: 'app_cart_paiement')]
     public function paiement (Order $order,
@@ -90,11 +98,18 @@ class CartController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $stripe = new StripeClient('%env(STRIPE_SECRET)%');
+        $stripe = new StripeClient($this->stripeSecretKey);
         $referenceStr = (string) $order->getReference();
+
 
         $lineItems = [];
         foreach ($order->getOrderItems() as $orderItem) {
+
+            $product = $orderItem->getProduct();
+            if ($product === null) {
+                throw new \LogicException('Le produit lié à la commande est introuvable.');
+            }
+
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'eur',
@@ -107,7 +122,8 @@ class CartController extends AbstractController
             ];
         }
 
-        $session = $stripe->checkout->sessions->create([
+        Stripe::setApiKey($this->stripeSecretKey);
+        $session = Session::create([
             'customer_email' => $user->getEmail(),
             'line_items' => $lineItems,
             'mode' => 'payment',
