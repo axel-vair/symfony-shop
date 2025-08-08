@@ -7,10 +7,10 @@ parameters:
         - src/
         - tests/
     scanFiles:
-            - vendor/stripe/stripe-php/init.php
-        scanDirectories:
-            - vendor/stripe/stripe-php/lib
+        - vendor/stripe/stripe-php/init.php
+    scanDirectories:
+        - vendor/stripe/stripe-php/lib
     ignoreErrors:
-            -
-              message: '#Property [a-zA-Z0-9\\_]+::\$id is never written, only read.#'
-              path: src/Entity/*
+        -
+            message: '#Property [a-zA-Z0-9\\_]+::\$id is never written, only read.#'
+            path: src/Entity/*
