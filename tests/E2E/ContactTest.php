@@ -2,6 +2,7 @@
 
 namespace App\Tests\E2E;
 
+
 use Symfony\Component\Panther\PantherTestCase;
 
 /**
@@ -11,7 +12,7 @@ class ContactTest extends PantherTestCase
 {
     public function testFormDisplay(): void
     {
-        $client = self::createPantherClient();
+        $client = self::createPantherClient(['browser' => PantherTestCase::FIREFOX]);
         $crawler = $client->request('GET', '/contact');
 
         // Vérifie que la page se charge correctement
@@ -21,7 +22,7 @@ class ContactTest extends PantherTestCase
 
     public function testFormSubmissionValid(): void
     {
-        $client = self::createPantherClient();
+        $client = self::createPantherClient(['browser' => PantherTestCase::FIREFOX]);
         $crawler = $client->request('GET', '/contact');
 
         // Remplir et soumettre le formulaire
@@ -41,7 +42,7 @@ class ContactTest extends PantherTestCase
 
     public function testFormSubmissionInvalid(): void
     {
-        $client = self::createPantherClient();
+        $client = self::createPantherClient(['browser' => PantherTestCase::FIREFOX]);
         $crawler = $client->request('GET', '/contact');
 
         // Soumettre un formulaire vide
