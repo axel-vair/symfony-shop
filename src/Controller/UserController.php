@@ -57,7 +57,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $plainPassword = $form->get('password')->getData();
+            $plainPassword = $form->get('plainPassword')->getData();
 
             // Vérifie que le mot de passe actuel est une chaîne de caractères et non vide
             if (!is_string($plainPassword) || empty($plainPassword)) {
