@@ -11,6 +11,6 @@ final class RGPDController extends AbstractController
     #[Route('mention-legales', name: 'app_mention_index')]
     public function index(): Response
     {
-        return $this->render('rgpd/index.html.twig');
+        return $this->render('pages/rgpd/index.html.twig');
     }
 }
