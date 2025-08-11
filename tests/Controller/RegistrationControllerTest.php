@@ -27,7 +27,6 @@ class RegistrationControllerTest extends WebTestCase
         $form['registration_form[plainPassword][first]'] = 'password123';
         $form['registration_form[plainPassword][second]'] = 'password123';
 
-
         $client->submit($form);
 
         // On attend une redirection vers login
