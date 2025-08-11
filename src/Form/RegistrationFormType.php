@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -69,15 +70,30 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => false,
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'mapped' => false,
-                'attr' => [
-                    'autocomplete' => 'new-password',
-                    'class' => 'form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
-                    'placeholder' => 'Mot de passe'
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
+                'first_options' => [
+                    'label' => 'Mot de passe*',
+                    'attr' => [
+                        'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                        'placeholder' => 'Mot de passe',
+                    ],
+                    'label_attr' => [
+                        'class' => 'form-label inline-block mb-2 text-gray-700'
+                    ],
                 ],
-                'label' => 'Mot de passe*',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'second_options' => [
+                    'label' => 'Vérification du mot de passe*',
+                    'attr' => [
+                        'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                        'placeholder' => 'Entrez à nouveau le mot de passe',
+                    ],
+                    'label_attr' => [
+                        'class' => 'form-label inline-block mb-2 text-gray-700'
+                    ],
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer un mot de passe',
@@ -90,6 +106,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => false,
             ])
+
             ->add('submit', SubmitType::class, [
                 'label' => 'S\'inscrire',
                 'attr' => ['class' => 'd-grid btn btn-dark mt-4 w-100'],
