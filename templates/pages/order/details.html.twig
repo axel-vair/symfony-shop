@@ -51,10 +51,11 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between align-items-center">
             <a href="{{ path('app_user_orders') }}" class="btn btn-secondary mt-3">Retour à la liste des commandes</a>
             {% if order.status == "En attente" %}
-                <a class="btn btn-danger mt-3">Régler ma commande</a>
+                <a href="{{ path('app_cart_paiement', { reference: order.reference }) }}"
+                   class="btn btn-danger"  data-turbo="false">Régler ma commande</a>
             {% endif %}
         </div>
     </div>
