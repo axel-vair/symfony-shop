@@ -7,6 +7,8 @@ use App\Entity\CartItem;
 use App\Entity\User;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use LogicException;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class CartService
@@ -31,6 +33,7 @@ class CartService
      * Sinon, on ajoute le produit avec une quantité de 1.
      *
      * @param int $id L'ID du produit à ajouter
+     * @throws Exception
      */
     public function addToCart(int $id): void
     {
@@ -44,9 +47,7 @@ class CartService
             $cartItem->setQuantity($cartItem->getQuantity() + 1);
         } else {
             $product = $this->productRepository->find($id);
-            if (!$product) {
-                throw new \Exception('Produit introuvable.');
-            }
+
             $cartItem = new CartItem();
             $cartItem->setProduct($product);
             $cartItem->setQuantity(1);
@@ -80,10 +81,8 @@ class CartService
 
     /**
      * Supprime le contenu du panier.
-     *
-     * @param User $user L'utilisateur dont on vide le panier
      */
-    public function removeFromCart(User $user): void
+    public function removeFromCart(): void
     {
         $cart = $this->getCart();
 
@@ -171,7 +170,7 @@ class CartService
         $user = $this->security->getUser();
 
         if (!$user instanceof User) {
-            throw new \LogicException('User must be logged in to access cart.');
+            throw new LogicException('User must be logged in to access cart.');
         }
 
         $cart = $user->getCart();

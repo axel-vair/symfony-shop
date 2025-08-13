@@ -14,7 +14,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for product in category.products %}
                 <div class="col">
-                    <a href="{{ path('app_product_id', {id: product.id}) }}" class="text-decoration-none text-body-emphasis">
+                    <a href="{{ path('app_product_show', {slug: product.slug}) }}" class="text-decoration-none text-body-emphasis">
                         <div class="card h-100 product-card shadow-sm">
                             <img src="{{ asset('images/' ~ product.image) }}" class="card-img-top" alt="{{ product.name }}">
                             <div class="card-body">

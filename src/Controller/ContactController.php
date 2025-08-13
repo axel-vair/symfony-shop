@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Contact;
 use App\Form\ContactType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,10 +22,10 @@ class ContactController extends AbstractController
      *
      * @param Request $request L'objet Request contenant les données de la requête HTTP
      * @param EntityManagerInterface $entityManager Le gestionnaire d'entités pour interagir avec la base de données
-     * @return Response La réponse HTTP (soit un rendu de la page de contact, soit une redirection)
+     * @return Response La réponse HTTP (soit un rendu de la page de contact, soit une redirection).
      */
     #[Route('/contact', name: 'app_contact')]
-    public function contact(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Crée une nouvelle instance de l'entité Contact
         $contact = new Contact();
@@ -53,7 +52,7 @@ class ContactController extends AbstractController
 
         }
 
-        // Si le formulaire n'a pas été soumis ou n'est pas valide, affiche la page de contact avec le formulaire
+        // Si le formulaire n'a pas été soumis ou n'est pas valide, affiche la page de contact avec le formulaire.
         return $this->render('pages/contact/contact.html.twig', [
             'contactForm' => $form,
         ]);

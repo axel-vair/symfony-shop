@@ -5,7 +5,9 @@ namespace App\Service;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Uid\Ulid;
 
 class OrderService
@@ -30,13 +32,13 @@ class OrderService
      *
      * @param User $user L'utilisateur pour lequel créer la commande
      * @return Order La commande créée
-     * @throws \Exception Si le panier est vide
+     * @throws Exception Si le panier est vide
      */
     public function createOrderFromCart(User $user): Order
     {
         $cart = $user->getCart();
         if (!$cart || $cart->getCartItems()->isEmpty()) {
-            throw new \Exception('Le panier est vide');
+            throw new Exception('Le panier est vide');
         }
 
         $order = new Order();
@@ -45,7 +47,7 @@ class OrderService
         $order->setReference($ulid);
         $order->setTotal($this->cartService->calculateTotal($cart));
         $order->setStatus('En attente');
-        $order->setCreatedAt(new \DateTimeImmutable());
+        $order->setCreatedAt(new DateTimeImmutable());
 
         foreach ($cart->getCartItems() as $cartItem) {
             $orderItem = new OrderItem();
@@ -53,7 +55,7 @@ class OrderService
 
             $product = $cartItem->getProduct();
             if(!$product){
-                throw new \Exception('Produit non disponible');
+                throw new Exception('Produit non disponible');
             }
             $orderItem->setProduct($product);
             $orderItem->setQuantity((int)$cartItem->getQuantity());

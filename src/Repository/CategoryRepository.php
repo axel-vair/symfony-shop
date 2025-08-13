@@ -15,4 +15,18 @@ class CategoryRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Category::class);
     }
+
+    /**
+     * Method to handle insentitive in slug
+     * @param string $slug
+     * @return Category|null
+     */
+    public function findOneCategoryBySlugInsensitive(string $slug): ?Category
+    {
+        return $this->createQueryBuilder('c')
+            ->where('LOWER(c.slug) = :slug')
+            ->setParameter('slug', strtolower($slug))
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

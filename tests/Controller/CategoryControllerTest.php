@@ -51,8 +51,12 @@ class CategoryControllerTest extends WebTestCase
             $this->markTestSkipped('Pas de catégorie en base pour tester.');
         }
 
-        $client->request('GET', '/category/'.$category->getId());
-        $this->assertResponseRedirects('/shop?category_id='.$category->getId(), 302);
+
+        $client->request('GET', '/categorie/'.$category->getSlug());
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', $category->getName());
+
+        $this->assertSelectorExists('.product-card');
     }
 
     public function testCategoryFilterInvalidCategory()
