@@ -31,9 +31,6 @@ jobs:
         with:
           php-version: '8.3'
 
-      - name: Composer install
-        run: composer install --prefer-dist --no-progress --no-suggest
-
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
@@ -42,6 +39,9 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+
+      - name: Composer install
+        run: composer install --prefer-dist --no-progress --no-suggest
 
       # --- Installation du driver pour le E2E ---
       - name: Install Firefox and dependencies for Geckodriver install
