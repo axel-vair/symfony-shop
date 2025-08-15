@@ -2,17 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
 use App\Entity\User;
 use App\Form\UserType;
-use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -47,10 +42,6 @@ class UserController extends AbstractController
         if (!$currentUser instanceof User || $currentUser->getId() !== $user->getId()) {
             throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier ce profil.');
         }
-       /* if ($currentUser === null || $currentUser->getId() !== $user->getId()) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier ce profil.');
-        }*/
-
         // Crée et traite le formulaire d'édition
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);

@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Service\CartService;
 use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use LogicException;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Stripe\StripeClient;
@@ -76,18 +78,18 @@ class CartController extends AbstractController
             $order = $orderService->createOrderFromCart($user);
             $this->addFlash('success', 'Votre commande a été initialisée avec succès.');
             return $this->redirectToRoute('app_cart_paiement', ['reference' => (string) $order->getReference()]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_cart');
         }
     }
 
     /**
-     * Récupère le contenu de la commande et instancie un session stripe
+     * Récupère le contenu de la commande et instancie une session stripe
      * @param Order $order
      * @param UrlGeneratorInterface $urlGenerator
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route('/panier/paiement/{reference}', name: 'app_cart_paiement')]
     public function paiement(Order $order, UrlGeneratorInterface $urlGenerator): RedirectResponse
@@ -96,14 +98,13 @@ class CartController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $stripe = new StripeClient($this->stripeSecretKey);
         $referenceStr = (string) $order->getReference();
 
         $lineItems = [];
         foreach ($order->getOrderItems() as $orderItem) {
             $product = $orderItem->getProduct();
             if ($product === null) {
-                throw new \LogicException('Le produit lié à la commande est introuvable.');
+                throw new LogicException('Le produit lié à la commande est introuvable.');
             }
 
             $lineItems[] = [
@@ -120,7 +121,7 @@ class CartController extends AbstractController
 
         $email = $user->getEmail();
         if ($email === null) {
-            throw new \LogicException('L\'email utilisateur est requis pour Stripe.');
+            throw new LogicException('L\'email utilisateur est requis pour Stripe.');
         }
 
         Stripe::setApiKey($this->stripeSecretKey);
@@ -129,7 +130,7 @@ class CartController extends AbstractController
             'line_items' => $lineItems,
             'mode' => 'payment',
             'payment_method_types' => ['card'],
-            'success_url' => $urlGenerator->generate('app_succes', [
+            'success_url' => $urlGenerator->generate('app_success', [
                 'reference' => $referenceStr
             ], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' => $urlGenerator->generate('app_cancel', [
@@ -139,7 +140,7 @@ class CartController extends AbstractController
         ]);
 
         if ($session->url === null) {
-            throw new \LogicException('La session Stripe ne contient pas d\'URL de redirection.');
+            throw new LogicException('La session Stripe ne contient pas d\'URL de redirection.');
         }
 
         return new RedirectResponse($session->url);
@@ -150,7 +151,7 @@ class CartController extends AbstractController
     /**
      * En cas de succès Stripe, on marque la commande "Payée" puis on redirige vers les détails de la commande.
      */
-    #[Route('/panier/succes/{reference}', name: 'app_succes')]
+    #[Route('/panier/succes/{reference}', name: 'app_success')]
     public function succes(Order $order,
                            EntityManagerInterface $entityManager,
                            CartService $cartService): Response
@@ -186,8 +187,21 @@ class CartController extends AbstractController
      * Annulation du paiement
      */
     #[Route('/panier/cancel/{reference}', name: 'app_cancel')]
-    public function cancel(Order $order): Response
+    public function cancel(Order $order, CartService $cartService): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('User not found or not authenticated');
+        }
+
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        if ($order->getUtilisateur() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Accès refusé à cette commande');
+        }
+
+        $cartService->removeFromCart($user);
+
         $this->addFlash('warning', 'La commande est en attente de paiement');
 
         return $this->redirectToRoute('app_order_details', [
@@ -204,6 +218,7 @@ class CartController extends AbstractController
      * @param CartService $cartService Le service de gestion du panier
      * @param Product $product Le produit à ajouter au panier
      * @return Response Une redirection vers la page du panier
+     * @throws Exception
      */
     #[Route('/panier/add/{id}', name: 'app_cart_add')]
     public function addToRoute(CartService $cartService, Product $product): Response
@@ -262,7 +277,7 @@ class CartController extends AbstractController
      * @return Response Une redirection vers la page du panier
      */
     #[Route('/panier/quantity/increase/{id}', name: 'app_cart_quantity_increase')]
-    public function increaseQuantity(CartService $cartService, Product $product)
+    public function increaseQuantity(CartService $cartService, Product $product): Response
     {
         $id = $product->getId();
 
@@ -280,7 +295,7 @@ class CartController extends AbstractController
 
     /**
      * Diminue la quantité d'un produit dans le panier.
-     * Cette fonction utilise le CartService pour diminuer la quantité du produit spécifié.
+     * Cette fonction utilise le CartService pour réduire la quantité du produit spécifié.
      * Elle redirige ensuite l'utilisateur vers la page du panier.
      *
      * @param CartService $cartService Le service de gestion du panier
@@ -288,7 +303,7 @@ class CartController extends AbstractController
      * @return Response Une redirection vers la page du panier
      */
     #[Route('/panier/quantity/decrease/{id}', name: 'app_cart_quantity_decrease')]
-    public function decreaseQuantity(CartService $cartService, Product $product)
+    public function decreaseQuantity(CartService $cartService, Product $product): Response
     {
         $id = $product->getId();
 
@@ -314,7 +329,7 @@ class CartController extends AbstractController
      * @return Response Une redirection vers la page du panier
      */
     #[Route('/panier/delete/product/{id}', name: 'app_cart_one_product_delete')]
-    public function deleteOneProductFromCart(CartService $cartService, Product $product)
+    public function deleteOneProductFromCart(CartService $cartService, Product $product): Response
     {
         $id = $product->getId();
 

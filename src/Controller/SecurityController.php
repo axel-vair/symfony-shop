@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,16 +60,16 @@ class SecurityController extends AbstractController
      * par le firewall de Symfony. Cette méthode ne sera jamais exécutée, mais doit
      * exister pour que Symfony puisse générer la route de déconnexion.
      *
-     * @throws \LogicException Cette exception ne sera jamais lancée en pratique
+     * @throws LogicException Cette exception ne sera jamais lancée en pratique
      */
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
         // Ajoute un message flash pour informer l'utilisateur qu'il a été déconnecté
-        // Note : Ce message ne sera pas affiché car cette méthode n'est jamais exécutée
+        // Note : Ce message ne sera pas affiché, car cette méthode n'est jamais exécutée
         $this->addFlash('success', 'Vous avez été déconnecté avec succès.');
 
         // Cette exception ne sera jamais lancée, car cette méthode est interceptée par le firewall
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

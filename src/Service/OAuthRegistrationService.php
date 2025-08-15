@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
+use RuntimeException;
 
 /**
  * Classe OAuthRegistrationService
@@ -14,7 +15,7 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 class OAuthRegistrationService
 {
     /**
-     * Constante représentant le mot de passe par défaut pour les utilisateurs OAuth.
+     * Constante qui représente le mot de passe par défaut pour les utilisateurs OAuth.
      * Ce mot de passe n'est pas destiné à être utilisé pour une authentification réelle.
      */
     private const OAUTH_PASSWORD = 'OAUTH_USER';
@@ -24,7 +25,7 @@ class OAuthRegistrationService
      *
      * @param UserRepository $userRepository Le repository pour les opérations liées aux utilisateurs
      */
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(private readonly UserRepository $userRepository)
     {
     }
 
@@ -32,7 +33,7 @@ class OAuthRegistrationService
      * Persiste un nouvel utilisateur dans la base de données à partir des informations OAuth.
      *
      * Cette méthode crée un nouvel utilisateur avec les informations fournies par le provider OAuth,
-     * définit la méthode d'authentification sur 'google', et utilise un mot de passe par défaut.
+     * définit la méthode d'authentification sur 'Google', et utilise un mot de passe par défaut.
      * L'utilisateur est ensuite ajouté à la base de données.
      *
      * @param ResourceOwnerInterface $resourceOwner Les informations de l'utilisateur fournies par le provider OAuth
@@ -44,7 +45,7 @@ class OAuthRegistrationService
         $email = $data['email'] ?? null;
 
         if (!$email) {
-            throw new \RuntimeException("L'email OAuth est absent.");
+            throw new RuntimeException("L'email OAuth est absent.");
         }
 
         $user = (new User())

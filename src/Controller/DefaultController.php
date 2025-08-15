@@ -11,17 +11,16 @@ use Symfony\Component\Routing\Attribute\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * Affiche la page d'accueil avec toutes les catégories et tous les produits.
-     *
-     * Cette méthode récupère toutes les catégories et tous les produits de la base de données
-     * et les passe à la vue pour affichage. Elle sert de point d'entrée principal pour l'application.
-     *
-     * @param CategoryRepository $categoryRepository Le repository pour accéder aux données des catégories
-     * @param ProductRepository $productRepository Le repository pour accéder aux données des produits
-     * @return Response La réponse HTTP contenant la vue de la page d'accueil
+     * Display every category and products into the homepage
+     * @param CategoryRepository $categoryRepository
+     * @param ProductRepository $productRepository
+     * @return Response
      */
     #[Route('/', name: 'app_default')]
-    public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
+    public function index(
+        CategoryRepository $categoryRepository,
+        ProductRepository $productRepository
+    ): Response
     {
 
         // Récupère toutes les catégories de la base de données
