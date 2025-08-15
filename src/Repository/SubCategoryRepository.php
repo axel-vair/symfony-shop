@@ -15,4 +15,13 @@ class SubCategoryRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, SubCategory::class);
     }
+
+    public function findOneSubCategoryBySlugInsensitive(string $slug): ?SubCategory
+    {
+        return $this->createQueryBuilder('c')
+            ->where('LOWER(c.slug) = :slug')
+            ->setParameter('slug', strtolower($slug))
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
