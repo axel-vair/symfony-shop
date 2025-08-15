@@ -9,7 +9,7 @@
                 <div class="card shadow-lg rounded">
                     <div class="row g-0">
                         <div class="col-md-6">
-                            <img src="{{ asset('/images') ~ product.image }}" class="img-fluid rounded-start" alt="{{ product.name }}">
+                            <img src="{{ asset('/images/yoga.jpg') }}" class="img-fluid rounded-start" alt="{{ product.name }}">
                             <h1 class="card-title display-5 fw-bold my-4 mx-3">{{ product.name }}</h1>
 
                             <div class="card-body p-4" style="background-color: #f8f9fa;">
@@ -27,7 +27,7 @@
                                 <div>
                                     <p class="card-text mb-2">
                                         <span class="text-muted me-2">Catégorie:</span>
-                                        <a href="{{ path('app_category', {id: product.category.id}) }}" class="text-decoration-none text-body-emphasis fw-bold">
+                                        <a href="{{ path('app_category_show', {slug: product.category.slug}) }}" class="text-decoration-none text-body-emphasis fw-bold">
                                             {{ product.category.name }}
                                         </a>
                                     </p>

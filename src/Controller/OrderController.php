@@ -23,12 +23,12 @@ final class OrderController extends AbstractController
      * @return Response La réponse HTTP contenant la vue des commandes
      */
     #[Route('/utilisateur/commandes', name: 'app_user_orders')]
-    public function showOrders(
+    public function index(
         OrderRepository $orderRepository,
         #[MapQueryParameter] int $page = 1
     ): Response
     {
-        // Vérifie que l'utilisateur a le rôle 'ROLE_USER'
+        // Vérifie que l'utilisateur possède le rôle 'ROLE_USER'
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $user = $this->getUser();
@@ -63,7 +63,7 @@ final class OrderController extends AbstractController
      * @return Response La réponse HTTP contenant la vue des détails de la commande
      */
     #[Route('/utilisateur/commande/{reference}', name: 'app_order_details')]
-    public function showOrderDetails(Order $order): Response
+    public function show(Order $order): Response
     {
         // Affiche la vue des détails de la commande
         return $this->render('pages/order/details.html.twig', [

@@ -9,6 +9,7 @@ use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,7 +63,7 @@ abstract class AbstractOAuthAuthenticator extends OAuth2Authenticator
     {
         $data = $resourceOwner->toArray();
         if (empty($data['email'])) {
-            throw new \RuntimeException("L'email OAuth est absent.");
+            throw new RuntimeException("L'email OAuth est absent.");
         }
         return $data['email'];
     }
@@ -170,5 +171,5 @@ abstract class AbstractOAuthAuthenticator extends OAuth2Authenticator
      * @param UserRepository $userRepository Le repository des utilisateurs
      * @return mixed L'utilisateur correspondant
      */
-    abstract protected function getUserFromResourceOwner(ResourceOwnerInterface $resourceOwner, UserRepository $userRepository);
+    abstract protected function getUserFromResourceOwner(ResourceOwnerInterface $resourceOwner, UserRepository $userRepository): mixed;
 }

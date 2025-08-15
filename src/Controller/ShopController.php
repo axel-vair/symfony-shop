@@ -22,23 +22,23 @@ class ShopController extends AbstractController
      * @param ProductRepository $productRepository Repository pour accéder aux données des produits
      * @param CategoryRepository $categoryRepository Repository pour accéder aux données des catégories
      * @param int $page Numéro de la page courante (par défaut 1)
-     * @param int|null $category_id ID de la catégorie pour filtrer les produits (optionnel)
      * @return Response La réponse HTTP contenant la vue de la page de la boutique
      */
-    #[Route('/shop', name: 'app_shop')]
+    #[Route('/boutique', name: 'app_shop')]
     public function index(
         ProductRepository $productRepository,
         CategoryRepository $categoryRepository,
         #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] ?int $category_id = null
+        #[MapQueryParameter(name: 'categorie')] ?string $categorySlug = null
     ): Response {
         // Crée un QueryBuilder pour construire dynamiquement la requête DQL
         $queryBuilder = $productRepository->createQueryBuilder('p');
 
         // Si un ID de catégorie est fourni, filtre les produits par cette catégorie
-        if ($category_id) {
-            $queryBuilder->andWhere('p.category = :category_id')
-                ->setParameter('category_id', $category_id);
+        if ($categorySlug) {
+            $category = $categoryRepository->findOneBy(['slug' => $categorySlug]);
+            $queryBuilder->andWhere('p.category = :category')
+                ->setParameter('category', $category);
         }
 
         // Récupère toutes les catégories pour le menu de filtrage
@@ -58,7 +58,7 @@ class ShopController extends AbstractController
         return $this->render('pages/shop/index.html.twig', [
             'products' => $pager,
             'categories' => $categories,
-            'current_category_id' => $category_id,
+            'current_categorySlug' => $categorySlug,
         ]);
     }
 }
