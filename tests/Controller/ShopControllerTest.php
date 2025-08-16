@@ -2,12 +2,13 @@
 
 namespace App\Tests\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Entity\Category;
 
 class ShopControllerTest extends WebTestCase
 {
-    public function testShopPageWithoutFilter()
+    public function testShopPageWithoutFilter(): void
     {
         $client = static::createClient();
 
@@ -15,15 +16,16 @@ class ShopControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $this->assertSelectorExists('.product-card');
-
         $this->assertSelectorExists('.category-link');
     }
 
-    public function testShopPageWithCategoryFilter()
+    public function testShopPageWithCategoryFilter(): void
     {
         $client = static::createClient();
 
-        $category = $client->getContainer()->get('doctrine')->getRepository(Category::class)->findOneBy([]);
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = $client->getContainer()->get('doctrine');
+        $category = $doctrine->getRepository(Category::class)->findOneBy([]);
         if (!$category) {
             $this->markTestSkipped('Pas de catégorie en base pour tester.');
         }
@@ -32,7 +34,6 @@ class ShopControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         $this->assertSelectorExists('.list-group-item');
-
         $this->assertSelectorExists('.product-card');
     }
 }

@@ -4,11 +4,12 @@ namespace App\Tests\Controller\Admin;
 
 use App\Controller\Admin\UserCrudController;
 use App\Entity\User;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserCrudControllerTest extends WebTestCase
 {
-    public function testAdminPageRequiresRoleAdmin()
+    public function testAdminPageRequiresRoleAdmin(): void
     {
         $client = static::createClient();
 
@@ -19,11 +20,13 @@ class UserCrudControllerTest extends WebTestCase
         );
     }
 
-    public function testAdminPageAccessibleByAdminUser()
+    public function testAdminPageAccessibleByAdminUser(): void
     {
         $client = static::createClient();
         $container = $client->getContainer();
-        $em = $container->get('doctrine')->getManager();
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = $container->get('doctrine');
+        $em = $doctrine->getManager();
 
         $user = new User();
         $user->setEmail('admin@example.com');
@@ -41,7 +44,7 @@ class UserCrudControllerTest extends WebTestCase
         $this->assertStringContainsString('UserCrudController', $client->getRequest()->getUri());
         $this->assertSelectorExists('h1', 'User');
     }
-    public function testGetEntityFqcnReturnsUserClassName()
+    public function testGetEntityFqcnReturnsUserClassName(): void
     {
         $this->assertSame(User::class, UserCrudController::getEntityFqcn());
     }

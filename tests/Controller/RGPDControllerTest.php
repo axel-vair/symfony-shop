@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RGPDControllerTest extends WebTestCase
 {
-    public function testAffichageRGPD()
+    public function testAffichageRGPD(): void
     {
         $client = static::createClient();
 

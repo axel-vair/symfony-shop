@@ -37,17 +37,9 @@ class Product
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
-
-    /**
-     * @var Collection<int, Comment>
-     */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'product')]
-    private Collection $comments;
 
     /**
      * @var Collection<int, CartItem>
@@ -70,7 +62,6 @@ class Product
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
         $this->cartItems = new ArrayCollection();
         $this->orderItems = new ArrayCollection();
     }
@@ -152,18 +143,6 @@ class Product
         return $this;
     }
 
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): static
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -172,33 +151,6 @@ class Product
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Comment>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): static
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): static
-    {
-        if ($this->comments->removeElement($comment) && $comment->getProduct() === $this) {
-            $comment->setProduct(null);
-        }
 
         return $this;
     }

@@ -129,7 +129,6 @@ class Order
     {
         return $this->reference;
     }
-
     public function setReference(Ulid $reference): static
     {
         $this->reference = $reference;
