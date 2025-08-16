@@ -14,16 +14,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ContactType extends AbstractType
 {
+    private const FIELD_CLASS = 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none';
+    private const LABEL_CLASS = 'form-label inline-block mb-2 text-gray-700';
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
                 'attr' => [
-                    'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                    'class' => self::FIELD_CLASS,
                     'placeholder' => 'Adresse email'
                 ],
                 'label' => 'Email',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'label_attr' => ['class' => self::LABEL_CLASS],
                 'constraints' => [
                     new NotBlank(['message' => "L'email est requis."]),
                     new Email(['message' => 'Veuillez saisir une adresse email valide.'])
@@ -33,11 +35,11 @@ class ContactType extends AbstractType
 
             ->add('name', TextareaType::class, [
                 'attr' => [
-                    'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                    'class' => self::FIELD_CLASS,
                     'placeholder' => 'Nom'
                 ],
                 'label' => 'Nom',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'label_attr' => ['class' => self::LABEL_CLASS],
                 'constraints' => [
                     new NotBlank(['message' => 'Le nom est requis.']),
                 ],
@@ -46,11 +48,11 @@ class ContactType extends AbstractType
 
             ->add('message', TextareaType::class, [
                 'attr' => [
-                    'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                    'class' => self::FIELD_CLASS,
                     'placeholder' => 'Contenu du message'
                 ],
                 'label' => 'Message',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'label_attr' => ['class' => self::LABEL_CLASS],
                 'constraints' => [
                     new NotBlank(['message' => 'Le message est requis.']),
                 ],

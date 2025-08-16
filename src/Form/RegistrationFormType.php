@@ -16,16 +16,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends AbstractType
 {
+    private const FIELD_CLASS = 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none';
+    private const LABEL_CLASS = 'form-label inline-block mb-2 text-gray-700';
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
                 'attr' => [
-                    'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                    'class' => self::FIELD_CLASS,
                     'placeholder' => 'Adresse email'
                 ],
                 'label' => 'Email*',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'label_attr' => ['class' => self::LABEL_CLASS],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez saisir un email',
@@ -35,36 +37,34 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('firstName', TextType::class, [
                 'attr' => [
-                    'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                    'class' => self::FIELD_CLASS,
                     'placeholder' => 'Prénom'
                 ],
                 'label' => 'Prénom',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'label_attr' => ['class' => self::LABEL_CLASS],
                 'constraints' => [
                     new Length([
                         'min' => 1,
-                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
+                        'minMessage' => 'Votre prénom doit contenir au moins {{ limit }} caractère(s)',
                         'max' => 30,
-                        'maxMessage' => 'Votre mot de passe doit contenir moins de {{ limit }} caractères',
-
+                        'maxMessage' => 'Votre prénom doit contenir moins de {{ limit }} caractères',
                     ])
                 ],
                 'required' => false,
             ])
             ->add('lastName', TextType::class, [
                 'attr' => [
-                    'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                    'class' => self::FIELD_CLASS,
                     'placeholder' => 'Nom'
                 ],
                 'label' => 'Nom',
-                'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                'label_attr' => ['class' => self::LABEL_CLASS],
                 'constraints' => [
                     new Length([
                         'min' => 1,
-                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
+                        'minMessage' => 'Votre nom doit contenir au moins {{ limit }} caractère(s)',
                         'max' => 30,
-                        'maxMessage' => 'Votre mot de passe doit contenir moins de {{ limit }} caractères',
-
+                        'maxMessage' => 'Votre nom doit contenir moins de {{ limit }} caractères',
                     ])
                 ],
                 'required' => false,
@@ -76,18 +76,18 @@ class RegistrationFormType extends AbstractType
                 'first_options' => [
                     'label' => 'Mot de passe*',
                     'attr' => [
-                        'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                        'class' => self::FIELD_CLASS,
                         'placeholder' => 'Mot de passe',
                     ],
-                    'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                    'label_attr' => ['class' => self::LABEL_CLASS],
                 ],
                 'second_options' => [
                     'label' => 'Vérification du mot de passe*',
                     'attr' => [
-                        'class' => 'mb-3 form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+                        'class' => self::FIELD_CLASS,
                         'placeholder' => 'Tapez à nouveau le mot de passe',
                     ],
-                    'label_attr' => ['class' => 'form-label inline-block mb-2 text-gray-700'],
+                    'label_attr' => ['class' => self::LABEL_CLASS],
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -101,7 +101,6 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => true,
             ])
-
             ->add('submit', SubmitType::class, [
                 'label' => 'S\'inscrire',
                 'attr' => ['class' => 'd-grid btn btn-dark mt-4 w-100'],
