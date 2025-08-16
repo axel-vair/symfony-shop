@@ -12,7 +12,6 @@ use Exception;
 use LogicException;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
-use Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -127,7 +126,7 @@ class CartController extends AbstractController
         Stripe::setApiKey($this->stripeSecretKey);
         $session = Session::create([
             'customer_email' => $email,
-            'line_items' => $lineItems,
+            'line_items' => [$lineItems],
             'mode' => 'payment',
             'payment_method_types' => ['card'],
             'success_url' => $urlGenerator->generate('app_success', [
@@ -174,7 +173,7 @@ class CartController extends AbstractController
         }
 
         // Vider le panier
-        $cartService->removeFromCart($user);
+        $cartService->removeFromCart();
 
         $this->addFlash('success', 'Paiement réussi, votre commande est finalisée.');
 
@@ -200,7 +199,7 @@ class CartController extends AbstractController
             throw $this->createAccessDeniedException('Accès refusé à cette commande');
         }
 
-        $cartService->removeFromCart($user);
+        $cartService->removeFromCart();
 
         $this->addFlash('warning', 'La commande est en attente de paiement');
 
@@ -258,7 +257,7 @@ class CartController extends AbstractController
         }
 
         // Vide le contenu du panier
-        $cartService->removeFromCart($user);
+        $cartService->removeFromCart();
 
         // Ajoute un message flash de succès
         $this->addFlash('success', 'Votre panier a été vidé.');

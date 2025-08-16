@@ -1,6 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-md navbar-light border-bottom mb-4">
         <div class="container-fluid">
+            <!-- Logo -->
             <a href="/" class="navbar-brand d-flex align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94">
                     <title>Butterfly</title>
@@ -23,22 +24,45 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_shop') }}">Boutique</a>
                     </li>
+
+                    <!-- Catégories avec sous-menus -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             Catégories
                         </a>
-                        {# Cache of category fetch to avoid request every time #}
+
                         {% cache 'header_categories_menu' ttl(3600) %}
-                        <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
-                            {% for category in categories() %}
-                            <li><a class="dropdown-item"
-                                   href="/categorie/{{ category.slug }}">{{ category.name }}</a></li>
-                            {% endfor %}
-                        </ul>
+                            <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                                {% for category in categories() %}
+                                    {% if category.subCategories|length > 0 %}
+                                        <li class="dropdown-submenu position-relative">
+                                            <a class="dropdown-item" href="/categorie/{{ category.slug }}">
+                                                {{ category.name }}
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                {% for sub in category.subCategories %}
+                                                    <li>
+                                                        <a class="dropdown-item" href="/{{ category.slug }}/{{ sub.slug }}">
+                                                            {{ sub.name }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a class="dropdown-item" href="/categorie/{{ category.slug }}">
+                                                {{ category.name }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
                         {% endcache %}
                     </li>
 
+                    <!-- Liens utilisateur -->
                     {% if app.user %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_profil', {id: app.user.id}) }}">Profil</a>
@@ -74,3 +98,45 @@
         </div>
     </nav>
 </header>
+
+<style>
+    /* Sous-menu */
+    .dropdown-submenu {
+        position: relative;
+    }
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+    /* Desktop: affichage au survol */
+    @media (min-width: 768px) {
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Mobile : ouverture des sous-menus au clic
+        document.querySelectorAll('.dropdown-submenu > a').forEach(function (element) {
+            element.addEventListener('click', function (e) {
+                if (window.innerWidth < 768) {
+                    e.preventDefault();
+                    let submenu = this.nextElementSibling;
+                    submenu.classList.toggle('show');
+                }
+            });
+        });
+
+        // Quand le dropdown principal se ferme, fermer tous les sous-menus
+        document.querySelectorAll('.dropdown').forEach(function (dd) {
+            dd.addEventListener('hidden.bs.dropdown', function () {
+                this.querySelectorAll('.dropdown-menu.show').forEach(function (menu) {
+                    menu.classList.remove('show');
+                });
+            });
+        });
+    });
+</script>

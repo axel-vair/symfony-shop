@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\SubCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -29,5 +29,19 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('slug', strtolower($slug))
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * Method filter by product by subcategory
+     * @param SubCategory $subCategory
+     * @return array
+     */
+    public function findBySubCategory(SubCategory $subCategory): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.subCategory = :subCategory')
+            ->setParameter('subCategory', $subCategory)
+            ->getQuery()
+            ->getResult();
     }
 }

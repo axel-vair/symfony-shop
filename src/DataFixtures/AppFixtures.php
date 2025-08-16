@@ -150,6 +150,7 @@ class AppFixtures extends Fixture
                 $category = $subCategory->getCategory();
 
                 $product->setCategory($category);
+                $product->setSubCategory($subCategory);
             }
 
             $manager->persist($product);

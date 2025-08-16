@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -18,8 +19,11 @@ class CategoryExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @return Category[]
+     */
     public function getCategories(): array
     {
-        return $this->categoryRepository->findAll();
+        return $this->categoryRepository->findAllWithSubCategories();
     }
 }

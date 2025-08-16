@@ -65,6 +65,9 @@ class Product
     #[Gedmo\Slug(fields: ['name'], separator: '-')]
     private ?string $slug = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?subCategory $subCategory = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -268,6 +271,18 @@ class Product
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getSubCategory(): ?SubCategory
+    {
+        return $this->subCategory;
+    }
+
+    public function setSubCategory(?SubCategory $subCategory): static
+    {
+        $this->subCategory = $subCategory;
 
         return $this;
     }
