@@ -1,0 +1,54 @@
+.breadcrumb-item a {
+    color: #2c3e50;
+}
+.breadcrumb-item a:hover {
+    color: #1a1d20;
+}
+
+#back {
+    color: #2c3e50;
+}
+
+#back:hover {
+    color: #1a1d20;
+}
+
+.product-card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pagination .page-link {
+    color: #343a40;
+}
+
+.pagination .page-link:hover,
+.pagination .page-link:focus {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #343a40;
+    border-color: #343a40;
+    color: #fff;
+}
+
+/*
+   * Accordéon page details
+*/
+
+.accordion-button[aria-expanded="true"] {
+    background-color: #f5f5f5 !important;
+    color: #111 !important;
+    box-shadow: none;
+}
+
+.accordion-item.show,
+.accordion-item.active {
+    background-color: #f5f5f5;
+}

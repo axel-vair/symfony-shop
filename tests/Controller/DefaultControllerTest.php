@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testAccueilAfficheCategoriesEtProduits()
+    public function testAccueilAfficheCategoriesEtProduits(): void
     {
         $client = static::createClient();
 

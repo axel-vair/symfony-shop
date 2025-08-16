@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class CategoryEntityTest extends TestCase
 {
-    public function testCategoryEntity()
+    public function testCategoryEntity(): void
     {
         $category = new Category();
         $category->setName('Tapis');
@@ -16,7 +16,7 @@ class CategoryEntityTest extends TestCase
         $this->assertSame('Tapis', $category->getName());
     }
 
-    public function testAddProductToCategory()
+    public function testAddProductToCategory(): void
     {
         $category = new Category();
         $category->setName('Tapis');
@@ -30,7 +30,7 @@ class CategoryEntityTest extends TestCase
         $this->assertSame($category, $product->getCategory());
     }
 
-    public function testRemoveProductFromCategory()
+    public function testRemoveProductFromCategory(): void
     {
         $category = new Category();
         $category->setName('Tapis');
@@ -45,7 +45,7 @@ class CategoryEntityTest extends TestCase
         $this->assertNull($product->getCategory());
     }
 
-    public function testToStringMethod()
+    public function testToStringMethod(): void
     {
         $category = new Category();
 

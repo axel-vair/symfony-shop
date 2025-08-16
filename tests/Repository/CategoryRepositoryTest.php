@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Tests\Repository;
 
 use App\Entity\Category;
@@ -8,27 +9,38 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CategoryRepositoryTest extends KernelTestCase
 {
-    private ?EntityManagerInterface $entityManager;
-    private ?CategoryRepository $categoryRepository;
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $entityManager;
+
+    /**
+     * @var CategoryRepository
+     */
+    private CategoryRepository $categoryRepository;
 
     protected function setUp(): void
     {
-        self::bootKernel(); // Démarre le noyau Symfony
+        self::bootKernel();
 
-        $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
-        $this->categoryRepository = self::getContainer()->get(CategoryRepository::class);
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $this->entityManager = $entityManager;
+
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = static::getContainer()->get(CategoryRepository::class);
+        $this->categoryRepository = $categoryRepository;
     }
 
     protected function tearDown(): void
     {
-        // Nettoyage après chaque test
+        parent::tearDown();
+
         $this->entityManager->close();
-        $this->entityManager = null;
     }
 
-    public function testFindCategoryByName()
+    public function testFindCategoryByName(): void
     {
-        // Créer une catégorie en base de données
         $category = new Category();
         $category->setName('Test Category');
         $this->entityManager->persist($category);
@@ -40,32 +52,27 @@ class CategoryRepositoryTest extends KernelTestCase
         $this->assertSame('Test Category', $foundCategory->getName());
     }
 
-    public function testFindCategoryByNameCaseInsensitive()
+    public function testFindCategoryByNameCaseInsensitive(): void
     {
-        // Créer une catégorie avec un nom en minuscule
         $category = new Category();
         $category->setName('CaseInsensitiveTest');
         $this->entityManager->persist($category);
         $this->entityManager->flush();
 
-        // Rechercher la catégorie en insensible à la casse
         $foundCategory = $this->categoryRepository->createQueryBuilder('c')
             ->where('LOWER(c.name) = LOWER(:name)')
             ->setParameter('name', 'caseinsensitivetest')
             ->getQuery()
             ->getOneOrNullResult();
 
-        // Vérifier que la catégorie existe même avec une recherche insensible à la casse
         $this->assertNotNull($foundCategory);
         $this->assertSame('CaseInsensitiveTest', $foundCategory->getName());
     }
 
-    public function testFindNonExistentCategory()
+    public function testFindNonExistentCategory(): void
     {
-        // Rechercher une catégorie inexistante
         $foundCategory = $this->categoryRepository->findOneBy(['name' => 'NonExistentCategory']);
 
-        // Vérifier que la catégorie n'existe pas
         $this->assertNull($foundCategory);
     }
 }

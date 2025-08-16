@@ -3,11 +3,12 @@
 namespace App\Tests\Controller\Admin;
 
 use App\Entity\User;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DashboardControllerTest extends WebTestCase
 {
-    public function testAccessDeniedWithoutAdminRole()
+    public function testAccessDeniedWithoutAdminRole(): void
     {
         $client = static::createClient();
 
@@ -22,11 +23,13 @@ class DashboardControllerTest extends WebTestCase
         );
     }
 
-    public function testAdminCanAccessAndRedirectsToProductCrud()
+    public function testAdminCanAccessAndRedirectsToProductCrud(): void
     {
         $client = static::createClient();
         $container = $client->getContainer();
-        $em = $container->get('doctrine')->getManager();
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = $container->get('doctrine');
+        $em = $doctrine->getManager();
 
         // Création et persistance d'un utilisateur wavec le rôle ROLE_ADMIN
         $user = new User();

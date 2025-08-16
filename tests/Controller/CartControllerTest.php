@@ -4,30 +4,29 @@ namespace App\Tests\Controller;
 
 use App\Entity\Product;
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CartControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private EntityManagerInterface $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Création et stockage d’un client unique réutilisé dans tous les tests
         $this->client = static::createClient();
 
-        // Récupération de l’entity manager depuis le container via ce client
-        $this->entityManager = $this->client->getContainer()->get('doctrine')->getManager();
+        $container = $this->client->getContainer();
 
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = $container->get('doctrine');
+        $this->entityManager = $doctrine->getManager();
     }
 
-    /**
-     * Crée et persiste un utilisateur avec ROLE_USER
-     */
     private function createUser(string $email = 'user@example.com'): User
     {
         $user = new User();
@@ -41,14 +40,11 @@ class CartControllerTest extends WebTestCase
         return $user;
     }
 
-    /**
-     * Crée et persiste un produit simple
-     */
-    private function createProduct(): Product
+    private function createProduct(string $name = 'Test Product', float $price = 10.0): Product
     {
         $product = new Product();
-        $product->setName('Test Product');
-        $product->setPrice(10.0);
+        $product->setName($name);
+        $product->setPrice($price);
 
         $this->entityManager->persist($product);
         $this->entityManager->flush();
@@ -62,7 +58,10 @@ class CartControllerTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertTrue($response->isRedirect());
-        $this->assertStringContainsString('/login', $response->headers->get('Location'));
+
+        $location = $response->headers->get('Location');
+        $this->assertNotNull($location);
+        $this->assertStringContainsString('/login', $location);
     }
 
     public function testCartPageLoadsForUser(): void
@@ -94,13 +93,12 @@ class CartControllerTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertTrue($response->isRedirect());
-        $this->assertStringContainsString('/login', $response->headers->get('Location'));
+
+        $location = $response->headers->get('Location');
+        $this->assertNotNull($location);
+        $this->assertStringContainsString('/login', $location);
     }
 
-
-    /**
-     * Helper privé pour tester les routes qui prennent un produit en paramètre ID
-     */
     private function doTestProductRoute(string $urlTemplate): void
     {
         $user = $this->createUser('user_product@example.com');
@@ -129,5 +127,16 @@ class CartControllerTest extends WebTestCase
     public function testDeleteOneProductFromCartRoute(): void
     {
         $this->doTestProductRoute('/panier/delete/product/{id}');
+    }
+
+    public function testDeleteCartRoute(): void
+    {
+        $user = $this->createUser('user_delete@example.com');
+        $this->client->loginUser($user);
+
+        $this->client->request('GET', '/panier/vider');
+
+        $response = $this->client->getResponse();
+        $this->assertTrue($response->isRedirect('/panier'));
     }
 }
