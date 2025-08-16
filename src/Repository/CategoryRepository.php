@@ -29,4 +29,17 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Method that display each category and their subcategory
+     * @return array
+     */
+    public function findAllWithSubCategories(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.subCategories', 's')
+            ->addSelect('s')
+            ->getQuery()
+            ->getResult();
+    }
 }
