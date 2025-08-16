@@ -66,7 +66,7 @@ class Product
     private ?string $slug = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?subCategory $subCategory = null;
+    private ?SubCategory $subCategory = null;
 
     public function __construct()
     {
