@@ -22,7 +22,7 @@ class RegistrationControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/register');
         $form = $crawler->selectButton("S'inscrire")->form();
 
-        $mail = 'regtest'.uniqid().'@exemple.com';
+        $mail = 'regtest' . uniqid() . '@exemple.com';
         $form['registration_form[email]'] = $mail;
         $form['registration_form[plainPassword][first]'] = 'password123';
         $form['registration_form[plainPassword][second]'] = 'password123';
@@ -43,9 +43,14 @@ class RegistrationControllerTest extends WebTestCase
         $form['registration_form[plainPassword][first]'] = '';
         $form['registration_form[plainPassword][second]'] = '';
         $client->submit($form);
-        $this->assertEquals(422, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('Veuillez saisir un email', $client->getResponse()->getContent());
-        $this->assertStringContainsString('Veuillez entrer un mot de passe', $client->getResponse()->getContent());
-    }
 
+        $responseContent = $client->getResponse()->getContent();
+        if ($responseContent === false) {
+            $responseContent = '';
+        }
+
+        $this->assertEquals(422, $client->getResponse()->getStatusCode());
+        $this->assertStringContainsString('Veuillez saisir un email', $responseContent);
+        $this->assertStringContainsString('Veuillez entrer un mot de passe', $responseContent);
+    }
 }

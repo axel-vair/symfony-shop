@@ -5,11 +5,12 @@ namespace App\Tests\Controller\Admin;
 use App\Controller\Admin\CategoryCrudController;
 use App\Entity\Category;
 use App\Entity\User;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CategoryCrudControllerTest extends WebTestCase
 {
-    public function testAdminPageRequiresRoleAdmin()
+    public function testAdminPageRequiresRoleAdmin(): void
     {
         $client = static::createClient();
 
@@ -21,11 +22,13 @@ class CategoryCrudControllerTest extends WebTestCase
         );
     }
 
-    public function testAdminPageAccessibleByAdminUser()
+    public function testAdminPageAccessibleByAdminUser(): void
     {
         $client = static::createClient();
         $container = $client->getContainer();
-        $em = $container->get('doctrine')->getManager();
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = $container->get('doctrine');
+        $em = $doctrine->getManager();
 
         $user = new User();
         $user->setEmail('admin@example.com');
@@ -48,7 +51,7 @@ class CategoryCrudControllerTest extends WebTestCase
      * Test unitaire
      * @return void
      */
-    public function testGetEntityFqcnReturnsCategoryClassName()
+    public function testGetEntityFqcnReturnsCategoryClassName(): void
     {
         $this->assertSame(Category::class, CategoryCrudController::getEntityFqcn());
     }

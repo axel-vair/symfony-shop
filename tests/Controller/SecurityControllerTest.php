@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Tests\Controller;
 
 use App\Entity\User;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SecurityControllerTest extends WebTestCase
 {
@@ -22,14 +25,19 @@ class SecurityControllerTest extends WebTestCase
     public function testLoginWithValidCredentials(): void
     {
         $client = static::createClient();
+
         $container = $client->getContainer();
-        $entityManager = $container->get('doctrine')->getManager();
-        $passwordHasher = $container->get('security.password_hasher');
+
+        /** @var ManagerRegistry $doctrine */
+        $doctrine = $container->get('doctrine');
+        $entityManager = $doctrine->getManager();
+
+        /** @var UserPasswordHasherInterface $passwordHasher */
+        $passwordHasher = $container->get(UserPasswordHasherInterface::class);
 
         $user = new User();
         $user->setEmail('validuser@example.com');
 
-        // Utilise hashPassword() au lieu de hash()
         $hashedPassword = $passwordHasher->hashPassword($user, 'validpassword');
         $user->setPassword($hashedPassword);
 

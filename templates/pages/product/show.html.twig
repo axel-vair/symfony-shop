@@ -3,41 +3,90 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow-lg rounded">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                            <img src="{{ asset('/images/yoga.jpg') }}" class="img-fluid rounded-start" alt="{{ product.name }}">
-                            <h1 class="card-title display-5 fw-bold my-4 mx-3">{{ product.name }}</h1>
+    <div class="container mb-1">
+        <a href="{{ path('app_shop') }}" id="back" class="text-decoration-none mb-3 d-inline-block">&lt; Retour</a>
+    </div>
 
-                            <div class="card-body p-4" style="background-color: #f8f9fa;">
-                                <div class="d-flex justify-content-between align-items-end w-100">
-                                    <div class="mx-3 px-3 py-2 rounded" style="background-color: #f8f9fa;">
-                                        <p class="card-text h6 fw-bold mb-1 text-muted">Prix</p>
-                                        <p class="card-text display-5 fw-bold mb-0">{{ product.price }} €</p>
-                                    </div>
-                                    <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-dark btn-lg">Ajouter au panier</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card-body h-100 d-flex flex-column justify-content-between p-5">
-                                <div>
-                                    <p class="card-text mb-2">
-                                        <span class="text-muted me-2">Catégorie:</span>
-                                        <a href="{{ path('app_category_show', {slug: product.category.slug}) }}" class="text-decoration-none text-body-emphasis fw-bold">
-                                            {{ product.category.name }}
-                                        </a>
-                                    </p>
-                                    <p class="card-text">{{ product.description }}</p>
-                                </div>
+
+    <div class="container">
+        <div class="row gy-4">
+            <!-- Product details -->
+            <div class="col-lg-5">
+                <h1 class="fw-bold">{{ product.name }}</h1>
+
+                <!-- Price -->
+                <div class="p-3 mb-4 rounded" style="background-color: #f8f9fa; max-width: 150px;">
+                    <p class="h6 text-muted mb-1">Prix</p>
+                    <p class="fs-2 fw-bold mb-0" style="color: #222;">{{ product.price }} €</p>
+                </div>
+
+                <div class="accordion mb-3" id="productOverview">
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOverview">
+                            <button class="accordion-button" type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOverview"
+                                    aria-expanded="true"
+                                    aria-controls="collapseOverview">
+                                Description du produit
+                            </button>
+                        </h2>
+                        <div id="collapseOverview" class="accordion-collapse collapse show"
+                             aria-labelledby="headingOverview"
+                             data-bs-parent="#productOverview">
+                            <div class="accordion-body small text-muted">
+                                {{ product.description|nl2br }}
                             </div>
                         </div>
                     </div>
+
+                    <!-- Return -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingReturnPolicy">
+                            <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseReturnPolicy"
+                                    aria-expanded="false"
+                                    aria-controls="collapseReturnPolicy">
+                                Politique de retour et échange
+                            </button>
+                        </h2>
+                        <div id="collapseReturnPolicy" class="accordion-collapse collapse"
+                             aria-labelledby="headingReturnPolicy"
+                             data-bs-parent="#productOverview">
+                            <div class="accordion-body small text-muted">
+                                <p>Vous pouvez retourner le produit sous 14 jours suivant sa réception, dans son état
+                                    d'origine et avec l’emballage intact.</p>
+                                <p>Les frais de retour sont à la charge du client sauf en cas de produit défectueux ou
+                                    erreur de notre part.</p>
+                                <p>Pour tout échange ou problème, contactez notre service client à <a
+                                            href="mailto:support@example.com">support@example.com</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-dark flex-grow-1">Ajouter au
+                        panier</a>
+                    <button type="button" class="btn btn-outline-dark" title="Aimer le produit"
+                            aria-label="Aimer le produit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                             class="bi bi-heart" viewBox="0 0 16 16">
+                            <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-1.01 1.96.316 4.595 3.224 6.691L8 15l3.376-5.256c2.91-2.104 4.23-4.73 3.224-6.69C13.486.878 10.4.28 8.717 2.01 8.72 2.01 8 2.748 8 2.748z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Image column -->
+            <div class="col-lg-7">
+                <img src="{{ asset('/images/yoga.jpg') }}" alt="{{ product.name }}"
+                     class="img-fluid rounded mx-auto d-block">
             </div>
         </div>
     </div>
 {% endblock %}
+
