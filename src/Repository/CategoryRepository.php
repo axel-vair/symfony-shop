@@ -32,7 +32,7 @@ class CategoryRepository extends ServiceEntityRepository
 
     /**
      * Method that display each category and their subcategory
-     * @return array
+     * @return Category[]
      */
     public function findAllWithSubCategories(): array
     {

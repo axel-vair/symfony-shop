@@ -34,7 +34,7 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * Method filter by product by subcategory
      * @param SubCategory $subCategory
-     * @return array
+     * @return Product[]
      */
     public function findBySubCategory(SubCategory $subCategory): array
     {
