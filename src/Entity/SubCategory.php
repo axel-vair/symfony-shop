@@ -98,11 +98,10 @@ class SubCategory
 
     public function removeProduct(Product $product): static
     {
-        if ($this->products->removeElement($product)) {
+        if ($this->products->removeElement($product) && $product->getSubCategory() === $this) {
             // set the owning side to null (unless already changed)
-            if ($product->getSubCategory() === $this) {
                 $product->setSubCategory(null);
-            }
+
         }
 
         return $this;

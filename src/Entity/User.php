@@ -49,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $orders;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $google_id = null;
+    private ?string $googleId = null;
 
     #[ORM\Column(length: 20)]
     private string $authMethod = 'local';
@@ -182,12 +182,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getGoogleId(): ?string
     {
-        return $this->google_id;
+        return $this->googleId;
     }
 
-    public function setGoogleId(?string $google_id): static
+    public function setGoogleId(?string $googleId): static
     {
-        $this->google_id = $google_id;
+        $this->googleId = $googleId;
 
         return $this;
     }

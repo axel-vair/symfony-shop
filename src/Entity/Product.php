@@ -175,11 +175,9 @@ class Product
 
     public function removeCartItem(CartItem $cartItem): static
     {
-        if ($this->cartItems->removeElement($cartItem)) {
+        if ($this->cartItems->removeElement($cartItem) && $cartItem->getProduct() === $this) {
             // set the owning side to null (unless already changed)
-            if ($cartItem->getProduct() === $this) {
-                $cartItem->setProduct(null);
-            }
+            $cartItem->setProduct(null);
         }
 
         return $this;
@@ -205,11 +203,9 @@ class Product
 
     public function removeOrderItem(OrderItem $orderItem): static
     {
-        if ($this->orderItems->removeElement($orderItem)) {
+        if ($this->orderItems->removeElement($orderItem) && $orderItem->getProduct() === $this) {
             // set the owning side to null (unless already changed)
-            if ($orderItem->getProduct() === $this) {
                 $orderItem->setProduct(null);
-            }
         }
 
         return $this;
