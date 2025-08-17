@@ -3,6 +3,16 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
+    <div class="container">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     <div class="container mb-1">
         <a href="{{ path('app_shop') }}" id="back" class="text-decoration-none mb-3 d-inline-block">&lt; Retour</a>
     </div>
@@ -69,15 +79,18 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-dark flex-grow-1">Ajouter au
+                    <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-dark flex-grow-1"
+                       aria-label="Ajouter au panier">Ajouter au
                         panier</a>
-                    <button type="button" class="btn btn-outline-dark" title="Aimer le produit"
-                            aria-label="Aimer le produit">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                             class="bi bi-heart" viewBox="0 0 16 16">
-                            <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-1.01 1.96.316 4.595 3.224 6.691L8 15l3.376-5.256c2.91-2.104 4.23-4.73 3.224-6.69C13.486.878 10.4.28 8.717 2.01 8.72 2.01 8 2.748 8 2.748z"></path>
-                        </svg>
-                    </button>
+                    {% if isFavorite %}
+                        <a href="{{ path('app_favorite_delete_by_product', {id: product.id }) }}" class="btn btn-danger bi bi-heart"
+                           aria-label="Retirer le produit des favoris">
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_favorite_add', {id: product.id }) }}" class="btn btn-outline-dark bi bi-heart"
+                           aria-label="Mettre en favoris le produit">
+                        </a>
+                    {% endif %}
                 </div>
             </div>
 

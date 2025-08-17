@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Favoris{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <section class="container">
+        <h1 class="mb-4">Vos favoris</h1>
+
+        {% if favorites is not empty %}
+            <div class="list-group">
+                {% for favorite in favorites %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ asset('/images/yoga.jpg') }}" alt="{{ favorite.product.name }}"
+                                 class="img-fluid" style="width: 50px; height: 50px; object-fit: cover;">
+                            <span class="ms-3">
+                                <a href="{{ path('app_product_show', {slug: favorite.product.slug}) }}"
+                                   class="text-decoration-none text-dark">
+                                    {{ favorite.product.name }}
+                                </a>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <!-- Mise en valeur du prix avec un style distinct -->
+                            <span class="badge text-black px-3 py-2"
+                                  style="font-size: 1.2rem; font-weight: bold; background-color: #f8f9fa;">
+                                {{ favorite.product.price|number_format(2, ',', ' ') }} €
+                            </span>
+                            <a href="{{ path('app_favorite_delete', {id: favorite.id}) }}"
+                               class="btn btn-outline-danger btn-sm ms-3">
+                                <i class="fas fa-heart-broken"></i> Retirer
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">Vous n'avez pas encore ajouté de produits aux favoris.</div>
+        {% endif %}
+    </section>
+{% endblock %}

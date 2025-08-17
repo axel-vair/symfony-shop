@@ -1,3 +1,7 @@
+/**
+    *** BREADCRUMB ***
+**/
+
 .breadcrumb-item a {
     color: #2c3e50;
 }
@@ -12,6 +16,10 @@
 #back:hover {
     color: #1a1d20;
 }
+
+/**
+    *** SHOP PAGE ***
+**/
 
 .product-card {
     transition: transform 0.3s ease-in-out;
@@ -38,9 +46,9 @@
     color: #fff;
 }
 
-/*
-   * Accordéon page details
-*/
+/**
+   *** Page details ***
+**/
 
 .accordion-button[aria-expanded="true"] {
     background-color: #f5f5f5 !important;
@@ -52,3 +60,55 @@
 .accordion-item.active {
     background-color: #f5f5f5;
 }
+
+/**
+    *** HEADER ***
+**/
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+@media (min-width: 768px) {
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+}
+.badge-custom {
+    top: 20%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    height: 1.6em;
+    min-width: 1.6em;
+    padding: 0 0.6em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.icons-nav {
+    font-size: 1.5rem;
+    margin-right: 12px;
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icons-nav:hover {
+    color: #707070;
+}
+
+
+
+
