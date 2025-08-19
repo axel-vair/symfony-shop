@@ -28,23 +28,22 @@ class ProductController extends AbstractController
     {
         /** @var User|null $user */
         $user = $this->getUser();
+        $isFavorite = false;
 
-        if ($user === null) {
-            return $this->redirectToRoute('app_login');
-        }
 
         if ($product === null) {
             throw $this->createNotFoundException('Produit non trouvé');
         }
 
-        $favorites = $favoriteRepository->findFavoritesByUser($user);
-        $isFavorite = false;
+        if($user){
+            $favorites = $favoriteRepository->findFavoritesByUser($user);
 
-        foreach ($favorites as $favorite) {
-            $favProduct = $favorite->getProduct();
-            if ($favProduct !== null && $favProduct->getId() === $product->getId()) {
-                $isFavorite = true;
-                break;
+            foreach ($favorites as $favorite) {
+                $favProduct = $favorite->getProduct();
+                if ($favProduct !== null && $favProduct->getId() === $product->getId()) {
+                    $isFavorite = true;
+                    break;
+                }
             }
         }
 
