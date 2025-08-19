@@ -13,19 +13,11 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class CartService
 {
-    private ProductRepository $productRepository;
-    private Security $security;
-    private EntityManagerInterface $entityManager;
-
     public function __construct(
-        ProductRepository $productRepository,
-        Security $security,
-        EntityManagerInterface $entityManager
-    ) {
-        $this->productRepository = $productRepository;
-        $this->security = $security;
-        $this->entityManager = $entityManager;
-    }
+        private readonly ProductRepository $productRepository,
+        private readonly Security $security,
+        private readonly EntityManagerInterface $entityManager
+    ){}
 
     /**
      * Ajoute un produit au panier.
