@@ -82,14 +82,18 @@
                     <a href="{{ path('app_cart_add', {id: product.id}) }}" class="btn btn-dark flex-grow-1"
                        aria-label="Ajouter au panier">Ajouter au
                         panier</a>
-                    {% if isFavorite %}
-                        <a href="{{ path('app_favorite_delete_by_product', {id: product.id }) }}" class="btn btn-danger bi bi-heart"
-                           aria-label="Retirer le produit des favoris">
-                        </a>
-                    {% else %}
-                        <a href="{{ path('app_favorite_add', {id: product.id }) }}" class="btn btn-outline-dark bi bi-heart"
-                           aria-label="Mettre en favoris le produit">
-                        </a>
+                    {% if app.user %}
+                        {% if isFavorite %}
+                            <a href="{{ path('app_favorite_delete_by_product', {id: product.id }) }}"
+                               class="btn btn-danger bi bi-heart"
+                               aria-label="Retirer le produit des favoris">
+                            </a>
+                        {% else %}
+                            <a href="{{ path('app_favorite_add', {id: product.id }) }}"
+                               class="btn btn-outline-dark bi bi-heart"
+                               aria-label="Mettre en favoris le produit">
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
