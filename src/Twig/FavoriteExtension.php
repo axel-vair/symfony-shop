@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Favorite;
+use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -20,9 +21,10 @@ class FavoriteExtension extends AbstractExtension
     }
 
     /**
-     * @return Favorite[]
+     * @param $user
+     * @return int
      */
-    public function getFavoriteCount($user): int
+    public function getFavoriteCount(User $user): int
     {
         $favorites = $this->favoriteRepository->findFavoritesByUser($user);
 

@@ -11,7 +11,7 @@ class Favorite
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'favorites')]
     private ?Product $product = null;
