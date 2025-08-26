@@ -129,7 +129,7 @@ class AppFixtures extends Fixture
             $product->setStock($productData['stock']);
             $product->setDescription($productData['description']);
             $product->setCreatedDate(new DateTime());
-            $product->setImage($productData['image'] ?? null);
+            $product->setImage($productData['image']);
             // Rattacher à la sous-catégorie
             $subCategory = $subCategoryEntities[$productData['subCategory']] ?? null;
             if ($subCategory !== null) {
