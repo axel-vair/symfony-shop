@@ -23,7 +23,7 @@
                 {% for favorite in favorites %}
                     <div class="list-group-item d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
-                            <img src="{{ asset('/images/yoga.jpg') }}" alt="{{ favorite.product.name }}"
+                            <img src="{{ asset('images/' ~ favorite.product.image) }}" alt="{{ favorite.product.name }}"
                                  class="img-fluid" style="width: 50px; height: 50px; object-fit: cover;">
                             <span class="ms-3">
                                 <a href="{{ path('app_product_show', {slug: favorite.product.slug}) }}"

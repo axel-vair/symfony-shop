@@ -1,4 +1,28 @@
 /**
+    *** HOMEPAGE ***
+**/
+
+.hero-section {
+    background-color: #f8f9fa;
+    padding: 80px 0;
+}
+
+.card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.category-item:hover .category-card {
+    background-color: #e8e8e8;
+    transform: translateY(-7px);
+    z-index: 10;
+}
+
+/**
     *** BREADCRUMB ***
 **/
 
@@ -109,6 +133,15 @@
     color: #707070;
 }
 
+.product-image {
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+}
 
-
+.home-product-image {
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+}
 
