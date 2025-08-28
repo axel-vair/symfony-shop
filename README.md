@@ -10,10 +10,11 @@ L’application devait inclure les modules suivants :
 - Page de profil utilisateur
 - Catalogue d’articles avec :
     - Filtres par **catégorie**
-    - Tri par **date de publication**
+    - Filtres par **sous-catégorie**
     - **Pagination** (5 articles par page minimum)
 - Panier d’achat
-- Paiement (réel ou simulé)
+- Favoris
+- Paiement (simulé via stripe)
 - Historique des commandes
 
 ### 🛠️ Objectifs techniques
@@ -23,11 +24,11 @@ L’application devait impérativement utiliser :
 - **Symfony CLI** pour la gestion du projet
 - **Doctrine ORM** pour la gestion des entités et requêtes (DQL)
 - Composants techniques :
-    - `Entities`, `Repositories`, `DTO`, `Migrations`
+    - `Entities`, `Repositories`, `Migrations`
     - `Controllers`, `Services`, `Interfaces`, `Routes`, `BuildForm`, `Middlewares`
 - Documentation de l'API via **API Platform**
 - Base de données nommée `symfony-shop` avec les tables :
-    - `User`, `Article`, `Category`, `Comment`, `Role`
+    - `user`, `product`, `category`, `sub_category`, `cart`, `cart_item`, `contact`, `favorite`, `order`, `order_item`,
 - Tous les formulaires générés via `BuildForm`
 - Utilisation de middlewares pour restreindre l’accès aux routes
 
@@ -35,16 +36,14 @@ L’application devait impérativement utiliser :
 
 - Gestion des droits d’accès par rôles (`user`, `admin`)
 - Vérification de l’authentification avant l’accès à certaines routes
-- Définition des routes via contrôleurs ou fichier YAML
+- Définition des routes via contrôleurs
 
 ### 🚀 Fonctionnalités avancées optionnelles
 
-- Implémenter un **scheduler** (cron) pour effectuer des sauvegardes régulières de la base de données
 - Utilisation de **PHP Mailer** pour l’envoi de mails :
     - Lors de l’inscription
     - Lors d’un achat
 - Intégration de **Faker.js** pour la génération de données fictives
-- Utilisation de **DTOs** pour encapsuler et valider les données d’entrée dans les contrôleurs
 
 ---
 
@@ -52,9 +51,9 @@ L’application devait impérativement utiliser :
 
 Certaines fonctionnalités ont été exclues ou partiellement développées dans le cadre du projet, notamment :
 
-- 🔒 Paiement réel en ligne : non implémenté (simulation seulement)
 - 📅 Scheduler : non intégré (proposé comme amélioration future)
-- 📤 Envoi de mail : partiellement implémenté (proposé comme amélioration future)
+- 📤 Envoi de mail : proposé comme amélioration future
+- 📝 DTO
 
 
 ---

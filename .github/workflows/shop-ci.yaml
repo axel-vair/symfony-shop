@@ -1,3 +1,6 @@
+# Trigger Events:
+  # The workflow is triggered on push or pull_request events to the main branch.
+  # It can also be triggered manually with workflow_dispatch.
 on:
   push:
     branches: [ "main" ]
@@ -25,12 +28,15 @@ jobs:
           --health-cmd="pg_isready -U shop" --health-timeout=5s --health-interval=10s --health-retries=5
 
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v4
 
+      # Set up PHP 8.3 for the environment
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
 
+      # Cache Composer dependencies to speed up future builds
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
@@ -40,10 +46,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
+      # Install Composer dependencies
       - name: Composer install
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      # --- Installation du driver pour le E2E ---
+      # Install Firefox and Geckodriver for E2E testing
       - name: Install Firefox and dependencies for Geckodriver install
         run: |
           sudo apt-get update
@@ -54,7 +61,7 @@ jobs:
           sudo mv geckodriver /usr/local/bin/
           geckodriver --version
           
-      # --- Préparation de la BDD ---
+      # Set up the test database
       - name: Drop test database (if exists)
         run: php bin/console doctrine:database:drop --if-exists --env=test --force
 
@@ -67,20 +74,20 @@ jobs:
       - name: Load fixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
-      # --- Composer assets - importmap install (pour @hotwired/stimulus) ---
+        # Install Importmap assets (for @hotwired/stimulus)
       - name: Install Importmap assets
         run: php bin/console importmap:install
 
-      # --- Nettoyage cache symfony test ---
+      # Clear Symfony cache for the test environment
       - name: Clear Symfony cache (test env)
         run: php bin/console cache:clear --env=test
 
-      # --- Exécution des autres tests PHPUnit ---
+      # Run PHPUnit tests
       - name: Run classic PHPUnit tests
         env:
           DATABASE_URL: postgresql://shop:pass@127.0.0.1:5432/shop_test
         run: ./vendor/bin/phpunit
 
-      # --- Analyse statique (PHPStan) ---
+      # Static analysis with PHPStan
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --level=8 src/
