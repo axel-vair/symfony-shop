@@ -2,5 +2,5 @@ projectKey=butterfly
 serverUrl=http://localhost:9001
 serverVersion=25.8.0.112029
 dashboardUrl=http://localhost:9001/dashboard?id=butterfly
-ceTaskId=12d4a752-eed3-4524-bc81-5d9515cd020f
-ceTaskUrl=http://localhost:9001/api/ce/task?id=12d4a752-eed3-4524-bc81-5d9515cd020f
+ceTaskId=3a37ca46-1825-4a1b-807a-f2912328a806
+ceTaskUrl=http://localhost:9001/api/ce/task?id=3a37ca46-1825-4a1b-807a-f2912328a806

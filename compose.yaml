@@ -16,7 +16,6 @@ services:
     ports:
       - '9081:8080'
 
-
   sonarqube:
     image: sonarqube:community
     depends_on:

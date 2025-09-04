@@ -24,7 +24,7 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils Utilitaire pour obtenir des informations sur l'authentification
      * @return Response La réponse HTTP contenant la vue du formulaire de connexion
      */
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();

@@ -11,7 +11,6 @@ use App\Service\CartService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class CartServiceTest extends TestCase
 {
