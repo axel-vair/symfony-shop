@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -11,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -79,7 +81,6 @@ class RegistrationFormType extends AbstractType
                         'class' => self::FIELD_CLASS,
                         'placeholder' => 'Mot de passe',
                     ],
-                    'label_attr' => ['class' => self::LABEL_CLASS],
                 ],
                 'second_options' => [
                     'label' => 'Vérification du mot de passe*',
@@ -100,6 +101,20 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
                 'required' => true,
+            ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'label' => "J'accepte les termes et conditions d'utilisation",
+                'attr' => [
+                    'class' => 'form-check-input ms-2',
+                ],
+                'help' => '<a href="/mention-legales" target="_blank"><u>Conditions d\'utilisation</u></a>',
+                'help_html' => true,
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter les termes et conditions d\'utilisation',
+                    ])
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'S\'inscrire',

@@ -3,15 +3,57 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <div class="container mt-5" style="max-width: 400px;">
-        {% for message in app.flashes('alert') %}
-            <div class="alert alert-alert">
-                {{ message }}
+    <div class="container" style="max-width: 960px;">
+        <div class="row g-5 align-items-start">
+            <h1 class="mt-10 text-center text-2xl font-bold leading-9 mb-4">Créer un compte</h1>
+            <!-- column left : form -->
+            <div class="col-md-6">
+                <div class="bg-white p-4 shadow-sm rounded-4 border">
+                    {{ form(registrationForm) }}
+                    <p class="mt-3 text-muted small fst-italic">* Tous les champs sont obligatoires</p>
+                </div>
             </div>
-        {% endfor %}
-        <h1 class="text-center text-2xl font-bold mb-4">Inscription</h1>
-        {{ form(registrationForm) }}
 
-        <p class="mt-3 fst-italic">* Les champs sont obligatoires</p>
+            <!-- column right : advantages -->
+            <div class="col-md-6">
+                <div class="bg-body-tertiary p-4 p-md-5 shadow rounded-4 h-100 d-flex flex-column justify-content-center text-center border border-light-subtle">
+
+                    <h2 class="fw-semibold mb-4 fs-4 text-dark">Pourquoi créer un compte&nbsp;?</h2>
+
+                    <div class="d-flex flex-column gap-4">
+                        <div class="d-flex align-items-center gap-3 text-start">
+                            <div class="bg-success-subtle text-success-emphasis p-3 rounded-3">
+                                <i class="bi bi-award-fill fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1 fw-semibold">Produits de qualité</h5>
+                                <p class="mb-0 text-muted small">Sélection rigoureuse et normes élevées.</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 text-start">
+                            <div class="bg-info-subtle text-info-emphasis p-3 rounded-3">
+                                <i class="bi bi-shield-check fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1 fw-semibold">Sécurité garantie</h5>
+                                <p class="mb-0 text-muted small">Produits testés, certifiés et fiables.</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 text-start">
+                            <div class="bg-warning-subtle text-warning-emphasis p-3 rounded-3">
+                                <i class="bi bi-truck fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1 fw-semibold">Livraison express</h5>
+                                <p class="mb-0 text-muted small">Expédié en 24h avec suivi complet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

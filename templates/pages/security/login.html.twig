@@ -14,57 +14,59 @@
             {% endfor %}
         {% endfor %}
     </div>
-    <div class="container mt-5" style="max-width: 400px;">
+    <div class="container" style="max-width: 400px;">
         <h1 class="mt-10 text-center text-2xl font-bold leading-9 mb-4">Connexion</h1>
 
-        <!-- alerts div -->
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+        <div class="bg-white p-4 shadow-sm rounded-4 border">
+            <!-- alerts div -->
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-        {% if app.user %}
-            <div class="mb-3 text-center">
-                Vous êtes connecté en tant que {{ app.user.userIdentifier }},
-                <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            {% if app.user %}
+                <div class="mb-3 text-center">
+                    Vous êtes connecté en tant que {{ app.user.userIdentifier }},
+                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                </div>
+            {% endif %}
+            <!-- end alerts div -->
+
+            <!-- button oauth service -->
+            <div class="d-grid mb-4">
+                <a href="{{ path('auth_oauth_connect', {service: 'google'}) }}" class="btn btn-outline-dark btn-lg">
+                    <i class="fab fa-google me-2"></i> Se connecter avec Google
+                </a>
             </div>
-        {% endif %}
-        <!-- end alerts div -->
+            <!-- end button oauth service -->
+            <div class="d-flex align-items-center my-4">
+                <hr class="flex-grow-1">
+                <span class="px-3">ou se connecter avec un email</span>
+                <hr class="flex-grow-1">
+            </div>
+            <!-- start form -->
+            <form method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Email</label>
+                    <input type="email" value="{{ last_username }}" name="_username" id="username"
+                           class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                           autocomplete="email" placeholder="Adresse email" required autofocus>
+                </div>
 
-        <!-- button oauth service -->
-        <div class="d-grid mb-4">
-            <a href="{{ path('auth_oauth_connect', {service: 'google'}) }}" class="btn btn-outline-dark btn-lg">
-                <i class="fab fa-google me-2"></i> Se connecter avec Google
-            </a>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" name="_password" id="password"
+                           class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                           autocomplete="current-password" placeholder="Mot de passe" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="d-grid">
+                    <button class="btn btn-dark mt-4" type="submit">
+                        Se connecter
+                    </button>
+                </div>
+            </form>
+            <!-- end form -->
         </div>
-        <!-- end button oauth service -->
-        <div class="d-flex align-items-center my-4">
-            <hr class="flex-grow-1">
-            <span class="px-3">ou se connecter avec un email</span>
-            <hr class="flex-grow-1">
-        </div>
-        <!-- start form -->
-        <form method="post">
-            <div class="mb-3">
-                <label for="username" class="form-label">Email</label>
-                <input type="email" value="{{ last_username }}" name="_username" id="username"
-                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                       autocomplete="email" placeholder="Adresse email" required autofocus>
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" name="_password" id="password"
-                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                       autocomplete="current-password" placeholder="Mot de passe" required>
-            </div>
-
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            <div class="d-grid">
-                <button class="btn btn-dark mt-4" type="submit">
-                    Se connecter
-                </button>
-            </div>
-        </form>
-        <!-- end form -->
     </div>
 {% endblock %}
